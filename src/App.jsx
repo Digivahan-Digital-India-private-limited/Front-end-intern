@@ -38,6 +38,23 @@ import UpdateTrandingCars from "./Pages/AdminPannel/ManageUserApp/TrandingCars/U
 import ViewTrandingCars from "./Pages/AdminPannel/ManageUserApp/TrandingCars/ViewTrandingCars";
 import DeleteTrandingCars from "./Pages/AdminPannel/ManageUserApp/TrandingCars/DeleteTrandingCars";
 import ManagePopularComparision from "./Pages/AdminPannel/ManageUserApp/PopularComparision/ManagePopularComparision";
+import CustomerQueries from "./Pages/AdminPannel/CustomerQueries/CustomerQueries";
+import PostFAQ from "./Pages/AdminPannel/CustomerQueries/FAQManagement/PostFAQ";
+import DeleteFAQ from "./Pages/AdminPannel/CustomerQueries/FAQManagement/DeleteFAQ";
+import UpdateFAQ from "./Pages/AdminPannel/CustomerQueries/FAQManagement/UpdateFAQ";
+import GeneralInformationQueries from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/GeneralInformationQueries";
+import TechnicalQueries from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/TechnicalQueries";
+import AccountRelated from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/AccountRelated";
+import PaymentBilling from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/PaymentBilling";
+import OrderServiceStatus from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/OrderServiceStatus";
+import ProductServiceComplaints from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/ProductServiceComplaints";
+import FeedbackSuggestions from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/FeedbackSuggestions";
+import CancellationReturn from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/CancellationReturn";
+import Escalation from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/Escalation";
+import OnboardingSetup from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/OnboardingSetup";
+import Subscription from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/Subscription";
+import VerificationQueries from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/VerificationQueries";
+import ReplyPage from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/ReplyPage";
 
 const App = () => {
   const { pathname } = useLocation();
@@ -121,6 +138,23 @@ const App = () => {
             path="/manage-popular-comparision"
             element={<ManagePopularComparision />}
           />
+          <Route path="/customer-queries" element={<CustomerQueries />} />
+          <Route path="/post-faq" element={<PostFAQ />} />
+          <Route path="/delete-faq" element={<DeleteFAQ />} />
+          <Route path="/update-faq" element={<UpdateFAQ />} />
+          <Route path="/general-information-queries" element={<GeneralInformationQueries />} />
+          <Route path="/technical-queries" element={<TechnicalQueries />} />
+          <Route path="/account-related" element={<AccountRelated />} />
+          <Route path="/payment-billing" element={<PaymentBilling />} />
+          <Route path="/order-service-status" element={<OrderServiceStatus />} />
+          <Route path="/product-service-complaints" element={<ProductServiceComplaints />} />
+          <Route path="/feedback-suggestions" element={<FeedbackSuggestions />} />
+          <Route path="/cancellation-return" element={<CancellationReturn />} />
+          <Route path="/escalation" element={<Escalation />} />
+          <Route path="/onboarding-setup" element={<OnboardingSetup />} />
+          <Route path="/subscription" element={<Subscription />} />
+          <Route path="/verification-queries" element={<VerificationQueries />} />
+          <Route path="/customer-queries/reply" element={<ReplyPage />} />
         </Route>
       </Routes>
     </main>
