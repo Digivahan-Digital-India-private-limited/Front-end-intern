@@ -55,6 +55,18 @@ import OnboardingSetup from "./Pages/AdminPannel/CustomerQueries/CustomerQueries
 import Subscription from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/Subscription";
 import VerificationQueries from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/VerificationQueries";
 import ReplyPage from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/ReplyPage";
+import Reviews from "./Pages/AdminPannel/Reviews/Reviews";
+import PositiveReviews from "./Pages/AdminPannel/Reviews/PositiveReviews/PositiveReviews";
+import AverageReviews from "./Pages/AdminPannel/Reviews/AverageReviews/AverageReviews";
+import NegativeReviews from "./Pages/AdminPannel/Reviews/NegativeReviews/NegativeReviews";
+import ReplyToReview from "./Pages/AdminPannel/Reviews/ReplyToReview";
+import Issues from "./Pages/AdminPannel/Issues/Issues";
+import PriorityIssue from "./Pages/AdminPannel/Issues/PriorityIssue/PriorityIssue";
+import AppIssue from "./Pages/AdminPannel/Issues/AppIssue/AppIssue";
+import ServiceIssue from "./Pages/AdminPannel/Issues/ServiceIssue/ServiceIssue";
+import SupportIssue from "./Pages/AdminPannel/Issues/SupportIssue/SupportIssue";
+import Suggestion from "./Pages/AdminPannel/Issues/Suggestion/Suggestion";
+import IssueResolution from "./Pages/AdminPannel/Issues/IssueResolution";
 
 const App = () => {
   const { pathname } = useLocation();
@@ -155,6 +167,18 @@ const App = () => {
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/verification-queries" element={<VerificationQueries />} />
           <Route path="/customer-queries/reply" element={<ReplyPage />} />
+          <Route path="/admin/reviews" element={<Reviews />} />
+          <Route path="/admin/reviews/positive" element={<PositiveReviews />} />
+          <Route path="/admin/reviews/average" element={<AverageReviews />} />
+          <Route path="/admin/reviews/negative" element={<NegativeReviews />} />
+          <Route path="/admin/reviews/reply" element={<ReplyToReview />} />
+          <Route path="/admin/issues" element={<Issues />} />
+          <Route path="/admin/issues/priority" element={<PriorityIssue />} />
+          <Route path="/admin/issues/app" element={<AppIssue />} />
+          <Route path="/admin/issues/service" element={<ServiceIssue />} />
+          <Route path="/admin/issues/support" element={<SupportIssue />} />
+          <Route path="/admin/issues/suggestion" element={<Suggestion />} />
+          <Route path="/admin/issues/resolution" element={<IssueResolution />} />
         </Route>
       </Routes>
     </main>
