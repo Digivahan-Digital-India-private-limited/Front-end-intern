@@ -40,6 +40,11 @@ import UpdateTrandingCars from "./Pages/AdminPannel/ManageUserApp/TrandingCars/U
 import ViewTrandingCars from "./Pages/AdminPannel/ManageUserApp/TrandingCars/ViewTrandingCars";
 import DeleteTrandingCars from "./Pages/AdminPannel/ManageUserApp/TrandingCars/DeleteTrandingCars";
 import ManagePopularComparision from "./Pages/AdminPannel/ManageUserApp/PopularComparision/ManagePopularComparision";
+import ManageTipsInfo from "./Pages/AdminPannel/ManageUserApp/TipsInfo/ManageTipsInfo";
+import ManageNews from "./Pages/AdminPannel/ManageUserApp/News/ManageNews";
+import ManageQRGuide from "./Pages/AdminPannel/ManageUserApp/QRGuide/ManageQRGuide";
+import ManageQRBenefits from "./Pages/AdminPannel/ManageUserApp/QRBenefits/ManageQRBenefits";
+import ManageAppInfo from "./Pages/AdminPannel/ManageUserApp/AppInfo/ManageAppInfo";
 import CustomerQueries from "./Pages/AdminPannel/CustomerQueries/CustomerQueries";
 import PostFAQ from "./Pages/AdminPannel/CustomerQueries/FAQManagement/PostFAQ";
 import DeleteFAQ from "./Pages/AdminPannel/CustomerQueries/FAQManagement/DeleteFAQ";
@@ -57,6 +62,21 @@ import OnboardingSetup from "./Pages/AdminPannel/CustomerQueries/CustomerQueries
 import Subscription from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/Subscription";
 import VerificationQueries from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/VerificationQueries";
 import ReplyPage from "./Pages/AdminPannel/CustomerQueries/CustomerQueriesByCategory/ReplyPage";
+import Reviews from "./Pages/AdminPannel/Reviews/Reviews";
+import PositiveReviews from "./Pages/AdminPannel/Reviews/PositiveReviews/PositiveReviews";
+import AverageReviews from "./Pages/AdminPannel/Reviews/AverageReviews/AverageReviews";
+import NegativeReviews from "./Pages/AdminPannel/Reviews/NegativeReviews/NegativeReviews";
+import ReplyToReview from "./Pages/AdminPannel/Reviews/ReplyToReview";
+import Issues from "./Pages/AdminPannel/Issues/Issues";
+import PriorityIssue from "./Pages/AdminPannel/Issues/PriorityIssue/PriorityIssue";
+import AppIssue from "./Pages/AdminPannel/Issues/AppIssue/AppIssue";
+import ServiceIssue from "./Pages/AdminPannel/Issues/ServiceIssue/ServiceIssue";
+import SupportIssue from "./Pages/AdminPannel/Issues/SupportIssue/SupportIssue";
+import Suggestion from "./Pages/AdminPannel/Issues/Suggestion/Suggestion";
+import IssueResolution from "./Pages/AdminPannel/Issues/IssueResolution";
+import AdminReports from "./Pages/AdminPannel/Reports/Reports";
+import VehicleOwnerReports from "./Pages/AdminPannel/Reports/VehicleOwnerReports/VehicleOwnerReports";
+import InteractorReports from "./Pages/AdminPannel/Reports/InteractorReports/InteractorReports";
 
 const App = () => {
   const { pathname } = useLocation();
@@ -148,6 +168,11 @@ const App = () => {
             path="/manage-popular-comparision"
             element={<ManagePopularComparision />}
           />
+          <Route path="/manage-tips-info" element={<ManageTipsInfo />} />
+          <Route path="/manage-news" element={<ManageNews />} />
+          <Route path="/manage-qr-guide" element={<ManageQRGuide />} />
+          <Route path="/manage-qr-benefits" element={<ManageQRBenefits />} />
+          <Route path="/manage-app-info" element={<ManageAppInfo />} />
           <Route path="/customer-queries" element={<CustomerQueries />} />
           <Route path="/post-faq" element={<PostFAQ />} />
           <Route path="/delete-faq" element={<DeleteFAQ />} />
@@ -180,6 +205,21 @@ const App = () => {
             element={<VerificationQueries />}
           />
           <Route path="/customer-queries/reply" element={<ReplyPage />} />
+          <Route path="/admin/reviews" element={<Reviews />} />
+          <Route path="/admin/reviews/positive" element={<PositiveReviews />} />
+          <Route path="/admin/reviews/average" element={<AverageReviews />} />
+          <Route path="/admin/reviews/negative" element={<NegativeReviews />} />
+          <Route path="/admin/reviews/reply" element={<ReplyToReview />} />
+          <Route path="/admin/issues" element={<Issues />} />
+          <Route path="/admin/issues/priority" element={<PriorityIssue />} />
+          <Route path="/admin/issues/app" element={<AppIssue />} />
+          <Route path="/admin/issues/service" element={<ServiceIssue />} />
+          <Route path="/admin/issues/support" element={<SupportIssue />} />
+          <Route path="/admin/issues/suggestion" element={<Suggestion />} />
+          <Route path="/admin/issues/resolution" element={<IssueResolution />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/admin/reports/vehicle-owners" element={<VehicleOwnerReports />} />
+          <Route path="/admin/reports/interactors" element={<InteractorReports />} />
         </Route>
       </Routes>
     </main>
