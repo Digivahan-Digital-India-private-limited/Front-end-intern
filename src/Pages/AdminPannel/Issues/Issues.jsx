@@ -127,7 +127,7 @@ const Issues = () => {
           <div 
             key={issue.id}
             onClick={() => navigate(issue.link)}
-            className={`${issue.bgColor} ${issue.borderColor} border-l-4 rounded-2xl p-6 cursor-pointer hover:shadow-lg transition-shadow`}
+            className={`${issue.bgColor} ${issue.borderColor} border-l-4 rounded-2xl p-6 cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300`}
           >
             <div className="flex items-center justify-between mb-4">
               <div className={`w-16 h-16 ${issue.dotColor} rounded-full`}></div>

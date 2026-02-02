@@ -24,9 +24,9 @@ const menuItems = [
   { name: "Customer Queries", icon: MessageSquare, link: "/customer-queries" },
   { name: "Reviews", icon: Star, link: "/admin/reviews" },
   { name: "Issues / Priority", icon: AlertTriangle, link: "/admin/issues" },
-  { name: "Reports", icon: FileText, link: "" },
+  { name: "Reports", icon: FileText, link: "/admin/reports" },
+  { name: "Manage User App", icon: Users, link: "/manage-user" },
   { name: "Settings", icon: Settings, link: "" },
-  { name: "Manage Users", icon: Users, link: "/manage-user" },
 ];
 
 function Sidebar() {
