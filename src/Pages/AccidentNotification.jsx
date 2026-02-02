@@ -1,67 +1,44 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import fetchUserDetails from "../utils/userApis";
 import { useParams, useNavigate } from "react-router-dom";
 import calculateAgeFromDate from "../utils/dateUtils";
 import { toast } from "react-toastify";
 
 function AccidentNotification() {
-  const [user, setUser] = useState(null);
-  const [issuetype, setissuetype] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
   const [images, setImages] = useState([]);
   const [message, setmessage] = useState("");
   const [location, setLocation] = useState(null);
   const [locationError, setLocationError] = useState("");
-  const [sendCount, setSendCount] = useState(0);
-  const [showPopup, setShowPopup] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const navigate = useNavigate();
-  const PLAYSTORE_URL =
-    "https://play.google.com/store/apps/details?id=com.digivahan";
 
   const fileInputRef = useRef(null);
   const { qr_id } = useParams();
 
-  // 🔥 API call
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:3000/api/user-details/${qr_id}`,
-        );
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["user-details", qr_id], // 🔥 unique per QR
+    queryFn: () => fetchUserDetails(qr_id),
+    enabled: !!qr_id,
+    staleTime: 5 * 60 * 1000, // 5 min cache
+    cacheTime: 10 * 60 * 1000,
+  });
 
-        if (!res.data.success) {
-          setError(res.data.message);
-        } else {
-          const userData = res.data.data;
-          const ageInYears = calculateAgeFromDate(userData.age);
+  const PRODUCT_TO_ISSUE = {
+    vehicle: "accident_alert",
+    pet: "pet_notification",
+    other: "other_notification",
+  };
 
-          setUser({
-            ...userData,
-            age: ageInYears,
-          });
-
-          const PRODUCT_TO_ISSUE = {
-            vehicle: "accident_alert",
-            pet: "pet_notification",
-            other: "other_notification",
-          };
-
-          setissuetype(
-            PRODUCT_TO_ISSUE[res.data.data.product_type] ||
-              "other_notification",
-          );
-        }
-      } catch (error) {
-        setError(error?.response?.data?.message || "Something Went Wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (qr_id) fetchUserDetails();
-  }, [qr_id]);
+  const issuetype = user
+    ? PRODUCT_TO_ISSUE[user.product_type] || "other_notification"
+    : "";
 
   const getLiveLocation = () => {
     if (!navigator.geolocation) {
@@ -165,10 +142,9 @@ function AccidentNotification() {
       return; // 👈 yahin se function stop
     }
 
-    // 👉 2 notification ke baad popup
-    if (sendCount >= 2 && !showPopup) {
-      setShowPopup(true);
-      return;
+    if (images.length < 2) {
+      alert("Please upload at least two image..");
+      return; // 👈 yahin se function stop
     }
 
     try {
@@ -194,9 +170,9 @@ function AccidentNotification() {
       // console.log("Notification sent:", response.data);
       if (response) {
         toast.success("Alert Sent successfully!");
+        navigate(`/emergency-notification/${qr_id}`);
         setmessage("");
         setImages([]);
-        setSendCount((prev) => prev + 1); // 👈 count badhao
       }
     } catch (error) {
       console.error("Send notification error:", error);
@@ -207,7 +183,7 @@ function AccidentNotification() {
   };
 
   // ⏳ Loading
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         Loading...
@@ -216,7 +192,7 @@ function AccidentNotification() {
   }
 
   // ❌ Error
-  if (error) {
+  if (isError) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center">
         <p className="text-red-500 mb-4">{error}</p>
@@ -232,41 +208,6 @@ function AccidentNotification() {
 
   return (
     <main>
-      {showPopup && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-6 w-80 text-center">
-            <h2 className="text-lg font-bold mb-3">
-              Install App for Better Experience
-            </h2>
-            <p className="text-sm text-gray-600 mb-5">
-              Aap already 2 baar alert bhej chuke ho. App install karoge to
-              unlimited features milenge 💙
-            </p>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  window.location.href = PLAYSTORE_URL;
-                }}
-                className="flex-1 bg-green-500 text-white py-2 rounded-lg font-semibold"
-              >
-                Install App & Send
-              </button>
-
-              <button
-                onClick={() => {
-                  setShowPopup(false);
-                  handleSendNotification(true); // 👈 force send
-                }}
-                className="flex-1 bg-gray-300 text-black py-2 rounded-lg font-semibold"
-              >
-                Send Anyway
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="min-h-screen bg-gray-100 p-4 max-w-md mx-auto">
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
@@ -287,7 +228,8 @@ function AccidentNotification() {
             <div>
               <h2 className="font-semibold text-lg">{user.full_Name}</h2>
               <p className="text-sm text-gray-500">
-                {user.age || "N/A"} year old • {user.gender || "N/A"}
+                {calculateAgeFromDate(user.age) || "N/A"} year old •{" "}
+                {user.gender || "N/A"}
               </p>
               <p className="text-xs text-gray-400">
                 {user.address || "Address not available"}
@@ -354,7 +296,7 @@ function AccidentNotification() {
                   {/* ❌ Delete button (hover only) */}
                   <button
                     onClick={() => handleDeleteImage(img.public_id)}
-                    className="absolute top-1 right-1 bg-black/60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+                    className="absolute top-1 right-1 bg-black/60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
                   >
                     ✕
                   </button>

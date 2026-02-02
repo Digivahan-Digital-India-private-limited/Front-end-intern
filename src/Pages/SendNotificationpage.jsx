@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { FaWhatsapp, FaGooglePlay } from "react-icons/fa";
-import { MdSms } from "react-icons/md";
-import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import fetchUserDetails from "../utils/userApis";
 import { useNavigate, useParams } from "react-router-dom";
 import calculateAgeFromDate from "../utils/dateUtils";
 import NoParking from "../assets/No Parking.png";
 import CongestedParking from "../assets/Congested Parking.png";
-import RoadBlockAlert from "../assets/Road Block Alert.png";
-import BlockedVehicleAlert from "../assets/Blocked Vehicle Alert.png";
 import CarLightsWindowsOpen from "../assets/Car Lights  Windows Open.png";
 import CarHornorAlarmGoingOn from "../assets/Car Horn or Alarm Going On.png";
 import UnknownIssueAlert from "../assets/Unknown Issue Alert.png";
 import AccidentAlert from "../assets/Accident Alert.png";
-// import DocumentAccess from "../assets/Request for Document Access.png";
-
-import axios from "axios";
+import DownloadApptabs from "./Popuptabs/DownloadApptabs";
 
 const notificationOptions = {
   vehicle: [
@@ -36,22 +32,6 @@ const notificationOptions = {
     },
     {
       id: 3,
-      title: "Road Block Alert",
-      icon: RoadBlockAlert,
-      issue_type: "road_block_alert",
-      notification_type: "Vehicle",
-      message: "Your vehicle is blocking traffic. Please move it immediately.",
-    },
-    {
-      id: 4,
-      title: "Blocked Vehicle Alert",
-      icon: BlockedVehicleAlert,
-      issue_type: "blocked_vehicle_alert",
-      notification_type: "Vehicle",
-      message: "Your vehicle is blocking another vehicle.",
-    },
-    {
-      id: 5,
       title: "Car Lights / Windows Open",
       icon: CarLightsWindowsOpen,
       issue_type: "car_lights_windows_left_open",
@@ -59,7 +39,7 @@ const notificationOptions = {
       message: "Your car lights or windows are open.",
     },
     {
-      id: 6,
+      id: 4,
       title: "Car Horn or Alarm Going On",
       icon: CarHornorAlarmGoingOn,
       issue_type: "car_horn_alarm_going_on",
@@ -67,7 +47,7 @@ const notificationOptions = {
       message: "Your car alarm or horn is going on.",
     },
     {
-      id: 7,
+      id: 5,
       title: "Unknown Issue Alert",
       icon: UnknownIssueAlert,
       issue_type: "unknown_issue_alert",
@@ -75,21 +55,13 @@ const notificationOptions = {
       message: "An unknown issue has been detected with your vehicle.",
     },
     {
-      id: 8,
+      id: 6,
       title: "Accident Alert",
       icon: AccidentAlert,
       issue_type: "accident_alert",
       notification_type: "Vehicle",
       message: "Your vehicle met with an accident.",
     },
-    // {
-    //   id: 9,
-    //   title: "Request for Document Access",
-    //   icon: DocumentAccess,
-    //   issue_type: "doc_access",
-    //   notification_type: "Vehicle",
-    //   message: "You have received a request for document access.",
-    // },
   ],
 
   pet: [
@@ -117,71 +89,50 @@ const notificationOptions = {
 
 const SendNotificationpage = () => {
   const [selected, setSelected] = useState(null);
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [issueType, setissueType] = useState(null);
   const [cooldown, setCooldown] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [timer, setTimer] = useState(30);
   const [showPopup, setShowPopup] = useState(false);
   const [firstIssueType, setFirstIssueType] = useState(null);
   const [lockNotifications, setLockNotifications] = useState(false);
-  const [showContactPopup, setShowContactPopup] = useState(false);
-  const [contactNumber, setContactNumber] = useState("");
-  const [contactType, setContactType] = useState(""); // "whatsapp" | "sms"
-
-  const PLAYSTORE_URL =
-    "https://play.google.com/store/apps/details?id=com.digivahan";
 
   const navigate = useNavigate();
   const { qr_id } = useParams();
 
-  // 🔥 API call
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["user-details", qr_id], // 🔥 UNIQUE PER QR
+    queryFn: () => fetchUserDetails(qr_id),
+    enabled: !!qr_id, // qr_id ho tabhi call
+    staleTime: 5 * 60 * 1000, // 5 min tak API dobara hit nahi
+    cacheTime: 10 * 60 * 1000, // memory me rakhega
+  });
+
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:3000/api/user-details/${qr_id}`,
-        );
-
-        if (!res.data.success) {
-          setError(res.data.message);
-        } else {
-          const userData = res.data.data;
-          const ageInYears = calculateAgeFromDate(userData.age);
-
-          setUser({
-            ...userData,
-            age: ageInYears,
-          });
-        }
-      } catch (error) {
-        setError(error?.response?.data?.message || "Something Went Wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (qr_id) fetchUserDetails();
-
-    // Timer
     if (!cooldown) return;
 
     const interval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          setCooldown(false);
-          setSelected(null);
-          setShowPopup(false); // 👈 yeh line add karo
-          return 30;
-        }
-        return prev - 1;
-      });
+      setTimer((prev) => prev - 1);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [qr_id, cooldown]);
+  }, [cooldown]);
+
+  useEffect(() => {
+    if (timer !== 0 || issueType) return;
+
+    setCooldown(false);
+    setSelected(null);
+    setShowPopup(false);
+    setTimer(30);
+
+    navigate(`/connect-tabs/${qr_id}/${issueType}`);
+  }, [timer, navigate, qr_id, issueType]);
 
   // Filter Notification Type base on product type
   const activeReasons = user?.product_type
@@ -200,6 +151,7 @@ const SendNotificationpage = () => {
     if (!notificationdetails) return;
     const currentIssue = notificationdetails.issue_type;
     setFirstIssueType(currentIssue);
+    setissueType(currentIssue);
 
     const NAVIGATION_ONLY_ISSUES = [
       "accident_alert",
@@ -240,6 +192,7 @@ const SendNotificationpage = () => {
         setLockNotifications(true); // first successful send ke baad disable
       }
 
+      setissueType(currentIssue);
       setCooldown(true);
       setTimer(30);
       setShowPopup(true); // 👈 YE LINE ADD KARO (popup open)
@@ -250,11 +203,12 @@ const SendNotificationpage = () => {
     }
   };
 
-  // ❌ Error
-  if (error) {
+  if (isError) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center">
-        <p className="text-red-500 mb-4">{error}</p>
+        <p className="text-red-500 mb-4">
+          {error.message || "Something went wrong"}
+        </p>
         <button
           onClick={() => navigate("/")}
           className="bg-orange-400 text-white px-6 py-2 rounded"
@@ -265,8 +219,7 @@ const SendNotificationpage = () => {
     );
   }
 
-  // ⏳ Loading
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         Loading...
@@ -276,82 +229,7 @@ const SendNotificationpage = () => {
 
   return (
     <main>
-      {showContactPopup && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-6 w-80">
-            <h2 className="text-lg font-semibold mb-3 text-gray-800">
-              Contact via {contactType === "whatsapp" ? "WhatsApp" : "SMS"}
-            </h2>
-
-            <label className="block text-sm text-gray-600 mb-1">
-              {contactType === "whatsapp" ? "Please enter your number to send a WhatsApp Alert" : "Please enter your number to send a SMS Alert"}
-            </label>
-
-            <input
-              type="number"
-              placeholder="Enter your number"
-              value={contactNumber}
-              onChange={(e) => setContactNumber(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-
-            <div className="flex gap-3 mt-5">
-              <button
-                onClick={() => {
-                  setShowContactPopup(false);
-                  setContactNumber("");
-                }}
-                className="flex-1 bg-gray-200 text-gray-800 py-2 rounded-lg font-medium"
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={() => {
-                  if (!contactNumber) {
-                    alert("Please enter mobile number");
-                    return;
-                  }
-
-                  // future use (WhatsApp deep link / API)
-                  console.log("Entered Number:", contactNumber);
-
-                  setShowContactPopup(false);
-                  setContactNumber("");
-                }}
-                className="flex-1 bg-green-500 text-white py-2 rounded-lg font-medium"
-              >
-                Continue
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showPopup && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-6 w-80 text-center">
-            <h2 className="text-lg font-bold mb-3">
-              Install App for Better Experience
-            </h2>
-            <p className="text-sm text-gray-600 mb-5">
-              Aapka notification delivered ho chuka hai chatting aur calling
-              features ke liye App ko install kijiye!
-            </p>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  window.location.href = PLAYSTORE_URL;
-                }}
-                className="flex-1 bg-green-500 text-white py-2 rounded-lg font-semibold"
-              >
-                Install App
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {showPopup && <DownloadApptabs />}
 
       <div className="min-h-screen max-w-6xl mx-auto bg-gray-100 p-4">
         {/* Header */}
@@ -375,51 +253,13 @@ const SendNotificationpage = () => {
               <div>
                 <h2 className="font-semibold text-lg">{user.full_Name}</h2>
                 <p className="text-sm text-gray-500">
-                  {user.age || "N/A"} year old • {user.gender || "N/A"}
+                  {calculateAgeFromDate(user.age) || "N/A"} year old •{" "}
+                  {user.gender || "N/A"}
                 </p>
                 <p className="text-xs text-gray-400">
                   {user.address || "Address not available"}
                 </p>
               </div>
-            </div>
-
-            {/* Right: Action Icons */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => {
-                  setContactType("whatsapp");
-                  setShowContactPopup(true);
-                }}
-                className="w-9 h-9 rounded-full bg-green-500 text-white flex items-center justify-center"
-                title="WhatsApp"
-              >
-                <FaWhatsapp size={18} />
-              </button>
-
-              <button
-                onClick={() => {
-                  setContactType("sms");
-                  setShowContactPopup(true);
-                }}
-                className="w-9 h-9 rounded-full bg-blue-500 text-white flex items-center justify-center"
-                title="SMS"
-              >
-                <MdSms size={18} />
-              </button>
-
-              {/* Google Play */}
-              <button
-                onClick={() =>
-                  window.open(
-                    "https://play.google.com/store/apps/details?id=com.digivahan",
-                    "_blank",
-                  )
-                }
-                className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center"
-                title="Open in Google Play"
-              >
-                <FaGooglePlay size={16} />
-              </button>
             </div>
           </div>
         </div>

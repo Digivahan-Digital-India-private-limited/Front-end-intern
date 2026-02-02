@@ -16,7 +16,9 @@ import Contactpage from "./Components/Contactpage/Contactpage";
 import VisitUs from "./Pages/VisitUs";
 import Reports from "./Pages/Reports";
 import SendNotificationpage from "./Pages/SendNotificationpage";
+import ConnectTabs from "./Pages/ConnectTabs";
 import AccidentNotification from "./Pages/AccidentNotification";
+import EmergencyContactUspage from "./Pages/EmergencyContactUspage";
 import AccessVehicleDoc from "./Pages/AccessVehicleDoc";
 
 // Admin Pannel
@@ -62,6 +64,7 @@ const App = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
   return (
     <main className="w-full h-full">
       <Routes>
@@ -106,9 +109,16 @@ const App = () => {
           element={<SendNotificationpage />}
         />
 
+        <Route path="/connect-tabs/:qr_id/:issue_type" element={<ConnectTabs />} />
+
         <Route
           path="/accident-notification/:qr_id"
           element={<AccidentNotification />}
+        />
+
+        <Route
+          path="/emergency-notification/:qr_id"
+          element={<EmergencyContactUspage />}
         />
 
         <Route
@@ -142,18 +152,33 @@ const App = () => {
           <Route path="/post-faq" element={<PostFAQ />} />
           <Route path="/delete-faq" element={<DeleteFAQ />} />
           <Route path="/update-faq" element={<UpdateFAQ />} />
-          <Route path="/general-information-queries" element={<GeneralInformationQueries />} />
+          <Route
+            path="/general-information-queries"
+            element={<GeneralInformationQueries />}
+          />
           <Route path="/technical-queries" element={<TechnicalQueries />} />
           <Route path="/account-related" element={<AccountRelated />} />
           <Route path="/payment-billing" element={<PaymentBilling />} />
-          <Route path="/order-service-status" element={<OrderServiceStatus />} />
-          <Route path="/product-service-complaints" element={<ProductServiceComplaints />} />
-          <Route path="/feedback-suggestions" element={<FeedbackSuggestions />} />
+          <Route
+            path="/order-service-status"
+            element={<OrderServiceStatus />}
+          />
+          <Route
+            path="/product-service-complaints"
+            element={<ProductServiceComplaints />}
+          />
+          <Route
+            path="/feedback-suggestions"
+            element={<FeedbackSuggestions />}
+          />
           <Route path="/cancellation-return" element={<CancellationReturn />} />
           <Route path="/escalation" element={<Escalation />} />
           <Route path="/onboarding-setup" element={<OnboardingSetup />} />
           <Route path="/subscription" element={<Subscription />} />
-          <Route path="/verification-queries" element={<VerificationQueries />} />
+          <Route
+            path="/verification-queries"
+            element={<VerificationQueries />}
+          />
           <Route path="/customer-queries/reply" element={<ReplyPage />} />
         </Route>
       </Routes>
