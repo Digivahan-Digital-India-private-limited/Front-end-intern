@@ -78,6 +78,19 @@ import AdminReports from "./Pages/AdminPannel/Reports/Reports";
 import VehicleOwnerReports from "./Pages/AdminPannel/Reports/VehicleOwnerReports/VehicleOwnerReports";
 import InteractorReports from "./Pages/AdminPannel/Reports/InteractorReports/InteractorReports";
 
+// iOS App Pages
+import { 
+  IOSLoginPage, 
+  VerifyNumber, 
+  VerifyEmail, 
+  VerifyOTP, 
+  AccountCreated,
+  LoginSuccess,
+  ResetPassword,
+  PasswordChanged 
+} from "./Pages/IOSAppPage/UserAuthentication";
+import { Home, Profile, Notification, Chat, DocumentVault, MyOrder, TrackOrder, MyGarage, ReviewOrder, EditDeliveryAddress, Payment, OrderSuccessful } from './Pages/IOSAppPage/IOSDashboard';
+
 const App = () => {
   const { pathname } = useLocation();
 
@@ -146,7 +159,27 @@ const App = () => {
           element={<AccessVehicleDoc />}
         />
 
-        {/* Panels */}
+        {/* iOS App Pages */}
+        <Route path="/ios/login" element={<IOSLoginPage />} />
+        <Route path="/ios/verify-number" element={<VerifyNumber />} />
+        <Route path="/ios/verify-email" element={<VerifyEmail />} />
+        <Route path="/ios/verify-otp" element={<VerifyOTP />} />
+        <Route path="/ios/account-created" element={<AccountCreated />} />
+        <Route path="/ios/login-success" element={<LoginSuccess />} />
+        <Route path="/ios/reset-password" element={<ResetPassword />} />
+        <Route path="/ios/password-changed" element={<PasswordChanged />} />
+        <Route path="/ios/dashboard" element={<Home />} />
+        <Route path="/ios/profile" element={<Profile />} />
+        <Route path="/ios/notifications" element={<Notification />} />
+        <Route path="/ios/chat" element={<Chat />} />
+        <Route path="/ios/document-vault" element={<DocumentVault />} />
+        <Route path="/ios/my-order" element={<MyOrder />} />
+        <Route path="/ios/track-order" element={<TrackOrder />} />
+        <Route path="/ios/my-garage" element={<MyGarage />} />
+        <Route path="/ios/review-order" element={<ReviewOrder />} />
+        <Route path="/ios/edit-delivery-address" element={<EditDeliveryAddress />} />
+        <Route path="/ios/payment" element={<Payment />} />
+        <Route path="/ios/order-successful" element={<OrderSuccessful />} />
         <Route element={<AdminPannel />}>
           <Route path="/admin-panel" element={<Dashboard />} />
           <Route path="/orders-panel" element={<Order />} />

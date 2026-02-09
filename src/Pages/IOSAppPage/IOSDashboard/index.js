@@ -1,0 +1,12 @@
+export { default as Home } from './Home';
+export { default as Profile } from './Profile';
+export { default as Notification } from './Notification';
+export { default as Chat } from './Chat';
+export { default as DocumentVault } from './DocumentVault';
+export { default as MyOrder } from './MyOrder';
+export { default as TrackOrder } from './TrackOrder';
+export { default as MyGarage } from './MyGarage';
+export { default as ReviewOrder } from './ReviewOrder';
+export { default as EditDeliveryAddress } from './EditDeliveryAddress';
+export { default as Payment } from './Payment';
+export { default as OrderSuccessful } from './OrderSuccessful';
