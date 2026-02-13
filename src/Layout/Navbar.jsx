@@ -38,15 +38,12 @@ const Navbar = () => {
         </div>
 
         {/* Right Side Buttons */}
-        <div className="hidden md:flex items-center space-x-3">
-          <Link to="/login-page" className="text-yellow-500 cursor-pointer">
-            Login
-          </Link>
+        <div className="hidden md:flex items-center">
           <Link
-            to="/button"
+            to="/login-page"
             className="bg-yellow-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-yellow-600 transition"
           >
-            Get Started
+            Login
           </Link>
         </div>
 
@@ -89,16 +86,9 @@ const Navbar = () => {
             <Link
               to="/login-page"
               onClick={() => setIsOpen(false)}
-              className="text-yellow-500 w-full text-left"
-            >
-              Login
-            </Link>
-            <Link
-              to="/button"
-              onClick={() => setIsOpen(false)}
               className="bg-yellow-500 text-white px-4 py-2 rounded text-center hover:bg-yellow-600 transition"
             >
-              Get Started
+              Login
             </Link>
           </div>
         </div>

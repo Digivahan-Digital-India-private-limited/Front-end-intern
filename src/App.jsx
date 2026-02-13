@@ -6,6 +6,7 @@ import Aboutpage from "./Components/Aboutpage/Aboutpage";
 import Updatespage from "./Components/Updatespage/Updatespage";
 import Newspage from "./Components/Newspage/Newspage";
 import Loginpage from "./Components/Authenticationpage/Loginpage";
+import OtpLoginPage from "./Components/Authenticationpage/OtpLoginPage";
 
 // information page
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
@@ -109,6 +110,7 @@ const App = () => {
           <Route path="/updates-page" element={<Updatespage />} />
           <Route path="/news-page" element={<Newspage />} />
           <Route path="/login-page" element={<Loginpage />} />
+          <Route path="/login-otp" element={<OtpLoginPage />} />
           <Route path="/contact-page" element={<Contactpage />} />
           <Route path="/visit-us-page" element={<VisitUs />} />
           <Route path="/Report-page" element={<Reports />} />
