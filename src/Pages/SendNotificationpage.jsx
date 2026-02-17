@@ -11,6 +11,8 @@ import CarHornorAlarmGoingOn from "../assets/Car Horn or Alarm Going On.png";
 import UnknownIssueAlert from "../assets/Unknown Issue Alert.png";
 import AccidentAlert from "../assets/Accident Alert.png";
 import DownloadApptabs from "./Popuptabs/DownloadApptabs";
+import NotAssigned from "./ErrorUIPage/NotAssigned";
+import Undermaintenance from "./ErrorUIPage/Undermaintenance";
 
 const notificationOptions = {
   vehicle: [
@@ -114,6 +116,57 @@ const SendNotificationpage = () => {
   });
 
   useEffect(() => {
+    const inProgress = localStorage.getItem("notificationInProgress");
+    const savedIssue = localStorage.getItem("activeIssueType");
+    const startTime = localStorage.getItem("notificationStartTime");
+
+    if (inProgress && savedIssue && startTime) {
+      const elapsed = Math.floor((Date.now() - Number(startTime)) / 1000);
+      const remaining = 30 - elapsed;
+
+      if (remaining > 0) {
+        setCooldown(true);
+        setShowPopup(true);
+        setissueType(savedIssue);
+        setFirstIssueType(savedIssue);
+        setLockNotifications(true);
+        setTimer(remaining);
+
+        // find id from issue_type
+        const allReasons = Object.values(notificationOptions).flat();
+        const matched = allReasons.find(
+          (item) => item.issue_type === savedIssue,
+        );
+
+        if (matched) {
+          setSelected(matched.id);
+        }
+      } else {
+        // time already passed → cleanup
+        localStorage.removeItem("notificationInProgress");
+        localStorage.removeItem("activeIssueType");
+        localStorage.removeItem("notificationStartTime");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (timer > 0 || !issueType) return;
+
+    // 🧹 clear saved state
+    localStorage.removeItem("notificationInProgress");
+    localStorage.removeItem("activeIssueType");
+    localStorage.removeItem("notificationStartTime");
+
+    setCooldown(false);
+    setSelected(null);
+    setShowPopup(false);
+    setTimer(30);
+
+    navigate(`/connect-tabs/${qr_id}/${issueType}`);
+  }, [timer, issueType, navigate, qr_id]);
+
+  useEffect(() => {
     if (!cooldown) return;
 
     const interval = setInterval(() => {
@@ -124,7 +177,7 @@ const SendNotificationpage = () => {
   }, [cooldown]);
 
   useEffect(() => {
-    if (timer !== 0 || issueType) return;
+    if (timer > 0 || !issueType) return;
 
     setCooldown(false);
     setSelected(null);
@@ -132,7 +185,7 @@ const SendNotificationpage = () => {
     setTimer(30);
 
     navigate(`/connect-tabs/${qr_id}/${issueType}`);
-  }, [timer, navigate, qr_id, issueType]);
+  }, [timer, issueType, navigate, qr_id]);
 
   // Filter Notification Type base on product type
   const activeReasons = user?.product_type
@@ -191,10 +244,12 @@ const SendNotificationpage = () => {
       if (!lockNotifications) {
         setLockNotifications(true); // first successful send ke baad disable
       }
+      // 🔐 Save state for refresh restore
+      localStorage.setItem("notificationInProgress", "true");
+      localStorage.setItem("activeIssueType", currentIssue);
+      localStorage.setItem("notificationStartTime", Date.now().toString());
 
-      setissueType(currentIssue);
       setCooldown(true);
-      setTimer(30);
       setShowPopup(true); // 👈 YE LINE ADD KARO (popup open)
     } catch (error) {
       alert(error?.response?.data?.message || "Failed to send notification");
@@ -202,22 +257,6 @@ const SendNotificationpage = () => {
       setIsSending(false);
     }
   };
-
-  if (isError) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-center">
-        <p className="text-red-500 mb-4">
-          {error.message || "Something went wrong"}
-        </p>
-        <button
-          onClick={() => navigate("/")}
-          className="bg-orange-400 text-white px-6 py-2 rounded"
-        >
-          Go Back
-        </button>
-      </div>
-    );
-  }
 
   if (isLoading) {
     return (
@@ -227,9 +266,27 @@ const SendNotificationpage = () => {
     );
   }
 
+  if (isError && error.type !== "SERVER_ERROR") {
+    return <NotAssigned message={error.message} />;
+  }
+
+  if (isError && error.type === "SERVER_ERROR") {
+    return <Undermaintenance />;
+  }
+
   return (
     <main>
-      {showPopup && <DownloadApptabs />}
+      {showPopup && (
+        <DownloadApptabs
+          timer={timer}
+          onClose={() => {
+            // allow manual close ONLY after 15 sec
+            if (timer <= 15) {
+              setShowPopup(false);
+            }
+          }}
+        />
+      )}
 
       <div className="min-h-screen max-w-6xl mx-auto bg-gray-100 p-4">
         {/* Header */}

@@ -157,8 +157,13 @@ const EmergencyContactUspage = () => {
               </div>
 
               <div className="flex gap-3">
-                <button className="text-green-500 text-lg">
-                  <FaWhatsapp />
+                <button
+                  onClick={() => {
+                    setshowSmsPopup(true);
+                  }}
+                  className="text-green-500 text-lg"
+                >
+                  <FaSms />
                 </button>
                 <button
                   onClick={() => {
