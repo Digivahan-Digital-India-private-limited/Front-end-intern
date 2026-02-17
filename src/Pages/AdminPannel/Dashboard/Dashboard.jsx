@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import StatCard from "./StateCard";
 
 import {
@@ -25,6 +26,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import { MyContext } from "../../../ContextApi/DataProvider";
 
 // Charts Data
 const happyCustomersData = [
@@ -59,6 +61,17 @@ const deleteRequestData = [
 ];
 
 const Dashboard = () => {
+  const { LogoutAdmin } = useContext(MyContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const result = await LogoutAdmin();
+
+    if (result) {
+      navigate("/login-page", { replace: true });
+    }
+  };
+
   return (
     <main className="w-full h-screen md:p-5 p-2 overflow-y-auto">
       <header className="bg-white rounded-lg shadow-sm p-4 mb-4 flex flex-col md:flex-row items-center justify-between gap-4">
@@ -70,8 +83,13 @@ const Dashboard = () => {
           />
           <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
         </div>
-
         <div className="flex items-center gap-4">
+          <button
+            onClick={handleLogout}
+            className="bg-yellow-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-yellow-600 transition"
+          >
+            Logout
+          </button>
           <button className="relative text-xl">🔔</button>
           <span className="text-gray-700">👤 Admin User</span>
         </div>

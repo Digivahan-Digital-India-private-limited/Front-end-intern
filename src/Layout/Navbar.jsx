@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import logo from "../assets/Group 8.png";
 import { Link } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const token = Cookies.get("admin_token");
 
   return (
     <header className="w-full bg-white shadow-lg mb-1 z-50">
@@ -38,14 +40,25 @@ const Navbar = () => {
         </div>
 
         {/* Right Side Buttons */}
-        <div className="hidden md:flex items-center">
-          <Link
-            to="/login-page"
-            className="bg-yellow-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-yellow-600 transition"
-          >
-            Login
-          </Link>
-        </div>
+        {token !== undefined ? (
+          <div className="hidden md:flex items-center">
+            <Link
+              to="/admin-panel"
+              className="bg-yellow-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-yellow-600 transition"
+            >
+              Dashboard
+            </Link>
+          </div>
+        ) : (
+          <div className="hidden md:flex items-center">
+            <Link
+              to="/login-page"
+              className="bg-yellow-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-yellow-600 transition"
+            >
+              Login
+            </Link>
+          </div>
+        )}
 
         {/* Mobile Menu Toggle Button */}
         <button

@@ -79,18 +79,21 @@ import AdminReports from "./Pages/AdminPannel/Reports/Reports";
 import VehicleOwnerReports from "./Pages/AdminPannel/Reports/VehicleOwnerReports/VehicleOwnerReports";
 import InteractorReports from "./Pages/AdminPannel/Reports/InteractorReports/InteractorReports";
 
+// Protected Routes
+import ProtectedRoutes from "./ProtectedRoutes/ProtectedRoutes";
+
 // iOS App Pages
-import { 
-  IOSLoginPage, 
-  VerifyNumber, 
-  VerifyEmail, 
-  VerifyOTP, 
-  AccountCreated,
-  LoginSuccess,
-  ResetPassword,
-  PasswordChanged 
-} from "./Pages/IOSAppPage/UserAuthentication";
-import { Home, Profile, Notification, Chat, DocumentVault, MyOrder, TrackOrder, MyGarage, ReviewOrder, EditDeliveryAddress, Payment, OrderSuccessful } from './Pages/IOSAppPage/IOSDashboard';
+// import {
+//   IOSLoginPage,
+//   VerifyNumber,
+//   VerifyEmail,
+//   VerifyOTP,
+//   AccountCreated,
+//   LoginSuccess,
+//   ResetPassword,
+//   PasswordChanged
+// } from "./Pages/IOSAppPage/UserAuthentication";
+// import { Home, Profile, Notification, Chat, DocumentVault, MyOrder, TrackOrder, MyGarage, ReviewOrder, EditDeliveryAddress, Payment, OrderSuccessful } from './Pages/IOSAppPage/IOSDashboard';
 
 const App = () => {
   const { pathname } = useLocation();
@@ -144,7 +147,10 @@ const App = () => {
           element={<SendNotificationpage />}
         />
 
-        <Route path="/connect-tabs/:qr_id/:issue_type" element={<ConnectTabs />} />
+        <Route
+          path="/connect-tabs/:qr_id/:issue_type"
+          element={<ConnectTabs />}
+        />
 
         <Route
           path="/accident-notification/:qr_id"
@@ -161,7 +167,7 @@ const App = () => {
           element={<AccessVehicleDoc />}
         />
 
-        {/* iOS App Pages */}
+        {/* iOS App Pages
         <Route path="/ios/login" element={<IOSLoginPage />} />
         <Route path="/ios/verify-number" element={<VerifyNumber />} />
         <Route path="/ios/verify-email" element={<VerifyEmail />} />
@@ -181,8 +187,14 @@ const App = () => {
         <Route path="/ios/review-order" element={<ReviewOrder />} />
         <Route path="/ios/edit-delivery-address" element={<EditDeliveryAddress />} />
         <Route path="/ios/payment" element={<Payment />} />
-        <Route path="/ios/order-successful" element={<OrderSuccessful />} />
-        <Route element={<AdminPannel />}>
+        <Route path="/ios/order-successful" element={<OrderSuccessful />} /> */}
+        <Route
+          element={
+            <ProtectedRoutes>
+              <AdminPannel />
+            </ProtectedRoutes>
+          }
+        >
           <Route path="/admin-panel" element={<Dashboard />} />
           <Route path="/orders-panel" element={<Order />} />
           <Route path="/qr-panel" element={<Qrmanagement />} />
@@ -251,10 +263,19 @@ const App = () => {
           <Route path="/admin/issues/service" element={<ServiceIssue />} />
           <Route path="/admin/issues/support" element={<SupportIssue />} />
           <Route path="/admin/issues/suggestion" element={<Suggestion />} />
-          <Route path="/admin/issues/resolution" element={<IssueResolution />} />
+          <Route
+            path="/admin/issues/resolution"
+            element={<IssueResolution />}
+          />
           <Route path="/admin/reports" element={<AdminReports />} />
-          <Route path="/admin/reports/vehicle-owners" element={<VehicleOwnerReports />} />
-          <Route path="/admin/reports/interactors" element={<InteractorReports />} />
+          <Route
+            path="/admin/reports/vehicle-owners"
+            element={<VehicleOwnerReports />}
+          />
+          <Route
+            path="/admin/reports/interactors"
+            element={<InteractorReports />}
+          />
         </Route>
       </Routes>
     </main>

@@ -1,76 +1,123 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logimg from "../../assets/Frame 1.png";
+import { MyContext } from "../../ContextApi/DataProvider";
 
 const OtpLoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [otp, setOtp] = useState("");
+  const { verifyAdminOtp } = useContext(MyContext);
+  const [Loading, setLoading] = useState(false);
+
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const inputsRef = useRef([]);
 
   const phone = useMemo(() => {
     const statePhone = location.state?.phone;
-    const storedPhone = sessionStorage.getItem("login_phone");
+    const storedPhone = localStorage.getItem("login_phone");
     return statePhone || storedPhone || "";
   }, [location.state]);
 
-  const handleSubmit = (e) => {
+  // Handle change
+  const handleChange = (value, index) => {
+    if (!/^\d?$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // auto focus next
+    if (value && index < 5) {
+      inputsRef.current[index + 1].focus();
+    }
+  };
+
+  // Handle backspace
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputsRef.current[index - 1].focus();
+    }
+  };
+
+  // Handle paste
+  const handlePaste = (e) => {
+    const pasteData = e.clipboardData.getData("text").replace(/\D/g, "");
+    if (pasteData.length === 6) {
+      const newOtp = pasteData.split("");
+      setOtp(newOtp);
+      inputsRef.current[5].focus();
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (otp !== "008500") {
-      toast.error("Please enter the correct OTP");
+    const otpValue = otp.join("");
+
+    if (otpValue.length !== 6) {
+      toast.error("Please enter complete OTP");
       return;
     }
 
-    // Frontend-only success flow
-    localStorage.setItem("role", "admin");
-    toast.success("Login successful!");
-    setTimeout(() => navigate("/admin-panel"), 900);
-  };
+    try {
+      setLoading(true);
 
-  const handleResend = () => {
-    toast.info("OTP resent to your phone");
-  };
+      const result = await verifyAdminOtp(otpValue);
 
-  const handleEditNumber = () => {
-    navigate("/login-page", { replace: true });
+      if (result) {
+        toast.success("Login successful 💛");
+
+        navigate("/admin-panel", { replace: true });
+      } else {
+        toast.error("No response received");
+      }
+    } catch (error) {
+      console.log("Component error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white shadow-lg rounded-2xl flex flex-col md:flex-row w-full max-w-3xl overflow-hidden animate-fade-in">
-        <div className="w-full md:w-1/2 flex justify-center items-center p-4 md:p-6 bg-yellow-50">
+      <div className="bg-white shadow-lg rounded-2xl flex flex-col md:flex-row w-full max-w-3xl overflow-hidden">
+        {/* Image */}
+        <div className="w-full md:w-[45%] flex justify-center items-center p-4 md:p-3 bg-red-500">
           <img
             src={logimg}
             alt="Login Illustration"
-            className="w-full h-64 sm:h-80 object-contain rounded-lg animate-float"
+            className="w-full h-64 sm:h-80 object-contain rounded-lg"
           />
         </div>
 
-        <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-center">
+        {/* Form */}
+        <div className="w-full md:w-[55%] p-6 sm:p-8 flex flex-col justify-center">
           <h1 className="text-2xl sm:text-3xl font-bold text-yellow-500 mb-2">
             Verify your number
           </h1>
+
           <p className="text-sm text-gray-600 mb-6">
-            We sent an OTP to {phone ? `+91 ${phone}` : "your phone"}. Use
-            008500 to continue.
+            We sent an OTP to {phone ? `+91 ${phone}` : "your phone"}.
           </p>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <input
-              type="tel"
-              inputMode="numeric"
-              pattern="[0-9]{6}"
-              maxLength={6}
-              placeholder="Enter 6-digit OTP"
-              value={otp}
-              onChange={(e) => {
-                const digitsOnly = e.target.value.replace(/\D/g, "");
-                setOtp(digitsOnly.slice(0, 6));
-              }}
-              required
-              className="w-full px-4 py-2 border rounded-lg tracking-[0.3em] text-center text-lg"
-            />
+            {/* OTP BOXES */}
+            <div className="flex justify-between gap-2" onPaste={handlePaste}>
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  ref={(el) => (inputsRef.current[index] = el)}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleChange(e.target.value, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  className="w-12 h-12 text-center border rounded-lg text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
+              ))}
+            </div>
 
             <button
               type="submit"
@@ -83,14 +130,14 @@ const OtpLoginPage = () => {
           <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
             <button
               type="button"
-              onClick={handleResend}
               className="text-yellow-600 hover:text-yellow-700"
             >
               Resend OTP
             </button>
+
             <button
               type="button"
-              onClick={handleEditNumber}
+              onClick={() => navigate("/login-page", { replace: true })}
               className="text-gray-500 hover:text-gray-700"
             >
               Edit number
