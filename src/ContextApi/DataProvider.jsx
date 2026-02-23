@@ -1,8 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import React, { createContext, useState } from "react";
+import React from "react";
 import { toast } from "react-toastify";
-export const MyContext = createContext();
+import { MyContext } from "./MyContext";
 const DataProvider = ({ children }) => {
   const AdminSignInwithOtp = async (phone) => {
     try {

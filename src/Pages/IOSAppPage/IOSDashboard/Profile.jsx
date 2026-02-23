@@ -64,7 +64,7 @@ const Profile = () => {
         navigate("/ios/my-order");
         break;
       case 3:
-        navigate("/ios/my-garage");
+        navigate("/ios/my-virtual-qr-list");
         break;
       case 4:
         navigate("/ios/update-profile");

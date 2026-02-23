@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Clock, Check, ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
+import { useShiprocket } from "../../../ContextApi/shiprocketContext";
+import ManageOrder from "./ManageOrder";
 
 const unprocessedOrders = [
-  { id: "ORD-001", name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
-  { id: "ORD-002", name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
-  { id: "ORD-003", name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
-  { id: "ORD-004", name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
-  { id: "ORD-005", name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
+  { id: "ORD-001", shipmentId: 1169201746, name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
+  { id: "ORD-002", shipmentId: 1169201747, name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
+  { id: "ORD-003", shipmentId: 1169201748, name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
+  { id: "ORD-004", shipmentId: 1169201749, name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
+  { id: "ORD-005", shipmentId: 1169201750, name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
 ];
 
 // Sample manifest data - this will be populated from processed orders
@@ -55,6 +57,7 @@ const processedOrdersData = [
 ];
 
 function Order() {
+  const { generateLabel, token, setToken } = useShiprocket();
   const [ordersView, setOrdersView] = useState(null);
   const [processedOrders, setProcessedOrders] = useState({});
   const [printedOrders, setPrintedOrders] = useState({});
@@ -63,6 +66,8 @@ function Order() {
   const [expandedManifest, setExpandedManifest] = useState(null);
   const [printedManifests, setPrintedManifests] = useState({});
   const [printingManifest, setPrintingManifest] = useState(null);
+  const [labelError, setLabelError] = useState("");
+  const [tokenInput, setTokenInput] = useState(token);
 
   // Handle Process button click - calls 3 APIs
   const handleProcess = async (orderId) => {
@@ -87,22 +92,32 @@ function Order() {
     }
   };
 
+  const triggerDownload = (url, filename) => {
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
   // Handle Print button click - calls API
-  const handlePrint = async (orderId) => {
-    setPrintingOrder(orderId);
+  const handlePrint = async (order) => {
+    setPrintingOrder(order.id);
+    setLabelError("");
     try {
-      // TODO: Backend Integration - Call print API
-      // await api.printLabel(orderId);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+      const labelUrl = await generateLabel(order.shipmentId);
+      triggerDownload(labelUrl, `label-${order.shipmentId}.pdf`);
+
       setPrintedOrders(prev => ({
         ...prev,
-        [orderId]: true
+        [order.id]: true
       }));
     } catch (error) {
       console.error("Error printing label:", error);
+      setLabelError(error?.message || "Unable to download label.");
     } finally {
       setPrintingOrder(null);
     }
@@ -291,23 +306,7 @@ function Order() {
   // Render Manage Order Page
   if (ordersView === "manage") {
     return (
-      <main className="w-full h-screen flex flex-col bg-white">
-        <div className="flex items-center gap-4 p-6 border-b border-gray-200 bg-white">
-          <button 
-            onClick={() => setOrdersView(null)}
-            className="p-2 hover:bg-gray-100 rounded-lg"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <h1 className="text-2xl font-semibold">Manage Order</h1>
-        </div>
-        
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="bg-gray-50 rounded-lg p-6">
-            <p className="text-gray-600 text-center">Manage Order functionality will be implemented here.</p>
-          </div>
-        </div>
-      </main>
+      <ManageOrder onBack={() => setOrdersView(null)} />
     );
   }
 
@@ -326,6 +325,25 @@ function Order() {
         </div>
         
         <div className="flex-1 overflow-y-auto p-6">
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <input
+              type="password"
+              value={tokenInput}
+              onChange={(event) => setTokenInput(event.target.value)}
+              placeholder="Paste Shiprocket token"
+              className="w-full max-w-xl rounded-lg border border-gray-300 px-3 py-2 text-sm"
+            />
+            <button
+              type="button"
+              onClick={() => setToken(tokenInput)}
+              className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white"
+            >
+              Save Token
+            </button>
+            {labelError && (
+              <span className="text-sm text-red-600">{labelError}</span>
+            )}
+          </div>
           <div className="bg-gray-50 rounded-lg">
             <table className="w-full">
               <thead>
@@ -378,7 +396,7 @@ function Order() {
                             </button>
                           ) : (
                             <button 
-                              onClick={() => handlePrint(order.id)}
+                              onClick={() => handlePrint(order)}
                               disabled={printingOrder === order.id}
                               className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium disabled:opacity-50"
                             >

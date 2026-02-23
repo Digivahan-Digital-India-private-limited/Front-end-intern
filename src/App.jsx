@@ -79,21 +79,27 @@ import AdminReports from "./Pages/AdminPannel/Reports/Reports";
 import VehicleOwnerReports from "./Pages/AdminPannel/Reports/VehicleOwnerReports/VehicleOwnerReports";
 import InteractorReports from "./Pages/AdminPannel/Reports/InteractorReports/InteractorReports";
 
+
 // Protected Routes
 import ProtectedRoutes from "./ProtectedRoutes/ProtectedRoutes";
 
 // iOS App Pages
-// import {
-//   IOSLoginPage,
-//   VerifyNumber,
-//   VerifyEmail,
-//   VerifyOTP,
-//   AccountCreated,
-//   LoginSuccess,
-//   ResetPassword,
-//   PasswordChanged
-// } from "./Pages/IOSAppPage/UserAuthentication";
-// import { Home, Profile, Notification, Chat, DocumentVault, MyOrder, TrackOrder, MyGarage, ReviewOrder, EditDeliveryAddress, Payment, OrderSuccessful } from './Pages/IOSAppPage/IOSDashboard';
+import {
+  IOSLoginPage,
+  VerifyNumber,
+  VerifyEmail,
+  VerifyOTP,
+  AccountCreated,
+  LoginSuccess,
+  ResetPassword,
+  PasswordChanged
+} from "./Pages/IOSAppPage/UserAuthentication";
+import { Home, Profile, Notification, Chat, DocumentVault, MyOrder, TrackOrder, MyGarage, ReviewOrder, EditDeliveryAddress, Payment, OrderSuccessful, UpdateProfile, BasicDetails, PublicDetails, EmergencyContactsEmpty, EmergencyContactsList, EditEmergencyContact, AddEmergencyContact, ChangePassword, IOSAboutUs, IOSTermsConditions, IOSPrivacyPolicy } from './Pages/IOSAppPage/IOSDashboard';
+
+// Virtual QR Management Pages
+import MyVirtualQREmpty from "./Pages/IOSAppPage/IOSDashboard/VirtualQR/MyVirtualQREmpty";
+import MyVirtualQRList from "./Pages/IOSAppPage/IOSDashboard/VirtualQR/MyVirtualQRList";
+import MyVirtualQRDetail from "./Pages/IOSAppPage/IOSDashboard/VirtualQR/MyVirtualQRDetail";
 
 const App = () => {
   const { pathname } = useLocation();
@@ -167,7 +173,7 @@ const App = () => {
           element={<AccessVehicleDoc />}
         />
 
-        {/* iOS App Pages
+        {/* iOS App Pages */}
         <Route path="/ios/login" element={<IOSLoginPage />} />
         <Route path="/ios/verify-number" element={<VerifyNumber />} />
         <Route path="/ios/verify-email" element={<VerifyEmail />} />
@@ -184,10 +190,24 @@ const App = () => {
         <Route path="/ios/my-order" element={<MyOrder />} />
         <Route path="/ios/track-order" element={<TrackOrder />} />
         <Route path="/ios/my-garage" element={<MyGarage />} />
+        <Route path="/ios/my-virtual-qr-empty" element={<MyVirtualQREmpty />} />
+        <Route path="/ios/my-virtual-qr-list" element={<MyVirtualQRList />} />
+        <Route path="/ios/my-virtual-qr-detail" element={<MyVirtualQRDetail />} />
+        <Route path="/ios/update-profile" element={<UpdateProfile />} />
+        <Route path="/ios/basic-details" element={<BasicDetails />} />
+        <Route path="/ios/public-details" element={<PublicDetails />} />
+        <Route path="/ios/emergency-contacts-empty" element={<EmergencyContactsEmpty />} />
+        <Route path="/ios/emergency-contacts-list" element={<EmergencyContactsList />} />
+        <Route path="/ios/edit-emergency-contact" element={<EditEmergencyContact />} />
+        <Route path="/ios/add-emergency-contact" element={<AddEmergencyContact />} />
+        <Route path="/ios/change-password" element={<ChangePassword />} />
+        <Route path="/ios/about-us" element={<IOSAboutUs />} />
+        <Route path="/ios/terms-conditions" element={<IOSTermsConditions />} />
+        <Route path="/ios/privacy-policy" element={<IOSPrivacyPolicy />} />
         <Route path="/ios/review-order" element={<ReviewOrder />} />
         <Route path="/ios/edit-delivery-address" element={<EditDeliveryAddress />} />
         <Route path="/ios/payment" element={<Payment />} />
-        <Route path="/ios/order-successful" element={<OrderSuccessful />} /> */}
+        <Route path="/ios/order-successful" element={<OrderSuccessful />} />
         <Route
           element={
             <ProtectedRoutes>
@@ -203,6 +223,7 @@ const App = () => {
           <Route path="/allotted-qr-code" element={<AllottedQrCode />} />
           <Route path="/sales-details-page" element={<SalesDetails />} />
           <Route path="/manage-user" element={<ManageUserApp />} />
+
           <Route path="/our-policies" element={<UpdatePolicies />} />
           <Route path="/edit-policy/:title" element={<Editpolicypage />} />
           <Route path="/fuel-Price" element={<FuelPriceManager />} />

@@ -26,7 +26,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { MyContext } from "../../../ContextApi/DataProvider";
+import { MyContext } from "../../../ContextApi/MyContext";
 
 // Charts Data
 const happyCustomersData = [

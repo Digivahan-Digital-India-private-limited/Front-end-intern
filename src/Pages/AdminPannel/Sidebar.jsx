@@ -15,6 +15,7 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Smartphone,
 } from "lucide-react";
 
 const menuItems = [
@@ -26,6 +27,7 @@ const menuItems = [
   { name: "Issues / Priority", icon: AlertTriangle, link: "/admin/issues" },
   { name: "Reports", icon: FileText, link: "/admin/reports" },
   { name: "Manage User App", icon: Users, link: "/manage-user" },
+  { name: "iOS App", icon: Smartphone, link: "/ios/login" },
   { name: "Settings", icon: Settings, link: "" },
 ];
 
