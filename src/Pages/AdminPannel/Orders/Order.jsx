@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Clock, Check, ArrowLeft, ChevronDown, ChevronUp, Package, Truck, Box, CheckCircle, FileText, Settings } from "lucide-react";
-// import { useShiprocket } from "../../../ContextApi/shiprocketContext";
 import ManageOrder from "./ManageOrder";
-
-// const unprocessedOrders = [
-//   { id: "ORD-001", shipmentId: 1169201746, name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
-//   { id: "ORD-002", shipmentId: 1169201747, name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
-//   { id: "ORD-003", shipmentId: 1169201748, name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
-//   { id: "ORD-004", shipmentId: 1169201749, name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
-//   { id: "ORD-005", shipmentId: 1169201750, name: "QR Code", user: "Rajesh", vehicle: "DL01AB1234", date: "2025 12 01\n10:20 AM" },
-// ];
 
 // Sample manifest data - now using dynamic state
 // Sample processed orders data - now using dynamic state
 
 function Order() {
-  // const { generateLabel, token, setToken } = useShiprocket();
   const [ordersView, setOrdersView] = useState(null);
   // const [processedOrders, setProcessedOrders] = useState({});
   // const [printedOrders, setPrintedOrders] = useState({});
@@ -34,7 +24,6 @@ function Order() {
   const [processedEshopboxOrders, setProcessedEshopboxOrders] = useState({});
   const [printedEshopboxOrders, setPrintedEshopboxOrders] = useState({});
   // const [labelError, setLabelError] = useState("");
-  // const [tokenInput, setTokenInput] = useState(token);
 
   // State for order counts
   const [shiprocketOrders, setShiprocketOrders] = useState([]);
@@ -43,6 +32,28 @@ function Order() {
   const [processedOrdersData, setProcessedOrdersData] = useState([]);
   const [manifestData, setManifestData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [deliveryPartners, setDeliveryPartners] = useState([
+    {
+      id: "shiprocket",
+      name: "Shiprocket",
+      status: "active",
+    },
+    {
+      id: "delhivery",
+      name: "Delhivery",
+      status: "inactive",
+    },
+    {
+      id: "eshopbox",
+      name: "EshopBox",
+      status: "inactive",
+    },
+  ]);
+  const [showAddPartner, setShowAddPartner] = useState(false);
+  const [newPartner, setNewPartner] = useState({
+    name: "",
+  });
 
   // Fetch orders data from API
   const fetchOrdersData = async () => {
@@ -255,6 +266,50 @@ function Order() {
     } catch (error) {
       console.error("Error tracking order:", error);
     }
+  };
+
+  const setActivePartner = (partnerId) => {
+    setDeliveryPartners((prev) =>
+      prev.map((partner) => ({
+        ...partner,
+        status: partner.id === partnerId ? "active" : "inactive",
+      }))
+    );
+  };
+
+  const handleNewPartnerChange = (event) => {
+    const { name, value } = event.target;
+    setNewPartner((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddPartner = (event) => {
+    event.preventDefault();
+    if (!newPartner.name.trim()) {
+      return;
+    }
+
+    const partnerId = newPartner.name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+
+    setDeliveryPartners((prev) => [
+      ...prev,
+      {
+        id: partnerId || `partner-${prev.length + 1}`,
+        name: newPartner.name.trim(),
+        status: "inactive",
+      },
+    ]);
+
+    setNewPartner({
+      name: "",
+    });
+    setShowAddPartner(false);
+  };
+
+  const handleRemovePartner = (partnerId) => {
+    setDeliveryPartners((prev) => prev.filter((p) => p.id !== partnerId));
   };
 
   // Render Generate Manifesto Page
@@ -799,6 +854,192 @@ function Order() {
     );
   }
 
+  // Render Delivery Partners Page
+  if (ordersView === "partners") {
+    const activePartner = deliveryPartners.find(
+      (partner) => partner.status === "active"
+    );
+
+    return (
+      <main className="w-full h-screen flex flex-col bg-white">
+        <div className="flex items-center gap-4 p-6 border-b border-gray-200 bg-white">
+          <button
+            onClick={() => setOrdersView(null)}
+            className="p-2 hover:bg-gray-100 rounded-lg"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <h1 className="text-2xl font-semibold">Delivery Partners</h1>
+          <span className="ml-auto text-sm font-medium text-gray-600">
+            Total Partners: {deliveryPartners.length}
+          </span>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex items-center justify-between gap-4 mb-6">
+            <div>
+              <p className="text-sm text-gray-500">Active Partner</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {activePartner ? activePartner.name : "Not set"}
+              </p>
+            </div>
+            <button
+              onClick={() => setShowAddPartner(true)}
+              className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+            >
+              Add Partner
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {deliveryPartners.map((partner) => {
+              const colorSchemes = {
+                shiprocket: {
+                  border: "border-blue-200",
+                  activeBorder: "border-blue-400",
+                  textHover: "group-hover:text-blue-600",
+                  gradientHover: "from-blue-400 to-cyan-500",
+                  buttonGradient: "from-blue-500 to-blue-600",
+                  buttonHover: "hover:from-blue-600 hover:to-blue-700",
+                  badgeActive: "bg-blue-100 text-blue-800",
+                  badgeInactive: "bg-blue-50 text-blue-700 group-hover:bg-blue-100",
+                  icon: "🚀",
+                },
+                delhivery: {
+                  border: "border-orange-200",
+                  activeBorder: "border-orange-400",
+                  textHover: "group-hover:text-orange-600",
+                  gradientHover: "from-orange-400 to-red-500",
+                  buttonGradient: "from-orange-500 to-orange-600",
+                  buttonHover: "hover:from-orange-600 hover:to-orange-700",
+                  badgeActive: "bg-orange-100 text-orange-800",
+                  badgeInactive: "bg-orange-50 text-orange-700 group-hover:bg-orange-100",
+                  icon: "🚚",
+                },
+                eshopbox: {
+                  border: "border-purple-200",
+                  activeBorder: "border-purple-400",
+                  textHover: "group-hover:text-purple-600",
+                  gradientHover: "from-purple-400 to-pink-500",
+                  buttonGradient: "from-purple-500 to-purple-600",
+                  buttonHover: "hover:from-purple-600 hover:to-purple-700",
+                  badgeActive: "bg-purple-100 text-purple-800",
+                  badgeInactive: "bg-purple-50 text-purple-700 group-hover:bg-purple-100",
+                  icon: "📦",
+                },
+              };
+
+              const scheme = colorSchemes[partner.id] || colorSchemes.shiprocket;
+
+              return (
+                <div
+                  key={partner.id}
+                  className={`group relative bg-white border-2 rounded-xl p-6 transition-all duration-300 ease-out transform hover:scale-105 hover:-translate-y-2 ${
+                    partner.status === "active"
+                      ? `${scheme.activeBorder} shadow-lg hover:shadow-2xl`
+                      : `${scheme.border} shadow-md hover:shadow-2xl`
+                  }`}
+                >
+                  {/* Animated background gradient on hover */}
+                  <div
+                    className={`absolute inset-0 rounded-xl bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${scheme.gradientHover}`}
+                  ></div>
+
+                  <div className="relative z-10 flex items-start justify-between mb-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">{scheme.icon}</span>
+                        <h3 className={`text-lg font-bold text-gray-900 ${scheme.textHover} transition-colors duration-300`}>
+                          {partner.name}
+                        </h3>
+                      </div>
+                      <span
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold mt-3 transition-all duration-300 ${
+                          partner.status === "active"
+                            ? `bg-green-100 text-green-800 scale-105`
+                            : scheme.badgeInactive
+                        }`}
+                      >
+                        {partner.status}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleRemovePartner(partner.id)}
+                      className="ml-2 text-red-300 hover:text-red-600 font-medium text-lg transition-all duration-200 hover:scale-125 hover:rotate-90"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  <div className="relative z-10 flex gap-2 mt-6">
+                    {partner.status === "active" ? (
+                      <button className="flex-1 px-4 py-2.5 rounded-lg bg-green-500 text-white text-sm font-semibold cursor-default shadow-md transition-all duration-300 hover:shadow-lg">
+                        ✓ Active
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => setActivePartner(partner.id)}
+                        className={`flex-1 px-4 py-2.5 rounded-lg bg-gradient-to-r ${scheme.buttonGradient} text-white text-sm font-semibold shadow-md transition-all duration-300 hover:shadow-lg ${scheme.buttonHover} transform hover:scale-105 active:scale-95`}
+                      >
+                        Set Active
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {showAddPartner && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+            <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl">
+              <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+                <h2 className="text-lg font-semibold">Add Delivery Partner</h2>
+                <button
+                  onClick={() => setShowAddPartner(false)}
+                  className="text-gray-500 hover:text-gray-800"
+                >
+                  ✕
+                </button>
+              </div>
+              <form onSubmit={handleAddPartner} className="px-6 py-5 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Partner Name
+                  </label>
+                  <input
+                    name="name"
+                    value={newPartner.name}
+                    onChange={handleNewPartnerChange}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                    placeholder="Enter partner name"
+                    required
+                  />
+                </div>
+                <div className="flex justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddPartner(false)}
+                    className="px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+                  >
+                    Add Partner
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </main>
+    );
+  }
+
   // Render Manage Order Page
   if (ordersView === "manage") {
     return (
@@ -806,114 +1047,9 @@ function Order() {
     );
   }
 
-  // Render Unprocessed Orders Table
-  // if (ordersView === "unprocessed") {
-  //   return (
-  //     <main className="w-full h-screen flex flex-col bg-white">
-  //       <div className="flex items-center gap-4 p-6 border-b border-gray-200 bg-white">
-  //         <button 
-  //           onClick={() => setOrdersView(null)}
-  //           className="p-2 hover:bg-gray-100 rounded-lg"
-  //         >
-  //           <ArrowLeft className="w-5 h-5" />
-  //         </button>
-  //         <h1 className="text-2xl font-semibold">Unprocessed Orders</h1>
-  //       </div>
-  //       
-  //       <div className="flex-1 overflow-y-auto p-6">
-  //         <div className="mb-4 flex flex-wrap items-center gap-3">
-  //           <input
-  //             type="password"
-  //             value={tokenInput}
-  //             onChange={(event) => setTokenInput(event.target.value)}
-  //             placeholder="Paste Shiprocket token"
-  //             className="w-full max-w-xl rounded-lg border border-gray-300 px-3 py-2 text-sm"
-  //           />
-  //           <button
-  //             type="button"
-  //             onClick={() => setToken(tokenInput)}
-  //             className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white"
-  //           >
-  //             Save Token
-  //           </button>
-  //           {labelError && (
-  //             <span className="text-sm text-red-600">{labelError}</span>
-  //           )}
-  //         </div>
-  //         <div className="bg-gray-50 rounded-lg">
-  //           <table className="w-full">
-  //             <thead>
-  //               <tr className="border-b border-gray-200">
-  //                 <th className="text-left p-4 font-medium text-gray-700">Order ID</th>
-  //                 <th className="text-left p-4 font-medium text-gray-700">Order Name</th>
-  //                 <th className="text-left p-4 font-medium text-gray-700">User Name</th>
-  //                 <th className="text-left p-4 font-medium text-gray-700">Vehicle Name</th>
-  //                 <th className="text-left p-4 font-medium text-gray-700">Order Date</th>
-  //                 <th className="text-left p-4 font-medium text-gray-700">Action</th>
-  //               </tr>
-  //             </thead>
-  //             <tbody>
-  //               {unprocessedOrders.map((order, index) => (
-  //                 <React.Fragment key={index}>
-  //                   <tr className="border-b border-gray-100">
-  //                     <td className="p-4 text-gray-600">{order.id}</td>
-  //                     <td className="p-4 text-gray-600">{order.name}</td>
-  //                     <td className="p-4 text-gray-600">{order.user}</td>
-  //                     <td className="p-4 text-gray-600">{order.vehicle}</td>
-  //                     <td className="p-4 text-gray-600 whitespace-pre-line">{order.date}</td>
-  //                     <td className="p-4">
-  //                       {processedOrders[order.id] ? (
-  //                         <button className="bg-green-500 text-white px-4 py-2 rounded-lg font-medium cursor-default">
-  //                           Processed
-  //                         </button>
-  //                       ) : (
-  //                         <button 
-  //                           onClick={() => handleProcess(order.id)}
-  //                           disabled={processingOrder === order.id}
-  //                           className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium disabled:opacity-50"
-  //                         >
-  //                           {processingOrder === order.id ? "Processing..." : "Process"}
-  //                         </button>
-  //                       )}
-  //                     </td>
-  //                   </tr>
-  //                   {/* Download Label Dialog Row - appears after processing */}
-  //                   {processedOrders[order.id] && (
-  //                     <tr className="border-b border-gray-100 bg-white">
-  //                       <td colSpan="5" className="p-4">
-  //                         <div className="flex items-center gap-4 pl-4 border-l-4 border-gray-200">
-  //                           <span className="text-gray-700">Download the label for the order</span>
-  //                         </div>
-  //                       </td>
-  //                       <td className="p-4">
-  //                         {printedOrders[order.id] ? (
-  //                           <button className="bg-green-500 text-white px-6 py-2 rounded-lg font-medium cursor-default">
-  //                             Printed
-  //                           </button>
-  //                         ) : (
-  //                           <button 
-  //                             onClick={() => handlePrint(order)}
-  //                             disabled={printingOrder === order.id}
-  //                             className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium disabled:opacity-50"
-  //                           >
-  //                             {printingOrder === order.id ? "Printing..." : "Print"}
-  //                           </button>
-  //                         )}
-  //                       </td>
-  //                     </tr>
-  //                   )}
-  //                 </React.Fragment>
-  //               ))}
-  //             </tbody>
-  //           </table>
-  //         </div>
-  //       </div>
-  //     </main>
-  //   );
-  // }
 
   return (
-    <main className="w-full h-screen p-2 overflow-y-auto">
+    <main className="w-full h-screen px-4 py-3 overflow-y-auto">
       <div>
         <h1 className="text-3xl font-bold">Order Management</h1>
         <p className="text-gray-500 mb-6">Manage and track all your orders</p>
@@ -925,7 +1061,7 @@ function Order() {
             {/* Shiprocket Card */}
             <div
               onClick={() => setOrdersView("shiprocket")}
-              className={`group relative flex items-center justify-between p-6 bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "shiprocket"
                   ? "ring-4 ring-blue-300 ring-offset-2"
                   : ""
@@ -954,10 +1090,36 @@ function Order() {
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-12 -mb-12"></div>
             </div>
 
+            {/* Delivery Partners Card */}
+            <div
+              onClick={() => setOrdersView("partners")}
+              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+                ordersView === "partners"
+                  ? "ring-4 ring-cyan-300 ring-offset-2"
+                  : ""
+              }`}
+            >
+              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+              <div className="flex items-center gap-4 relative z-10">
+                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                  <Truck className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Delivery Partners</h2>
+                  <p className="text-sm text-cyan-100">Switch and manage partners</p>
+                  <p className="text-sm font-semibold text-white mt-1">
+                    {deliveryPartners.length} Partners
+                  </p>
+                </div>
+              </div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-12 -mb-12"></div>
+            </div>
+
             {/* Delhivery Card */}
             <div
               onClick={() => setOrdersView("delhivery")}
-              className={`group relative flex items-center justify-between p-6 bg-gradient-to-br from-rose-400 to-rose-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-rose-400 to-rose-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "delhivery"
                   ? "ring-4 ring-rose-300 ring-offset-2"
                   : ""
@@ -989,7 +1151,7 @@ function Order() {
             {/* EshopBox Card */}
             <div
               onClick={() => setOrdersView("eshopbox")}
-              className={`group relative flex items-center justify-between p-6 bg-gradient-to-br from-violet-400 to-violet-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-violet-400 to-violet-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "eshopbox"
                   ? "ring-4 ring-violet-300 ring-offset-2"
                   : ""
@@ -1021,7 +1183,7 @@ function Order() {
             {/* Processed Orders Card */}
             <div
               onClick={() => setOrdersView("processed")}
-              className={`group relative flex items-center justify-between p-6 bg-gradient-to-br from-emerald-400 to-emerald-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-emerald-400 to-emerald-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "processed"
                   ? "ring-4 ring-emerald-300 ring-offset-2"
                   : ""
@@ -1053,7 +1215,7 @@ function Order() {
             {/* Generate Manifest Card */}
             <div
               onClick={() => setOrdersView("manifest")}
-              className={`group relative flex items-center justify-between p-6 bg-gradient-to-br from-amber-400 to-amber-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-amber-400 to-amber-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "manifest"
                   ? "ring-4 ring-amber-300 ring-offset-2"
                   : ""
@@ -1085,7 +1247,7 @@ function Order() {
             {/* Manage Order Card */}
             <div
               onClick={() => setOrdersView("manage")}
-              className={`group relative flex items-center justify-between p-6 bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "manage"
                   ? "ring-4 ring-indigo-300 ring-offset-2"
                   : ""

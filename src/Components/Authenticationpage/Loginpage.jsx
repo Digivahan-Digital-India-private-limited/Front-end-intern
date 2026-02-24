@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import logimg from "../../assets/Frame 1.png";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { MyContext } from "../../ContextApi/MyContext";
+import { MyContext } from "../../ContextApi/DataProvider";
 
 const Loginpage = () => {
   const navigate = useNavigate();

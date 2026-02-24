@@ -6,7 +6,6 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import DataProvider from "./ContextApi/DataProvider.jsx";
-import { ShiprocketProvider } from "./ContextApi/shiprocketContext.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,9 +32,7 @@ createRoot(document.getElementById("root")).render(
     />
     <QueryClientProvider client={queryClient}>
       <DataProvider>
-        <ShiprocketProvider>
           <App />
-        </ShiprocketProvider>
       </DataProvider>
     </QueryClientProvider>
   </BrowserRouter>,
