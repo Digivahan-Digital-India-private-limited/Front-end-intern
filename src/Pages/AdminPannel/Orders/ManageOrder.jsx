@@ -7,6 +7,7 @@ import {
   AlertCircle,
   CheckCircle,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Sample order database
 const orderDatabase = {
@@ -50,7 +51,8 @@ const cancellationReasons = [
   { value: "other", label: "Other" },
 ];
 
-const ManageOrder = ({ onBack }) => {
+const ManageOrder = () => {
+  const navigate = useNavigate();
   const [activeCard, setActiveCard] = useState(null);
   const [inputOrderId, setInputOrderId] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -127,7 +129,7 @@ const ManageOrder = ({ onBack }) => {
       <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
         <button
           className="p-2 md:p-2.5 rounded-lg bg-white border-2 border-indigo-100 hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 text-gray-700 shadow-sm hover:shadow-md"
-          onClick={onBack}
+          onClick={() => navigate('/orders-panel')}
         >
           <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
         </button>

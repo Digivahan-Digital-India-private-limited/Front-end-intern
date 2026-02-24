@@ -26,6 +26,13 @@ import AccessVehicleDoc from "./Pages/AccessVehicleDoc";
 import AdminPannel from "./Pages/AdminPannel/AdminPannel";
 import Dashboard from "./Pages/AdminPannel/Dashboard/Dashboard";
 import Order from "./Pages/AdminPannel/Orders/Order";
+import ShiprocketOrders from "./Pages/AdminPannel/Orders/ShiprocketOrders/ShiprocketOrders";
+import DelhiveryOrders from "./Pages/AdminPannel/Orders/DelhiveryOrders/DelhiveryOrders";
+import EshopboxOrders from "./Pages/AdminPannel/Orders/EshopboxOrders/EshopboxOrders";
+import ProcessedOrders from "./Pages/AdminPannel/Orders/ProcessedOrders/ProcessedOrders";
+import GenerateManifest from "./Pages/AdminPannel/Orders/GenerateManifest/GenerateManifest";
+import DeliveryPartners from "./Pages/AdminPannel/Orders/DeliveryPartners/DeliveryPartners";
+import ManageOrder from "./Pages/AdminPannel/Orders/ManageOrder";
 import Qrmanagement from "./Pages/AdminPannel/QRManagement/Qrmanagement";
 import AssignedQR from "./Pages/AdminPannel/QRManagement/QRStatusTabs/AssignedQR";
 import BlockedQR from "./Pages/AdminPannel/QRManagement/QRStatusTabs/BlockedQR";
@@ -217,6 +224,13 @@ const App = () => {
         >
           <Route path="/admin-panel" element={<Dashboard />} />
           <Route path="/orders-panel" element={<Order />} />
+          <Route path="/orders-panel/shiprocket" element={<ShiprocketOrders />} />
+          <Route path="/orders-panel/delhivery" element={<DelhiveryOrders />} />
+          <Route path="/orders-panel/eshopbox" element={<EshopboxOrders />} />
+          <Route path="/orders-panel/processed" element={<ProcessedOrders />} />
+          <Route path="/orders-panel/generate-manifest" element={<GenerateManifest />} />
+          <Route path="/orders-panel/delivery-partners" element={<DeliveryPartners />} />
+          <Route path="/orders-panel/manage" element={<ManageOrder />} />
           <Route path="/qr-panel" element={<Qrmanagement />} />
           <Route path="/check-assigned-qr" element={<AssignedQR />} />
           <Route path="/check-blocked-qr" element={<BlockedQR />} />
