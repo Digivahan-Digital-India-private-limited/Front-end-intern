@@ -1,15 +1,18 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import React from "react";
+import React, { createContext } from "react";
 import { toast } from "react-toastify";
-import { MyContext } from "./MyContext";
+export const MyContext = createContext();
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 const DataProvider = ({ children }) => {
+  console.log(BASE_URL);
+
   const AdminSignInwithOtp = async (phone) => {
     try {
-      const response = await axios.post(
-        "https://digivahan-backend.onrender.com/api/auth/admin/send-otp",
-        { phone },
-      );
+      const response = await axios.post(`${BASE_URL}/api/auth/admin/send-otp`, {
+        phone,
+      });
 
       if (response.data) {
         return response.data;
@@ -26,7 +29,7 @@ const DataProvider = ({ children }) => {
       const phone = localStorage.getItem("login_phone");
 
       const response = await axios.post(
-        "https://digivahan-backend.onrender.com/api/auth/admin/verify-admin",
+        `${BASE_URL}/api/auth/admin/verify-admin`,
         {
           phone,
           OtpCode: userOtp,
@@ -62,7 +65,6 @@ const DataProvider = ({ children }) => {
       // ✅ get token from cookies
       const token = Cookies.get("admin_token");
       console.log(token);
-      
 
       if (!token) {
         toast.error("No active session found");
@@ -71,7 +73,7 @@ const DataProvider = ({ children }) => {
 
       // ✅ call logout API
       const response = await axios.post(
-        "https://digivahan-backend.onrender.com/api/auth/admin/logout-admin",
+        `${BASE_URL}/api/auth/admin/logout-admin`,
         {},
         {
           headers: {

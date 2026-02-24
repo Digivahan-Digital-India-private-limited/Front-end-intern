@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Clock, Check, ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
-import { useShiprocket } from "../../../ContextApi/shiprocketContext";
 import ManageOrder from "./ManageOrder";
 
 const unprocessedOrders = [
@@ -57,7 +56,7 @@ const processedOrdersData = [
 ];
 
 function Order() {
-  const { generateLabel, token, setToken } = useShiprocket();
+  
   const [ordersView, setOrdersView] = useState(null);
   const [processedOrders, setProcessedOrders] = useState({});
   const [printedOrders, setPrintedOrders] = useState({});
@@ -67,7 +66,6 @@ function Order() {
   const [printedManifests, setPrintedManifests] = useState({});
   const [printingManifest, setPrintingManifest] = useState(null);
   const [labelError, setLabelError] = useState("");
-  const [tokenInput, setTokenInput] = useState(token);
 
   // Handle Process button click - calls 3 APIs
   const handleProcess = async (orderId) => {
