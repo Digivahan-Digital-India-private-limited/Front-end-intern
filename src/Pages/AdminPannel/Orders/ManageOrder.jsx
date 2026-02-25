@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
 import {
   ArrowLeft,
-  Edit3,
+  Package,
   X,
   ChevronDown,
   AlertCircle,
   CheckCircle,
+  ExternalLink,
+  Copy,
+  Check,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { MyContext } from "../../../ContextApi/DataProvider";
@@ -25,17 +28,25 @@ const ManageOrder = () => {
   const [inputOrderId, setInputOrderId] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [updateData, setUpdateData] = useState(null);
   const [cancellationReason, setCancellationReason] = useState("");
   const [cancellationNotes, setCancellationNotes] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [copiedLink, setCopiedLink] = useState(false);
 
   const handleCardClick = (cardType) => {
     setActiveCard(cardType);
     setInputOrderId("");
     setSelectedOrder(null);
-    setUpdateData(null);
     setSuccessMessage("");
+    setCopiedLink(false);
+  };
+
+  const handleCopyTrackingLink = () => {
+    if (selectedOrder?.trackingLink) {
+      navigator.clipboard.writeText(selectedOrder.trackingLink);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    }
   };
 
   const handleSubmitOrderId = async () => {
@@ -61,37 +72,18 @@ const ManageOrder = () => {
         status: order.order_status,
         processedDate: new Date(order.createdAt).toLocaleDateString(),
         trackingLink: partner?.tracking_url || partner?.label_url || "",
+        deliveryPartner: partner?.delivery_partner_name || order.delivery_partner || "",
       };
 
       setSelectedOrder(mappedOrder);
       setShowDetails(true);
-
-      if (activeCard === "update") {
-        setUpdateData({ ...mappedOrder });
-      }
     } catch (error) {
       console.log(error);
       alert("Something went wrong");
     }
   };
 
-  const handleUpdateOrder = () => {
-    if (
-      !updateData.name ||
-      !updateData.ownerName ||
-      !updateData.vehicleNumber
-    ) {
-      alert("Please fill all required fields");
-      return;
-    }
-    setSuccessMessage("Order updated successfully!");
-    setTimeout(() => {
-      setActiveCard(null);
-      setShowDetails(false);
-      setUpdateData(null);
-      setSuccessMessage("");
-    }, 2000);
-  };
+
 
   const handleCancelOrder = async () => {
     if (!cancellationReason || !cancellationNotes.trim()) {
@@ -123,10 +115,10 @@ const ManageOrder = () => {
     setShowDetails(false);
     setInputOrderId("");
     setSelectedOrder(null);
-    setUpdateData(null);
     setCancellationReason("");
     setCancellationNotes("");
     setSuccessMessage("");
+    setCopiedLink(false);
   };
 
   return (
@@ -144,7 +136,7 @@ const ManageOrder = () => {
             Manage Orders
           </h1>
           <p className="text-sm text-gray-600">
-            Update or cancel orders with ease
+            Track or cancel orders with ease
           </p>
         </div>
       </div>
@@ -154,21 +146,21 @@ const ManageOrder = () => {
         {activeCard === null ? (
           // Cards Grid
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-3xl">
-            {/* Update Order Card */}
+            {/* Track Order Card */}
             <div
-              onClick={() => handleCardClick("update")}
-              className="group bg-white rounded-lg p-5 md:p-6 cursor-pointer transition-all duration-300 border-t-4 border-t-emerald-500 hover:border-t-emerald-600 shadow-md hover:shadow-lg hover:-translate-y-1 overflow-hidden relative"
+              onClick={() => handleCardClick("track")}
+              className="group bg-white rounded-lg p-5 md:p-6 cursor-pointer transition-all duration-300 border-t-4 border-t-blue-500 hover:border-t-blue-600 shadow-md hover:shadow-lg hover:-translate-y-1 overflow-hidden relative"
             >
-              <div className="absolute inset-0 bg-linear-to-br from-emerald-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-linear-to-br from-blue-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative">
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-md bg-linear-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md">
-                  <Edit3 className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-md bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md">
+                  <Package className="w-6 h-6 md:w-7 md:h-7 text-white" />
                 </div>
                 <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-1">
-                  Update Order
+                  Track Order
                 </h2>
                 <p className="text-sm text-gray-600">
-                  Modify order details and tracking
+                  View order status and tracking details
                 </p>
                 <div className="mt-4 flex justify-end">
                   <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-gray-200 transition-colors duration-300">
@@ -216,11 +208,11 @@ const ManageOrder = () => {
             {!showDetails && (
               <div className="animate-fadeIn">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-                  {activeCard === "update" ? "Update Order" : "Cancel Order"}
+                  {activeCard === "track" ? "Track Order" : "Cancel Order"}
                 </h2>
                 <p className="text-gray-600 text-sm md:text-base mb-5 md:mb-6">
                   Please enter the Order ID for{" "}
-                  {activeCard === "update" ? "updating" : "cancelling"} and
+                  {activeCard === "track" ? "tracking" : "cancelling"} and
                   checking details
                 </p>
 
@@ -260,7 +252,7 @@ const ManageOrder = () => {
                     Order Details
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
-                    Update tracking and status information
+                    {activeCard === "track" ? "View order tracking and status information" : "Update tracking and status information"}
                   </p>
                 </div>
 
@@ -285,16 +277,9 @@ const ManageOrder = () => {
                     </label>
                     <input
                       type="text"
-                      value={updateData?.name || selectedOrder?.name}
-                      onChange={(e) =>
-                        activeCard === "update" &&
-                        setUpdateData({
-                          ...updateData,
-                          name: e.target.value,
-                        })
-                      }
-                      disabled={activeCard === "cancel"}
-                      className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 disabled:bg-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed transition-all duration-300"
+                      value={selectedOrder?.name}
+                      disabled
+                      className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm bg-gray-100 text-gray-600 cursor-not-allowed"
                     />
                   </div>
 
@@ -305,16 +290,9 @@ const ManageOrder = () => {
                     </label>
                     <input
                       type="text"
-                      value={updateData?.ownerName || selectedOrder?.ownerName}
-                      onChange={(e) =>
-                        activeCard === "update" &&
-                        setUpdateData({
-                          ...updateData,
-                          ownerName: e.target.value,
-                        })
-                      }
-                      disabled={activeCard === "cancel"}
-                      className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 disabled:bg-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed transition-all duration-300"
+                      value={selectedOrder?.ownerName}
+                      disabled
+                      className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm bg-gray-100 text-gray-600 cursor-not-allowed"
                     />
                   </div>
 
@@ -325,19 +303,9 @@ const ManageOrder = () => {
                     </label>
                     <input
                       type="text"
-                      value={
-                        updateData?.vehicleNumber ||
-                        selectedOrder?.vehicleNumber
-                      }
-                      onChange={(e) =>
-                        activeCard === "update" &&
-                        setUpdateData({
-                          ...updateData,
-                          vehicleNumber: e.target.value,
-                        })
-                      }
-                      disabled={activeCard === "cancel"}
-                      className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 disabled:bg-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed transition-all duration-300"
+                      value={selectedOrder?.vehicleNumber}
+                      disabled
+                      className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm bg-gray-100 text-gray-600 cursor-not-allowed"
                     />
                   </div>
 
@@ -387,28 +355,57 @@ const ManageOrder = () => {
                     />
                   </div>
 
-                  {/* Tracking Link */}
-                  <div>
-                    <label className="text-xs md:text-sm font-semibold text-gray-700 uppercase tracking-wider mb-2 block">
-                      Tracking Link (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      value={
-                        updateData?.trackingLink || selectedOrder?.trackingLink
-                      }
-                      onChange={(e) =>
-                        activeCard === "update" &&
-                        setUpdateData({
-                          ...updateData,
-                          trackingLink: e.target.value,
-                        })
-                      }
-                      disabled={activeCard === "cancel"}
-                      placeholder="https://tracking.example.com"
-                      className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 disabled:bg-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed transition-all duration-300"
-                    />
-                  </div>
+                  {/* Tracking Link - Only show in Track Order for Delhivery */}
+                  {activeCard === "track" && selectedOrder?.deliveryPartner?.toLowerCase() === "delhivery" && (
+                    <div className="md:col-span-2">
+                      <label className="text-xs md:text-sm font-semibold text-gray-700 uppercase tracking-wider mb-2 block">
+                        Tracking Link
+                      </label>
+                      {selectedOrder?.trackingLink ? (
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={selectedOrder?.trackingLink}
+                            disabled
+                            className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg text-sm bg-gray-100 text-gray-600 cursor-not-allowed"
+                          />
+                          <button
+                            onClick={handleCopyTrackingLink}
+                            className={`px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap ${
+                              copiedLink
+                                ? "bg-green-500 hover:bg-green-600 text-white"
+                                : "bg-gray-500 hover:bg-gray-600 text-white"
+                            }`}
+                          >
+                            {copiedLink ? (
+                              <>
+                                <Check className="w-4 h-4" />
+                                Copied
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-4 h-4" />
+                                Copy
+                              </>
+                            )}
+                          </button>
+                          <a
+                            href={selectedOrder?.trackingLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            Track
+                          </a>
+                        </div>
+                      ) : (
+                        <div className="px-3 py-2 border-2 border-gray-200 rounded-lg text-sm bg-gray-100 text-gray-500 italic">
+                          No tracking link available
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Cancellation Reason (only for cancel) */}
@@ -442,26 +439,29 @@ const ManageOrder = () => {
 
                 {/* Action Buttons */}
                 <div className="flex gap-3 md:gap-4">
-                  <button
-                    className="flex-1 py-2.5 md:py-3 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold rounded-lg text-sm md:text-base transition-all duration-300"
-                    onClick={() => setShowDetails(false)}
-                  >
-                    Back
-                  </button>
-                  <button
-                    className={`flex-1 py-2.5 md:py-3 text-white font-semibold rounded-lg text-sm md:text-base transition-all duration-300 ${
-                      activeCard === "update"
-                        ? "bg-linear-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 hover:shadow-lg"
-                        : "bg-linear-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 hover:shadow-lg"
-                    }`}
-                    onClick={
-                      activeCard === "update"
-                        ? handleUpdateOrder
-                        : handleCancelOrder
-                    }
-                  >
-                    {activeCard === "update" ? "Save / Update" : "Cancel Order"}
-                  </button>
+                  {activeCard === "track" ? (
+                    <button
+                      className="w-full py-2.5 md:py-3 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold rounded-lg text-sm md:text-base transition-all duration-300"
+                      onClick={handleClose}
+                    >
+                      Close
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        className="flex-1 py-2.5 md:py-3 bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold rounded-lg text-sm md:text-base transition-all duration-300"
+                        onClick={() => setShowDetails(false)}
+                      >
+                        Back
+                      </button>
+                      <button
+                        className="flex-1 py-2.5 md:py-3 bg-linear-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 hover:shadow-lg text-white font-semibold rounded-lg text-sm md:text-base transition-all duration-300"
+                        onClick={handleCancelOrder}
+                      >
+                        Cancel Order
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             )}
@@ -477,9 +477,7 @@ const ManageOrder = () => {
                     {successMessage}
                   </h3>
                   <p className="text-sm md:text-base text-gray-600">
-                    {activeCard === "update"
-                      ? "The order has been successfully updated."
-                      : "The order has been successfully cancelled."}
+                    The order has been successfully cancelled.
                   </p>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import { Truck, Box, CheckCircle, FileText, Settings, Package } from "lucide-react";
+import { Truck, FileText, Settings, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
  
 function Order() {
@@ -8,8 +8,6 @@ function Order() {
   const [orderCounts, setOrderCounts] = useState({
     shiprocket: 0,
     delhivery: 0,
-    eshopbox: 0,
-    processed: 0,
     manifest: 0,
     partners: 3
   });
@@ -18,11 +16,7 @@ function Order() {
   const fetchOrderCounts = async () => {
     setLoading(true);
     try {
-      // TODO: Replace with actual API endpoints
-      // const response = await fetch('/api/orders/counts');
-      // const data = await response.json();
-      // setOrderCounts(data);
- 
+      
       // Simulate API call with mock data
       await new Promise(resolve => setTimeout(resolve, 1000));
      
@@ -30,8 +24,6 @@ function Order() {
       setOrderCounts({
         shiprocket: 8,
         delhivery: 8,
-        eshopbox: 8,
-        processed: 5,
         manifest: 13,
         partners: 3
       });
@@ -74,24 +66,6 @@ function Order() {
       gradient: "from-rose-400 to-rose-500",
       icon: Truck,
       link: "/orders-panel/delhivery"
-    },
-    {
-      id: "eshopbox",
-      title: "EshopBox",
-      description: "Click to view details",
-      count: orderCounts.eshopbox,
-      gradient: "from-violet-400 to-violet-500",
-      icon: Box,
-      link: "/orders-panel/eshopbox"
-    },
-    {
-      id: "processed",
-      title: "Processed Order",
-      description: "Click to view details",
-      count: orderCounts.processed,
-      gradient: "from-emerald-400 to-emerald-500",
-      icon: CheckCircle,
-      link: "/orders-panel/processed"
     },
     {
       id: "manifest",
