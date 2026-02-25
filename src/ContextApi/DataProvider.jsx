@@ -8,7 +8,9 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const MyContext = createContext();
 
 const DataProvider = ({ children }) => {
-  const [orders, setOrders] = useState([]);
+  const [DeliveryOrders, setDeliveryOrders] = useState([]);
+  const [ShiprocketOrders, setShiprocketOrders] = useState([]);
+  const [ConfirmedOrders, setConfirmedOrders] = useState([]);
 
   const AdminSignInwithOtp = async (phone) => {
     try {
@@ -136,7 +138,7 @@ const DataProvider = ({ children }) => {
         },
       );
 
-      console.log("Partner Activated:", response.data);
+      // console.log("Partner Activated:", response.data);
       return response.data;
     } catch (error) {
       console.error(
@@ -146,20 +148,266 @@ const DataProvider = ({ children }) => {
     }
   };
 
+  const OrderConfirms = async (orderid) => {
+    try {
+      const token = Cookies.get("admin_token");
+
+      if (!token) {
+        toast.error("Session expired");
+        return null;
+      }
+
+      const response = await axios.post(
+        `${BASE_URL}/api/admin/order-confirm`,
+        {
+          order_id: orderid,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (response.data?.status) {
+        toast.success(response.data.message || "Order Confirmed");
+        return response.data;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Order confirm error:", error);
+      toast.error(error.response?.data?.message || "Failed to confirm order");
+      return null;
+    }
+  };
+
+  const PrintManifest = async (orderId) => {
+    try {
+      const token = Cookies.get("admin_token");
+
+      if (!token) {
+        toast.error("Session expired");
+        return null;
+      }
+
+      const response = await axios.get(
+        `${BASE_URL}/api/admin/generate-manifests/${orderId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const manifestUrl = response.data?.data?.manifest_url;
+
+      if (manifestUrl) {
+        // 🔥 Direct open (better for S3)
+        window.open(manifestUrl, "_blank");
+
+        toast.success("Manifest ready");
+
+        return manifestUrl;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Manifest error:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to generate manifest",
+      );
+      return null;
+    }
+  };
+
+  const PrintShiprocketLabel = async (orderId) => {
+    try {
+      const token = Cookies.get("admin_token");
+
+      if (!token) {
+        toast.error("Session expired");
+        return null;
+      }
+
+      const response = await axios.get(
+        `${BASE_URL}/api/admin/generate-shiprocket-label/${orderId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const labelUrl = response.data?.data?.label_url;
+
+      if (labelUrl) {
+        // ✅ Best way for S3 PDF
+        window.open(labelUrl, "_blank");
+
+        toast.success("Label ready");
+        return labelUrl;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Label error:", error);
+      toast.error(error.response?.data?.message || "Failed to generate label");
+      return null;
+    }
+  };
+
+  const PrintDeliveryLabel = async (orderId) => {
+    try {
+      const token = Cookies.get("admin_token");
+
+      if (!token) {
+        toast.error("Session expired");
+        return null;
+      }
+
+      const response = await axios.get(
+        `${BASE_URL}/api/admin/generate-delivery-label/${orderId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const labelUrl = response.data?.data?.label_url;
+
+      console.log("Delivery Label URL:", labelUrl);
+
+      if (labelUrl) {
+        // ✅ Safest way for presigned S3 URL
+        window.open(labelUrl, "_blank");
+
+        toast.success("Delivery label ready");
+        return labelUrl;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Delivery label error:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to generate delivery label",
+      );
+      return null;
+    }
+  };
+
+  const OrderCancelByAdmin = async (orderId) => {
+    try {
+      const token = Cookies.get("admin_token");
+
+      if (!token) {
+        toast.error("Session expired");
+        return null;
+      }
+
+      const response = await axios.post(
+        `${BASE_URL}/api/orders/admin-cancel`,
+        {
+          order_id: orderId, // business order_id (MY_QR_xxx)
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      console.log(response.data);
+      
+
+      if (response.data?.status) {
+        toast.success(response.data.message || "Order canceled successfully");
+        return response.data;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Cancel error:", error);
+      toast.error(error.response?.data?.message || "Failed to cancel order");
+      return null;
+    }
+  };
+
+  const getOrderDetailsByAdmin = async (orderId) => {
+    try {
+      const token = Cookies.get("admin_token");
+
+      if (!token) {
+        toast.error("Session expired");
+        return null;
+      }
+
+      const response = await axios.post(
+        `${BASE_URL}/api/admin/fetch/order-id`,
+        {
+          order_id: orderId, // business order_id (MY_QR_xxx)
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (response.data?.status) {
+        toast.success(response.data.message || "Order fetch Sucessfully");
+        return response.data;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Cancel error:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to get order details",
+      );
+      return null;
+    }
+  };
+
   useEffect(() => {
     const token = Cookies.get("admin_token");
     if (!token) return;
 
     const decoded = jwtDecode(token);
-
-    const socket = io("http://localhost:3000");
+    const socket = io(`${BASE_URL}`);
 
     socket.emit("join_admin_room", { adminId: decoded.userId });
 
+    /* ---------------- NEW ORDER ---------------- */
     socket.on("new_order_created", (order) => {
-      console.log("🔥 Real-time Order:", order);
+      if (order.active_partner === "shiprocket") {
+        setShiprocketOrders((prev) => [order, ...prev]);
+      } else if (order.active_partner === "delivery") {
+        setDeliveryOrders((prev) => [order, ...prev]);
+      }
+    });
 
-      setOrders((prev) => [order, ...prev]);
+    /* ---------------- ORDER CONFIRMED ---------------- */
+    socket.on("order_confirmed", (updatedOrder) => {
+      console.log("✅ Order Confirmed:", updatedOrder);
+
+      // Remove from NEW list
+      if (updatedOrder.active_partner === "shiprocket") {
+        setShiprocketOrders((prev) =>
+          prev.filter((o) => o._id !== updatedOrder._id),
+        );
+      } else if (updatedOrder.active_partner === "delivery") {
+        setDeliveryOrders((prev) =>
+          prev.filter((o) => o._id !== updatedOrder._id),
+        );
+      }
+
+      // Add to Confirmed list
+      setConfirmedOrders((prev) => [updatedOrder, ...prev]);
     });
 
     return () => {
@@ -174,6 +422,15 @@ const DataProvider = ({ children }) => {
         verifyAdminOtp,
         LogoutAdmin,
         AddDeliveryPartners,
+        DeliveryOrders,
+        ShiprocketOrders,
+        OrderConfirms,
+        ConfirmedOrders,
+        PrintManifest,
+        PrintShiprocketLabel,
+        PrintDeliveryLabel,
+        getOrderDetailsByAdmin,
+        OrderCancelByAdmin,
       }}
     >
       {children}

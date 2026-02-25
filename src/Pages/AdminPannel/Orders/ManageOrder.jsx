@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ArrowLeft,
   Edit3,
@@ -7,40 +7,8 @@ import {
   AlertCircle,
   CheckCircle,
 } from "lucide-react";
-
-// Sample order database
-const orderDatabase = {
-  "ORD-001": {
-    id: "ORD-001",
-    name: "Premium QR Code Package",
-    ownerName: "Rajesh Kumar",
-    vehicleNumber: "DL-01-AB-1234",
-    qrCode: "QR-2025-001",
-    status: "Delivered",
-    processedDate: "12/01/2025",
-    trackingLink: "https://tracking.example.com/ORD-001",
-  },
-  "ORD-002": {
-    id: "ORD-002",
-    name: "Standard QR Code",
-    ownerName: "Priya Singh",
-    vehicleNumber: "MH-02-CD-5678",
-    qrCode: "QR-2025-002",
-    status: "Processing",
-    processedDate: "12/02/2025",
-    trackingLink: "https://tracking.example.com/ORD-002",
-  },
-  "ORD-003": {
-    id: "ORD-003",
-    name: "Premium QR Code Package",
-    ownerName: "Amit Patel",
-    vehicleNumber: "GJ-03-EF-9012",
-    qrCode: "QR-2025-003",
-    status: "Pending",
-    processedDate: "12/03/2025",
-    trackingLink: "https://tracking.example.com/ORD-003",
-  },
-};
+import { useNavigate } from "react-router-dom";
+import { MyContext } from "../../../ContextApi/DataProvider";
 
 const cancellationReasons = [
   { value: "customer_request", label: "Customer Request" },
@@ -50,7 +18,9 @@ const cancellationReasons = [
   { value: "other", label: "Other" },
 ];
 
-const ManageOrder = ({ onBack }) => {
+const ManageOrder = () => {
+  const navigate = useNavigate();
+  const { getOrderDetailsByAdmin, OrderCancelByAdmin } = useContext(MyContext);
   const [activeCard, setActiveCard] = useState(null);
   const [inputOrderId, setInputOrderId] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -68,21 +38,49 @@ const ManageOrder = ({ onBack }) => {
     setSuccessMessage("");
   };
 
-  const handleSubmitOrderId = () => {
-    const orderKey = inputOrderId.toUpperCase();
-    if (orderDatabase[orderKey]) {
-      setSelectedOrder(orderDatabase[orderKey]);
-      setShowDetails(true);
-      if (activeCard === "update") {
-        setUpdateData({ ...orderDatabase[orderKey] });
+  const handleSubmitOrderId = async () => {
+    if (!inputOrderId.trim()) return;
+
+    try {
+      const response = await getOrderDetailsByAdmin(inputOrderId);
+
+      if (!response?.status) {
+        alert("Order not found");
+        return;
       }
-    } else {
-      alert("Order not found. Please check the Order ID.");
+
+      const order = response.data.order;
+      const partner = response.data.partner;
+
+      const mappedOrder = {
+        id: order.order_id, // Business order ID
+        name: order.order_items?.[0]?.name || "N/A",
+        ownerName: `${order.shipping?.first_name || ""} ${order.shipping?.last_name || ""}`,
+        vehicleNumber: order.order_items?.[0]?.vehicle_id || "N/A",
+        qrCode: order.order_items?.[0]?.sku || "N/A",
+        status: order.order_status,
+        processedDate: new Date(order.createdAt).toLocaleDateString(),
+        trackingLink: partner?.tracking_url || partner?.label_url || "",
+      };
+
+      setSelectedOrder(mappedOrder);
+      setShowDetails(true);
+
+      if (activeCard === "update") {
+        setUpdateData({ ...mappedOrder });
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
     }
   };
 
   const handleUpdateOrder = () => {
-    if (!updateData.name || !updateData.ownerName || !updateData.vehicleNumber) {
+    if (
+      !updateData.name ||
+      !updateData.ownerName ||
+      !updateData.vehicleNumber
+    ) {
       alert("Please fill all required fields");
       return;
     }
@@ -95,19 +93,29 @@ const ManageOrder = ({ onBack }) => {
     }, 2000);
   };
 
-  const handleCancelOrder = () => {
+  const handleCancelOrder = async () => {
     if (!cancellationReason || !cancellationNotes.trim()) {
       alert("Please select a reason and add notes");
       return;
     }
-    setSuccessMessage("Order cancelled successfully!");
-    setTimeout(() => {
-      setActiveCard(null);
-      setShowDetails(false);
-      setCancellationReason("");
-      setCancellationNotes("");
-      setSuccessMessage("");
-    }, 2000);
+
+    try {
+      const response = await OrderCancelByAdmin(selectedOrder.id);
+
+      if (!response?.status) {
+        alert("Cancellation failed");
+        return;
+      }
+
+      setSuccessMessage("Order cancelled successfully!");
+
+      setTimeout(() => {
+        handleClose();
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    }
   };
 
   const handleClose = () => {
@@ -127,7 +135,7 @@ const ManageOrder = ({ onBack }) => {
       <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
         <button
           className="p-2 md:p-2.5 rounded-lg bg-white border-2 border-indigo-100 hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 text-gray-700 shadow-sm hover:shadow-md"
-          onClick={onBack}
+          onClick={() => navigate("/orders-panel")}
         >
           <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
         </button>
@@ -135,7 +143,9 @@ const ManageOrder = ({ onBack }) => {
           <h1 className="text-2xl md:text-3xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Manage Orders
           </h1>
-          <p className="text-sm text-gray-600">Update or cancel orders with ease</p>
+          <p className="text-sm text-gray-600">
+            Update or cancel orders with ease
+          </p>
         </div>
       </div>
 
@@ -154,8 +164,12 @@ const ManageOrder = ({ onBack }) => {
                 <div className="w-12 h-12 md:w-14 md:h-14 rounded-md bg-linear-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md">
                   <Edit3 className="w-6 h-6 md:w-7 md:h-7 text-white" />
                 </div>
-                <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-1">Update Order</h2>
-                <p className="text-sm text-gray-600">Modify order details and tracking</p>
+                <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-1">
+                  Update Order
+                </h2>
+                <p className="text-sm text-gray-600">
+                  Modify order details and tracking
+                </p>
                 <div className="mt-4 flex justify-end">
                   <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-gray-200 transition-colors duration-300">
                     <ChevronDown className="w-4 h-4 text-gray-600" />
@@ -174,8 +188,12 @@ const ManageOrder = ({ onBack }) => {
                 <div className="w-12 h-12 md:w-14 md:h-14 rounded-md bg-linear-to-br from-red-500 to-red-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md">
                   <X className="w-6 h-6 md:w-7 md:h-7 text-white" />
                 </div>
-                <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-1">Cancel Order</h2>
-                <p className="text-sm text-gray-600">Process cancellation requests</p>
+                <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-1">
+                  Cancel Order
+                </h2>
+                <p className="text-sm text-gray-600">
+                  Process cancellation requests
+                </p>
                 <div className="mt-4 flex justify-end">
                   <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-gray-200 transition-colors duration-300">
                     <ChevronDown className="w-4 h-4 text-gray-600" />
@@ -202,7 +220,8 @@ const ManageOrder = ({ onBack }) => {
                 </h2>
                 <p className="text-gray-600 text-sm md:text-base mb-5 md:mb-6">
                   Please enter the Order ID for{" "}
-                  {activeCard === "update" ? "updating" : "cancelling"} and checking details
+                  {activeCard === "update" ? "updating" : "cancelling"} and
+                  checking details
                 </p>
 
                 <div className="mb-4">
@@ -237,8 +256,12 @@ const ManageOrder = ({ onBack }) => {
             {showDetails && !successMessage && (
               <div className="animate-fadeIn">
                 <div className="mb-5 md:mb-6 pb-4 md:pb-5 border-b-2 border-gray-200">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">Order Details</h3>
-                  <p className="text-sm text-gray-600 mt-1">Update tracking and status information</p>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                    Order Details
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Update tracking and status information
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-5 md:mb-6">
@@ -342,8 +365,8 @@ const ManageOrder = ({ onBack }) => {
                           selectedOrder?.status === "Delivered"
                             ? "bg-green-100 text-green-800"
                             : selectedOrder?.status === "Processing"
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-amber-100 text-amber-800"
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-amber-100 text-amber-800"
                         }`}
                       >
                         {selectedOrder?.status}
@@ -372,8 +395,7 @@ const ManageOrder = ({ onBack }) => {
                     <input
                       type="text"
                       value={
-                        updateData?.trackingLink ||
-                        selectedOrder?.trackingLink
+                        updateData?.trackingLink || selectedOrder?.trackingLink
                       }
                       onChange={(e) =>
                         activeCard === "update" &&
@@ -465,22 +487,6 @@ const ManageOrder = ({ onBack }) => {
           </div>
         )}
       </div>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-      `}</style>
     </div>
   );
 };
