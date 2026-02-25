@@ -942,7 +942,7 @@ function Order() {
                 >
                   {/* Animated background gradient on hover */}
                   <div
-                    className={`absolute inset-0 rounded-xl bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${scheme.gradientHover}`}
+                    className={`absolute inset-0 rounded-xl bg-linear-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${scheme.gradientHover}`}
                   ></div>
 
                   <div className="relative z-10 flex items-start justify-between mb-4">
@@ -979,7 +979,7 @@ function Order() {
                     ) : (
                       <button
                         onClick={() => setActivePartner(partner.id)}
-                        className={`flex-1 px-4 py-2.5 rounded-lg bg-gradient-to-r ${scheme.buttonGradient} text-white text-sm font-semibold shadow-md transition-all duration-300 hover:shadow-lg ${scheme.buttonHover} transform hover:scale-105 active:scale-95`}
+                        className={`flex-1 px-4 py-2.5 rounded-lg bg-linear-to-r ${scheme.buttonGradient} text-white text-sm font-semibold shadow-md transition-all duration-300 hover:shadow-lg ${scheme.buttonHover} transform hover:scale-105 active:scale-95`}
                       >
                         Set Active
                       </button>
@@ -1061,7 +1061,7 @@ function Order() {
             {/* Shiprocket Card */}
             <div
               onClick={() => setOrdersView("shiprocket")}
-              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-linear-to-br from-blue-400 to-blue-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "shiprocket"
                   ? "ring-4 ring-blue-300 ring-offset-2"
                   : ""
@@ -1093,7 +1093,7 @@ function Order() {
             {/* Delivery Partners Card */}
             <div
               onClick={() => setOrdersView("partners")}
-              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-linear-to-br from-cyan-400 to-cyan-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "partners"
                   ? "ring-4 ring-cyan-300 ring-offset-2"
                   : ""
@@ -1119,7 +1119,7 @@ function Order() {
             {/* Delhivery Card */}
             <div
               onClick={() => setOrdersView("delhivery")}
-              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-rose-400 to-rose-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-linear-to-br from-rose-400 to-rose-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "delhivery"
                   ? "ring-4 ring-rose-300 ring-offset-2"
                   : ""
@@ -1151,7 +1151,7 @@ function Order() {
             {/* EshopBox Card */}
             <div
               onClick={() => setOrdersView("eshopbox")}
-              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-violet-400 to-violet-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-linear-to-br from-violet-400 to-violet-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "eshopbox"
                   ? "ring-4 ring-violet-300 ring-offset-2"
                   : ""
@@ -1183,7 +1183,7 @@ function Order() {
             {/* Processed Orders Card */}
             <div
               onClick={() => setOrdersView("processed")}
-              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-emerald-400 to-emerald-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-linear-to-br from-emerald-400 to-emerald-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "processed"
                   ? "ring-4 ring-emerald-300 ring-offset-2"
                   : ""
@@ -1215,7 +1215,7 @@ function Order() {
             {/* Generate Manifest Card */}
             <div
               onClick={() => setOrdersView("manifest")}
-              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-amber-400 to-amber-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-linear-to-br from-amber-400 to-amber-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "manifest"
                   ? "ring-4 ring-amber-300 ring-offset-2"
                   : ""
@@ -1247,7 +1247,7 @@ function Order() {
             {/* Manage Order Card */}
             <div
               onClick={() => setOrdersView("manage")}
-              className={`group relative flex items-center justify-between p-5 bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
+              className={`group relative flex items-center justify-between p-5 bg-linear-to-br from-indigo-400 to-indigo-500 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
                 ordersView === "manage"
                   ? "ring-4 ring-indigo-300 ring-offset-2"
                   : ""

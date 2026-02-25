@@ -1,13 +1,14 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import React, { createContext } from "react";
+import { jwtDecode } from "jwt-decode";
+import { io } from "socket.io-client";
+import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-// eslint-disable-next-line react-refresh/only-export-components
-export const MyContext = createContext();
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+export const MyContext = createContext();
 
 const DataProvider = ({ children }) => {
-  console.log(BASE_URL);
+  const [orders, setOrders] = useState([]);
 
   const AdminSignInwithOtp = async (phone) => {
     try {
@@ -103,9 +104,77 @@ const DataProvider = ({ children }) => {
     }
   };
 
+  const AddDeliveryPartners = async (partnername) => {
+    try {
+      const token = Cookies.get("admin_token");
+
+      if (!token) {
+        console.error("Token not found");
+        return;
+      }
+
+      const decoded = jwtDecode(token);
+      const admin_id = decoded?.userId; // check id or _id
+
+      if (!admin_id) {
+        console.error("Admin ID not found in token");
+        return;
+      }
+
+      // 4️⃣ Call API
+      const response = await axios.post(
+        `${BASE_URL}/api/admin/add-active-partner`,
+        {
+          admin_id: admin_id,
+          partner_name: partnername,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      console.log("Partner Activated:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error adding delivery partner:",
+        error.response?.data || error.message,
+      );
+    }
+  };
+
+  useEffect(() => {
+    const token = Cookies.get("admin_token");
+    if (!token) return;
+
+    const decoded = jwtDecode(token);
+
+    const socket = io("http://localhost:3000");
+
+    socket.emit("join_admin_room", { adminId: decoded.userId });
+
+    socket.on("new_order_created", (order) => {
+      console.log("🔥 Real-time Order:", order);
+
+      setOrders((prev) => [order, ...prev]);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     <MyContext.Provider
-      value={{ AdminSignInwithOtp, verifyAdminOtp, LogoutAdmin }}
+      value={{
+        AdminSignInwithOtp,
+        verifyAdminOtp,
+        LogoutAdmin,
+        AddDeliveryPartners,
+      }}
     >
       {children}
     </MyContext.Provider>
