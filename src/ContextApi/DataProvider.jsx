@@ -321,7 +321,6 @@ const DataProvider = ({ children }) => {
       );
 
       console.log(response.data);
-      
 
       if (response.data?.status) {
         toast.success(response.data.message || "Order canceled successfully");
@@ -369,6 +368,41 @@ const DataProvider = ({ children }) => {
       toast.error(
         error.response?.data?.message || "Failed to get order details",
       );
+      return null;
+    }
+  };
+
+  const TrackOrderByAdmin = async (orderId) => {
+    try {
+      const token = Cookies.get("admin_token");
+
+      if (!token) {
+        toast.error("Session expired");
+        return null;
+      }
+
+      const response = await axios.post(
+        `${BASE_URL}/api/track-order-status`,
+        {
+          order_id: orderId, // Business Order ID
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (response.data?.status) {
+        toast.success("Order tracked successfully");
+        return response.data;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Tracking error:", error);
+      toast.error(error.response?.data?.message || "Failed to track order");
       return null;
     }
   };
@@ -431,6 +465,7 @@ const DataProvider = ({ children }) => {
         PrintDeliveryLabel,
         getOrderDetailsByAdmin,
         OrderCancelByAdmin,
+        TrackOrderByAdmin,
       }}
     >
       {children}

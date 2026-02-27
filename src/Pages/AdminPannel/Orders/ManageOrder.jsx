@@ -23,7 +23,8 @@ const cancellationReasons = [
 
 const ManageOrder = () => {
   const navigate = useNavigate();
-  const { getOrderDetailsByAdmin, OrderCancelByAdmin } = useContext(MyContext);
+  const { getOrderDetailsByAdmin, OrderCancelByAdmin, TrackOrderByAdmin } =
+    useContext(MyContext);
   const [activeCard, setActiveCard] = useState(null);
   const [inputOrderId, setInputOrderId] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -53,37 +54,62 @@ const ManageOrder = () => {
     if (!inputOrderId.trim()) return;
 
     try {
-      const response = await getOrderDetailsByAdmin(inputOrderId);
+      if (activeCard === "track") {
+        const response = await TrackOrderByAdmin(inputOrderId);
 
-      if (!response?.status) {
-        alert("Order not found");
-        return;
+        if (!response?.status) {
+          alert("Tracking failed");
+          return;
+        }
+
+        const data = response.data;
+
+        const mappedOrder = {
+          id: data.order_id,
+          name: "QR Code Sticker Pack",
+          ownerName: data.owner_name,
+          vehicleNumber: data.vehicle_number,
+          qrCode: data.qr_code,
+          status: data.shipment_status,
+          trackingLink: data.tracking_url,
+          processedDate: data.order_date
+            ? new Date(data.order_date).toLocaleDateString()
+            : "N/A",
+          deliveryPartner: "delhivery",
+        };
+
+        setSelectedOrder(mappedOrder);
+        setShowDetails(true);
       }
 
-      const order = response.data.order;
-      const partner = response.data.partner;
+      if (activeCard === "cancel") {
+        const response = await getOrderDetailsByAdmin(inputOrderId);
 
-      const mappedOrder = {
-        id: order.order_id, // Business order ID
-        name: order.order_items?.[0]?.name || "N/A",
-        ownerName: `${order.shipping?.first_name || ""} ${order.shipping?.last_name || ""}`,
-        vehicleNumber: order.order_items?.[0]?.vehicle_id || "N/A",
-        qrCode: order.order_items?.[0]?.sku || "N/A",
-        status: order.order_status,
-        processedDate: new Date(order.createdAt).toLocaleDateString(),
-        trackingLink: partner?.tracking_url || partner?.label_url || "",
-        deliveryPartner: partner?.delivery_partner_name || order.delivery_partner || "",
-      };
+        if (!response?.status) {
+          alert("Order not found");
+          return;
+        }
 
-      setSelectedOrder(mappedOrder);
-      setShowDetails(true);
+        const order = response.data.order;
+
+        const mappedOrder = {
+          id: order.order_id,
+          name: order.order_items?.[0]?.name || "N/A",
+          ownerName: `${order.shipping?.first_name || ""} ${order.shipping?.last_name || ""}`,
+          vehicleNumber: order.order_items?.[0]?.vehicle_id || "N/A",
+          qrCode: order.order_items?.[0]?.sku || "N/A",
+          status: order.order_status,
+          processedDate: new Date(order.createdAt).toLocaleDateString(),
+        };
+
+        setSelectedOrder(mappedOrder);
+        setShowDetails(true);
+      }
     } catch (error) {
       console.log(error);
       alert("Something went wrong");
     }
   };
-
-
 
   const handleCancelOrder = async () => {
     if (!cancellationReason || !cancellationNotes.trim()) {
@@ -252,7 +278,9 @@ const ManageOrder = () => {
                     Order Details
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
-                    {activeCard === "track" ? "View order tracking and status information" : "Update tracking and status information"}
+                    {activeCard === "track"
+                      ? "View order tracking and status information"
+                      : "Update tracking and status information"}
                   </p>
                 </div>
 
@@ -356,56 +384,58 @@ const ManageOrder = () => {
                   </div>
 
                   {/* Tracking Link - Only show in Track Order for Delhivery */}
-                  {activeCard === "track" && selectedOrder?.deliveryPartner?.toLowerCase() === "delhivery" && (
-                    <div className="md:col-span-2">
-                      <label className="text-xs md:text-sm font-semibold text-gray-700 uppercase tracking-wider mb-2 block">
-                        Tracking Link
-                      </label>
-                      {selectedOrder?.trackingLink ? (
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="text"
-                            value={selectedOrder?.trackingLink}
-                            disabled
-                            className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg text-sm bg-gray-100 text-gray-600 cursor-not-allowed"
-                          />
-                          <button
-                            onClick={handleCopyTrackingLink}
-                            className={`px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap ${
-                              copiedLink
-                                ? "bg-green-500 hover:bg-green-600 text-white"
-                                : "bg-gray-500 hover:bg-gray-600 text-white"
-                            }`}
-                          >
-                            {copiedLink ? (
-                              <>
-                                <Check className="w-4 h-4" />
-                                Copied
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-4 h-4" />
-                                Copy
-                              </>
-                            )}
-                          </button>
-                          <a
-                            href={selectedOrder?.trackingLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                            Track
-                          </a>
-                        </div>
-                      ) : (
-                        <div className="px-3 py-2 border-2 border-gray-200 rounded-lg text-sm bg-gray-100 text-gray-500 italic">
-                          No tracking link available
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  {activeCard === "track" &&
+                    selectedOrder?.deliveryPartner?.toLowerCase() ===
+                      "delhivery" && (
+                      <div className="md:col-span-2">
+                        <label className="text-xs md:text-sm font-semibold text-gray-700 uppercase tracking-wider mb-2 block">
+                          Tracking Link
+                        </label>
+                        {selectedOrder?.trackingLink ? (
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={selectedOrder?.trackingLink}
+                              disabled
+                              className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg text-sm bg-gray-100 text-gray-600 cursor-not-allowed"
+                            />
+                            <button
+                              onClick={handleCopyTrackingLink}
+                              className={`px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap ${
+                                copiedLink
+                                  ? "bg-green-500 hover:bg-green-600 text-white"
+                                  : "bg-gray-500 hover:bg-gray-600 text-white"
+                              }`}
+                            >
+                              {copiedLink ? (
+                                <>
+                                  <Check className="w-4 h-4" />
+                                  Copied
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="w-4 h-4" />
+                                  Copy
+                                </>
+                              )}
+                            </button>
+                            <a
+                              href={selectedOrder?.trackingLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                              Track
+                            </a>
+                          </div>
+                        ) : (
+                          <div className="px-3 py-2 border-2 border-gray-200 rounded-lg text-sm bg-gray-100 text-gray-500 italic">
+                            No tracking link available
+                          </div>
+                        )}
+                      </div>
+                    )}
                 </div>
 
                 {/* Cancellation Reason (only for cancel) */}
