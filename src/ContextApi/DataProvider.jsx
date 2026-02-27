@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { io } from "socket.io-client";
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = "https://api.digicapital.co.in";
 export const MyContext = createContext();
 
 const DataProvider = ({ children }) => {

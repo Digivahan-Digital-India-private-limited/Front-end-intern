@@ -45,7 +45,25 @@ export default function PrivacyPolicy() {
 • Razorpay (Payments)
 • Google Maps API (Location services)
 • AWS (Data storage)
-We do not sell or trade your data to any unauthorized parties`,
+We do not sell or trade your data to any unauthorized parties
+
+─────────────────────────────────────────
+Use of Location Information
+
+Our application collects and uses your device location to provide location-based services and relevant nearby information.
+
+When you grant location permission, we use your location only for the following purposes:
+
+• To display nearby petrol pumps and related fuel services.
+• To show nearby places and services powered by Google location services (such as businesses, landmarks, and other relevant points of interest).
+• To provide search results and recommendations based on your current location.
+• To improve the accuracy of location-based results within the app.
+
+We access location data only while the app is in use, unless otherwise required for a specific feature that you enable. Location data is used in real time to fetch relevant nearby services and is not sold, rented, or shared with third parties for marketing purposes.
+
+We do not store your precise location on our servers unless it is required to deliver a specific feature within the app. Any location information processed is used strictly to provide core app functionality.
+
+You can enable or disable location access at any time through your device settings. Disabling location permission may limit certain features of the application.`,
       },
 
       {
