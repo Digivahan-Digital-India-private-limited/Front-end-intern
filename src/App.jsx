@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Layout from "./Layout/Layout";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import Homepage from "./Components/Homepage/Homepage";
 import Aboutpage from "./Components/Aboutpage/Aboutpage";
 import Updatespage from "./Components/Updatespage/Updatespage";
@@ -137,6 +137,7 @@ const App = () => {
 
           {/* Information page */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/digivahan-privacy-policy" element={<Navigate to="/privacy-policy" replace />} />
           <Route path="/protection-policy" element={<ProtectionPolicy />} />
           <Route
             path="/return-refund-policy"
