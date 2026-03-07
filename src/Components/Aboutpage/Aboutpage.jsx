@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ringimg from "../../assets/Right.png";
 import conimg from "../../assets/Container.png";
 import OfficeImg from "../../assets/Digivahan Building.png";
@@ -8,7 +8,7 @@ import ProfileCard from "./ProfileCard";
 import SandeepRathore from "../../assets/Sandeep_ji_profile_pic.webp";
 import ParvezAnsari from "../../assets/Parvez Ansari.webp";
 
-/* â”€â”€ animation styles â”€â”€ */
+/* ── animation styles ── */
 const animStyles = `
   @keyframes fadeUp {
     from { opacity:0; transform:translateY(40px); }
@@ -90,7 +90,7 @@ const animStyles = `
   .dot-pulse { animation:pulseDot 1.5s ease-in-out infinite; }
 `;
 
-/* â”€â”€ hook: trigger class "vis" when element enters viewport â”€â”€ */
+/* ── hook: trigger class "vis" when element enters viewport ── */
 const useScrollAnim = () => {
   const refs  = useRef({});
   const [vis, setVis] = useState({});
@@ -123,9 +123,9 @@ const Aboutpage = () => {
       <style>{animStyles}</style>
       <main className="w-full overflow-hidden">
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-            SECTION 1 â€” HERO / ABOUT US
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+        {/* ══════════════════════════════════════════
+            SECTION 1 — HERO / ABOUT US
+        ══════════════════════════════════════════ */}
         <section className="grad-hero w-full py-14 px-4">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-10 items-center">
 
@@ -149,7 +149,7 @@ const Aboutpage = () => {
               <h4 className="text-base font-semibold text-yellow-600">Empowering India with Smart Vehicle Solutions</h4>
 
               <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
-                Digivahan is India's trusted digital platform for all your vehicle-related services. From RC, insurance, and PUC status to challan checks and safety QR stickers â€” we bring everything to your fingertips. With a mission to make transportation smarter, safer, and more accessible, we are revolutionizing the way India moves.
+                Digivahan is India's trusted digital platform for all your vehicle-related services. From RC, insurance, and PUC status to challan checks and safety QR stickers — we bring everything to your fingertips. With a mission to make transportation smarter, safer, and more accessible, we are revolutionizing the way India moves.
               </p>
               <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
                 Established in 2023, Digivahan Digital India Pvt. Ltd. is a technology-driven company focused on transforming vehicle management and public safety through digital innovation. Our mission is to create a smart, mobile-first ecosystem where vehicle-related services are seamless, secure, and easily accessible for every Indian citizen.
@@ -174,9 +174,9 @@ const Aboutpage = () => {
           </div>
         </section>
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-            SECTION 2 â€” TEAM
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+        {/* ══════════════════════════════════════════
+            SECTION 2 — TEAM
+        ══════════════════════════════════════════ */}
         <section className="max-w-6xl mx-auto py-14 px-4">
 
           {/* Section heading */}
@@ -241,9 +241,9 @@ const Aboutpage = () => {
           </div>
         </section>
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-            SECTION 3 â€” FOUNDER'S MESSAGE (UNCHANGED)
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+        {/* ══════════════════════════════════════════
+            SECTION 3 — FOUNDER'S MESSAGE (UNCHANGED)
+        ══════════════════════════════════════════ */}
         <section className="max-w-6xl mx-auto my-8 px-3">
           <div className="relative bg-gradient-to-br from-yellow-50 via-white to-green-50 border border-yellow-200 rounded-3xl overflow-hidden shadow-lg flex flex-col md:flex-row animate-fade-in" style={{ minHeight: 480 }}>
 
@@ -253,7 +253,7 @@ const Aboutpage = () => {
             <div className="relative flex-shrink-0 md:w-2/5 w-full bg-yellow-50 flex items-center justify-center" style={{ clipPath:"ellipse(92% 50% at 0% 50%)" }}>
               <img
                 src="/Sandeep Sir.jpeg"
-                alt="Sandeep Rathor â€“ Founder & CEO"
+                alt="Sandeep Rathor – Founder & CEO"
                 className="w-full h-full object-contain object-bottom"
                 style={{ minHeight:420, maxHeight:600 }}
                 loading="lazy"
@@ -266,12 +266,12 @@ const Aboutpage = () => {
 
             <div className="flex-1 min-w-0 flex flex-col justify-center gap-4 px-7 py-10 md:px-10 md:py-12 pr-6 md:pr-10 z-10 overflow-hidden">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-widest text-yellow-600 mb-1">ðŸŒŸ Founder's Message</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-yellow-600 mb-1">🌟 Founder's Message</p>
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-snug">Leading Innovation with Purpose</h2>
               </div>
               <span className="block text-6xl leading-none text-yellow-300 font-serif select-none">&ldquo;</span>
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed -mt-4">
-                At Digivahan Digital India Pvt. Ltd., our journey began with a simple yet powerful vision â€” to make vehicle-related services smarter, more transparent, and easily accessible for every Indian citizen.
+                At Digivahan Digital India Pvt. Ltd., our journey began with a simple yet powerful vision — to make vehicle-related services smarter, more transparent, and easily accessible for every Indian citizen.
               </p>
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
                 As the Founder, I strongly believe that technology should simplify lives, not complicate them. With the rapid growth of digital transformation in India, there was a clear need for a reliable and secure platform dedicated to vehicle management and verification services. Digivahan was created to bridge that gap.
@@ -280,20 +280,20 @@ const Aboutpage = () => {
                 Our mission is to build a seamless ecosystem where vehicle owners, authorities, and citizens can connect through trust-driven digital solutions. From QR-based vehicle identification to real-time verification services, we are committed to delivering innovation with integrity.
               </p>
               <p className="text-gray-700 text-sm sm:text-base leading-relaxed font-medium">
-                We are not just building a platform â€” we are building a movement toward safer roads, smarter documentation, and a digitally empowered India.
+                We are not just building a platform — we are building a movement toward safer roads, smarter documentation, and a digitally empowered India.
               </p>
               <p className="text-gray-500 text-sm italic">Thank you for being part of our journey.</p>
               <div className="flex items-center gap-3 pt-1">
                 <div className="h-px flex-1 bg-yellow-200" />
-                <span className="text-yellow-600 font-semibold text-sm">â€” Sandeep Rathor</span>
+                <span className="text-yellow-600 font-semibold text-sm">— Sandeep Rathor</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-            SECTION 4 â€” VISION / MISSION / SERVICES / AUDIENCE
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+        {/* ══════════════════════════════════════════
+            SECTION 4 — VISION / MISSION / SERVICES / AUDIENCE
+        ══════════════════════════════════════════ */}
         <section className="bg-gray-50 py-14 px-4">
           <div className="max-w-6xl mx-auto">
 
@@ -309,8 +309,8 @@ const Aboutpage = () => {
                 {/* Vision + Mission */}
                 <div className="grid sm:grid-cols-2 gap-6">
                   {[
-                    { emoji:"ðŸŒ", title:"Our Vision", delay:"0s",   text:"To make every Indian vehicle digitally verifiable and connected â€” enabling a safer and more transparent transport ecosystem." },
-                    { emoji:"ðŸš€", title:"Our Mission", delay:"0.15s", text:"We simplify vehicle documentation, safety, and verification through an all-in-one digital platform offering trusted, secure, and real-time services to every citizen." },
+                    { emoji:"🌍", title:"Our Vision", delay:"0s",   text:"To make every Indian vehicle digitally verifiable and connected — enabling a safer and more transparent transport ecosystem." },
+                    { emoji:"🚀", title:"Our Mission", delay:"0.15s", text:"We simplify vehicle documentation, safety, and verification through an all-in-one digital platform offering trusted, secure, and real-time services to every citizen." },
                   ].map(({ emoji, title, delay, text }) => (
                     <div
                       key={title}
@@ -327,22 +327,22 @@ const Aboutpage = () => {
                 {/* Core Services + Target */}
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div ref={ref("cs")} className={`ab-pop ${v("cs")} card-hover bg-white border-2 border-gray-100 p-6 rounded-2xl shadow-sm`} style={{ animationDelay:"0.25s" }}>
-                    <h2 className="text-lg font-bold text-gray-900 mb-4">ðŸ› ï¸ Core Services</h2>
+                    <h2 className="text-lg font-bold text-gray-900 mb-4">🛠️ Core Services</h2>
                     <ul className="space-y-2 text-gray-600 text-sm">
                       {["RC, Insurance, Challan & PUC Verification","QR-Based Digital Identity for Vehicles","Public Alert & Lost Vehicle Reporting","Secure Document Upload & Instant Validation"].map(s => (
                         <li key={s} className="flex items-start gap-2">
-                          <span className="text-yellow-500 font-bold mt-0.5">âœ”</span>{s}
+                          <span className="text-yellow-500 font-bold mt-0.5">✔</span>{s}
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   <div ref={ref("ta")} className={`ab-pop ${v("ta")} card-hover bg-white border-2 border-gray-100 p-6 rounded-2xl shadow-sm`} style={{ animationDelay:"0.35s" }}>
-                    <h2 className="text-lg font-bold text-gray-900 mb-4">ðŸŽ¯ Target Audience</h2>
+                    <h2 className="text-lg font-bold text-gray-900 mb-4">🎯 Target Audience</h2>
                     <ul className="space-y-2 text-gray-600 text-sm">
-                      <li>ðŸ‘¤ Private & Commercial Vehicle Owners</li>
-                      <li>ðŸš¨ Citizens reporting found or lost vehicles</li>
-                      <li>ðŸ›ï¸ Transport professionals & RTO partners</li>
+                      <li>👤 Private & Commercial Vehicle Owners</li>
+                      <li>🚨 Citizens reporting found or lost vehicles</li>
+                      <li>🏛️ Transport professionals & RTO partners</li>
                     </ul>
                   </div>
                 </div>
@@ -356,9 +356,9 @@ const Aboutpage = () => {
           </div>
         </section>
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-            SECTION 5 â€” USP
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+        {/* ══════════════════════════════════════════
+            SECTION 5 — USP
+        ══════════════════════════════════════════ */}
         <section className="max-w-6xl mx-auto py-14 px-4">
           <div className="flex flex-col md:flex-row gap-10 items-center">
 
@@ -381,7 +381,7 @@ const Aboutpage = () => {
                     className={`ab-fade-up ${v("usp"+i)} flex items-start gap-3 bg-yellow-50 border border-yellow-100 rounded-xl px-4 py-3 text-sm text-gray-700`}
                     style={{ animationDelay: `${i * 0.15}s` }}
                   >
-                    <span className="text-yellow-500 font-bold text-base mt-0.5">â†’</span>
+                    <span className="text-yellow-500 font-bold text-base mt-0.5">→</span>
                     {item}
                   </li>
                 ))}
@@ -394,16 +394,16 @@ const Aboutpage = () => {
           </div>
         </section>
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        {/* ══════════════════════════════════════════
             CONTAINER IMAGE
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+        ══════════════════════════════════════════ */}
         <div ref={ref("conImg")} className={`ab-fade-up ${v("conImg")} max-w-6xl mx-auto px-4 py-2`}>
           <img src={conimg} alt="Core Value" className="w-full rounded-2xl shadow object-cover md:h-full h-40" />
         </div>
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-            SECTION 6 â€” LEGAL & CONTACT
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+        {/* ══════════════════════════════════════════
+            SECTION 6 — LEGAL & CONTACT
+        ══════════════════════════════════════════ */}
         <section className="max-w-6xl mx-auto py-14 px-4">
 
           <div ref={ref("legalH")} className={`ab-fade-up ${v("legalH")} text-center mb-10`}>
@@ -416,11 +416,11 @@ const Aboutpage = () => {
             <div ref={ref("legalL")} className={`ab-fade-left ${v("legalL")} md:w-1/2`}>
               <div className="card-hover bg-white border-2 border-yellow-100 rounded-3xl p-8 shadow-sm h-full space-y-4">
                 {[
-                  ["ðŸ¢","Company Name","Digivahan Digital India Pvt Ltd"],
-                  ["ðŸ“…","Established","2023"],
-                  ["ðŸ”–","CIN","U62099DL2023PTC420571"],
-                  ["ðŸ“","Registered Address","Plot No, 2-A, Third Floor, Block-R, Uttam Nagar, New Delhi - 110059, India"],
-                  ["âœ‰ï¸","Email","info@digivahan.in"],
+                  ["🏢","Company Name","Digivahan Digital India Pvt Ltd"],
+                  ["📅","Established","2023"],
+                  ["🔖","CIN","U62099DL2023PTC420571"],
+                  ["📍","Registered Address","Plot No, 2-A, Third Floor, Block-R, Uttam Nagar, New Delhi - 110059, India"],
+                  ["✉️","Email","info@digivahan.in"],
                 ].map(([icon, label, val]) => (
                   <div key={label} className="flex items-start gap-3">
                     <span className="text-xl mt-0.5">{icon}</span>
@@ -440,9 +440,9 @@ const Aboutpage = () => {
           </div>
         </section>
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        {/* ══════════════════════════════════════════
             MAP
-        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+        ══════════════════════════════════════════ */}
         <div ref={ref("map")} className={`ab-fade-up ${v("map")} max-w-6xl mx-auto px-4 pb-10`}>
           <div className="w-full h-80 md:h-96 rounded-3xl overflow-hidden shadow-lg border border-gray-100">
             <iframe
