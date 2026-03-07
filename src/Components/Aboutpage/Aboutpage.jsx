@@ -298,59 +298,122 @@ const Aboutpage = () => {
           <div className="max-w-6xl mx-auto">
 
             {/* heading */}
-            <div ref={ref("vmH")} className={`ab-fade-up ${v("vmH")} text-center mb-10`}>
+            <div ref={ref("vmH")} className={`ab-fade-up ${v("vmH")} text-center mb-12`}>
               <span className="inline-block bg-yellow-100 text-yellow-700 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-3">What We Stand For</span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900">Our <span className="text-yellow-500">Purpose</span></h2>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-8 items-start">
-              <div className="md:w-2/3 flex flex-col gap-6">
+            {/* Top row — Vision & Mission side by side */}
+            <div className="grid sm:grid-cols-2 gap-6 mb-6">
 
-                {/* Vision + Mission */}
-                <div className="grid sm:grid-cols-2 gap-6">
+              {/* Vision */}
+              <div
+                ref={ref("vision")}
+                style={{ animationDelay:"0s", background:"linear-gradient(135deg,#fef3c7 0%,#fffbeb 60%,#fef9ee 100%)", border:"2px solid #fde68a" }}
+                className={`ab-fade-left ${v("vision")} relative overflow-hidden rounded-3xl p-7 flex flex-col gap-4`}
+              >
+                <div className="absolute top-0 right-0 w-28 h-28 bg-yellow-300/20 rounded-full translate-x-10 -translate-y-10 pointer-events-none" />
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-yellow-400 flex items-center justify-center shadow-md flex-shrink-0">
+                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18"/><path d="M3 12h18"/></svg>
+                  </div>
+                  <h2 className="text-lg font-extrabold text-gray-900 tracking-tight">Our Vision</h2>
+                </div>
+                <div className="h-0.5 w-10 rounded-full bg-yellow-400" />
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  To make every Indian vehicle <strong>digitally verifiable and connected</strong> — enabling a safer and more transparent transport ecosystem for every citizen.
+                </p>
+                <span className="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded-full px-3 py-1 w-fit">
+                  <span className="w-2 h-2 rounded-full bg-yellow-500 dot-pulse inline-block" /> Long-term Goal
+                </span>
+              </div>
+
+              {/* Mission */}
+              <div
+                ref={ref("mission")}
+                style={{ animationDelay:"0.15s", background:"linear-gradient(135deg,#1e293b 0%,#0f172a 100%)", border:"2px solid #334155" }}
+                className={`ab-fade-right ${v("mission")} relative overflow-hidden rounded-3xl p-7 flex flex-col gap-4`}
+              >
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-yellow-400/10 rounded-full -translate-x-10 translate-y-10 pointer-events-none" />
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-yellow-400 flex items-center justify-center shadow-md flex-shrink-0">
+                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                  </div>
+                  <h2 className="text-lg font-extrabold text-white tracking-tight">Our Mission</h2>
+                </div>
+                <div className="h-0.5 w-10 rounded-full bg-yellow-400" />
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  We simplify vehicle documentation, safety, and verification through an <strong className="text-yellow-300">all-in-one digital platform</strong> — offering trusted, secure, and real-time services to every citizen.
+                </p>
+                <span className="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold text-yellow-300 bg-yellow-400/10 border border-yellow-400/30 rounded-full px-3 py-1 w-fit">
+                  <span className="w-2 h-2 rounded-full bg-yellow-400 dot-pulse inline-block" /> Day-to-day Commitment
+                </span>
+              </div>
+            </div>
+
+            {/* Bottom row — Core Services, Target Audience, Illustration */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+              {/* Core Services */}
+              <div
+                ref={ref("cs")}
+                style={{ animationDelay:"0.25s", border:"2px solid #f3f4f6" }}
+                className={`ab-fade-up ${v("cs")} relative bg-white rounded-3xl p-7 flex flex-col gap-4 shadow-sm`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  </div>
+                  <h2 className="text-base font-extrabold text-gray-900 tracking-tight">Core Services</h2>
+                </div>
+                <div className="h-0.5 w-10 rounded-full bg-blue-200" />
+                <ul className="flex flex-col gap-2.5">
                   {[
-                    { emoji:"🌍", title:"Our Vision", delay:"0s",   text:"To make every Indian vehicle digitally verifiable and connected — enabling a safer and more transparent transport ecosystem." },
-                    { emoji:"🚀", title:"Our Mission", delay:"0.15s", text:"We simplify vehicle documentation, safety, and verification through an all-in-one digital platform offering trusted, secure, and real-time services to every citizen." },
-                  ].map(({ emoji, title, delay, text }) => (
-                    <div
-                      key={title}
-                      ref={ref("vm"+title)}
-                      style={{ animationDelay: delay }}
-                      className={`ab-pop ${v("vm"+title)} card-hover bg-white border-2 border-yellow-100 p-6 rounded-2xl shadow-sm`}
-                    >
-                      <h2 className="text-lg font-bold text-gray-900 mb-2">{emoji} {title}</h2>
-                      <p className="text-gray-600 text-sm leading-relaxed">{text}</p>
-                    </div>
+                    ["RC, Insurance, Challan & PUC", "Verification"],
+                    ["QR-Based Digital Identity", "for Vehicles"],
+                    ["Public Alert & Lost Vehicle", "Reporting"],
+                    ["Secure Document Upload &", "Instant Validation"],
+                  ].map(([l1, l2], i) => (
+                    <li key={i} className="flex items-center gap-2.5">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-yellow-400/20 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
+                      </span>
+                      <span className="text-gray-600 text-xs leading-tight">{l1} {l2}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
+              </div>
 
-                {/* Core Services + Target */}
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div ref={ref("cs")} className={`ab-pop ${v("cs")} card-hover bg-white border-2 border-gray-100 p-6 rounded-2xl shadow-sm`} style={{ animationDelay:"0.25s" }}>
-                    <h2 className="text-lg font-bold text-gray-900 mb-4">🛠️ Core Services</h2>
-                    <ul className="space-y-2 text-gray-600 text-sm">
-                      {["RC, Insurance, Challan & PUC Verification","QR-Based Digital Identity for Vehicles","Public Alert & Lost Vehicle Reporting","Secure Document Upload & Instant Validation"].map(s => (
-                        <li key={s} className="flex items-start gap-2">
-                          <span className="text-yellow-500 font-bold mt-0.5">✔</span>{s}
-                        </li>
-                      ))}
-                    </ul>
+              {/* Target Audience */}
+              <div
+                ref={ref("ta")}
+                style={{ animationDelay:"0.35s", border:"2px solid #f3f4f6" }}
+                className={`ab-fade-up ${v("ta")} relative bg-white rounded-3xl p-7 flex flex-col gap-4 shadow-sm`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-green-50 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                   </div>
-
-                  <div ref={ref("ta")} className={`ab-pop ${v("ta")} card-hover bg-white border-2 border-gray-100 p-6 rounded-2xl shadow-sm`} style={{ animationDelay:"0.35s" }}>
-                    <h2 className="text-lg font-bold text-gray-900 mb-4">🎯 Target Audience</h2>
-                    <ul className="space-y-2 text-gray-600 text-sm">
-                      <li>👤 Private & Commercial Vehicle Owners</li>
-                      <li>🚨 Citizens reporting found or lost vehicles</li>
-                      <li>🏛️ Transport professionals & RTO partners</li>
-                    </ul>
-                  </div>
+                  <h2 className="text-base font-extrabold text-gray-900 tracking-tight">Target Audience</h2>
                 </div>
+                <div className="h-0.5 w-10 rounded-full bg-green-200" />
+                <ul className="flex flex-col gap-3">
+                  {[
+                    { icon: "🚗", label: "Private & Commercial", sub: "Vehicle Owners" },
+                    { icon: "📢", label: "Citizens reporting", sub: "found or lost vehicles" },
+                    { icon: "🏛️", label: "Transport professionals", sub: "& RTO partners" },
+                  ].map(({ icon, label, sub }) => (
+                    <li key={label} className="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-2.5">
+                      <span className="text-lg leading-none">{icon}</span>
+                      <span className="text-xs text-gray-700 leading-tight"><strong>{label}</strong> {sub}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
               {/* Illustration */}
-              <div ref={ref("visionImg")} className={`ab-fade-right ${v("visionImg")} md:w-1/3 flex justify-center`}>
-                <img src={VisionImg} alt="Vision Illustration" className="float-img2 sm:h-80 w-auto object-contain" />
+              <div ref={ref("visionImg")} className={`ab-fade-right ${v("visionImg")} hidden lg:flex items-center justify-center`}>
+                <img src={VisionImg} alt="Vision Illustration" className="float-img2 h-72 w-auto object-contain" />
               </div>
             </div>
           </div>
@@ -411,27 +474,33 @@ const Aboutpage = () => {
             <h2 className="text-3xl font-extrabold text-gray-900">Legal Entity &amp; <span className="text-yellow-500">Contact Info</span></h2>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-8 items-stretch">
+          <div className="flex flex-col md:flex-row gap-8 items-start">
             {/* Info card */}
             <div ref={ref("legalL")} className={`ab-fade-left ${v("legalL")} md:w-1/2`}>
-              <div className="card-hover bg-white border-2 border-yellow-100 rounded-3xl p-8 shadow-sm h-full space-y-4">
+              <div className="bg-white border-2 border-yellow-100 rounded-3xl overflow-hidden shadow-sm">
+                {/* Top accent bar */}
+                <div className="h-1.5 w-full bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-100" />
+                <div className="p-7 flex flex-col divide-y divide-gray-100">
                 {[
-                  ["🏢","Company Name","Digivahan Digital India Pvt Ltd"],
-                  ["📅","Established","2023"],
-                  ["🔖","CIN","U62099DL2023PTC420571"],
-                  ["📍","Registered Address","Plot No, 2-A, Third Floor, Block-R, Uttam Nagar, New Delhi - 110059, India"],
-                  ["✉️","Email","info@digivahan.in"],
-                ].map(([icon, label, val]) => (
-                  <div key={label} className="flex items-start gap-3">
-                    <span className="text-xl mt-0.5">{icon}</span>
-                    <div>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">{label}</p>
-                      <p className="text-gray-700 text-sm">{val}</p>
+                  { icon: <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>, label:"Company Name", val:"Digivahan Digital India Pvt Ltd" },
+                  { icon: <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>, label:"Established", val:"2023" },
+                  { icon: <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>, label:"CIN", val:"U62099DL2023PTC420571" },
+                  { icon: <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>, label:"Registered Address", val:"Plot No, 2-A, Third Floor, Block-R, Uttam Nagar, New Delhi - 110059, India" },
+                  { icon: <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>, label:"Email", val:"info@digivahan.in" },
+                ].map(({ icon, label, val }) => (
+                  <div key={label} className="flex items-start gap-4 py-4 first:pt-0 last:pb-0">
+                    <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-yellow-50 border border-yellow-100 flex items-center justify-center mt-0.5">
+                      {icon}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-0.5">{label}</p>
+                      <p className="text-gray-800 text-sm font-medium leading-snug">{val}</p>
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
+                </div>{/* end p-7 */}
+              </div>{/* end card */}
+            </div>{/* end md:w-1/2 */}
 
             {/* Office image */}
             <div ref={ref("legalR")} className={`ab-fade-right ${v("legalR")} md:w-1/2 rounded-3xl overflow-hidden shadow-lg`}>
