@@ -474,10 +474,10 @@ const Aboutpage = () => {
             <h2 className="text-3xl font-extrabold text-gray-900">Legal Entity &amp; <span className="text-yellow-500">Contact Info</span></h2>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-8 items-start">
+          <div className="flex flex-col md:flex-row gap-8 items-stretch">
             {/* Info card */}
-            <div ref={ref("legalL")} className={`ab-fade-left ${v("legalL")} md:w-1/2`}>
-              <div className="bg-white border-2 border-yellow-100 rounded-3xl overflow-hidden shadow-sm">
+            <div ref={ref("legalL")} className={`ab-fade-left ${v("legalL")} md:w-1/2 flex flex-col`}>
+              <div className="bg-white border-2 border-yellow-100 rounded-3xl overflow-hidden shadow-sm flex-1 flex flex-col">
                 {/* Top accent bar */}
                 <div className="h-1.5 w-full bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-100" />
                 <div className="p-7 flex flex-col divide-y divide-gray-100">
@@ -503,8 +503,8 @@ const Aboutpage = () => {
             </div>{/* end md:w-1/2 */}
 
             {/* Office image */}
-            <div ref={ref("legalR")} className={`ab-fade-right ${v("legalR")} md:w-1/2 rounded-3xl overflow-hidden shadow-lg`}>
-              <img src={OfficeImg} alt="Digivahan Office" className="w-full h-full object-cover" style={{ minHeight: 260 }} />
+            <div ref={ref("legalR")} className={`ab-fade-right ${v("legalR")} md:w-1/2 rounded-3xl overflow-hidden shadow-lg self-stretch`}>
+              <img src={OfficeImg} alt="Digivahan Office" className="w-full h-full object-cover" style={{ display:"block" }} />
             </div>
           </div>
         </section>
