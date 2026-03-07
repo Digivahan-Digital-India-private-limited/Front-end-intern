@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ringimg from "../../assets/Right.png";
 import conimg from "../../assets/Container.png";
-import OfficeImg from "../../assets/Digivahan Building.png";
+const OfficeImg = "/Digivahan Building.webp";
 import About1Img from "../../assets/About us 3.webp";
 import VisionImg from "../../assets/Vision.png";
 import ProfileCard from "./ProfileCard";
@@ -88,6 +88,20 @@ const animStyles = `
   }
   .icon-spin { animation:rotateSlow 8s linear infinite; }
   .dot-pulse { animation:pulseDot 1.5s ease-in-out infinite; }
+
+  /* ── USP Orbit ── */
+  @keyframes uspCW  { from{transform:rotate(0deg)}   to{transform:rotate(360deg)}  }
+  @keyframes uspCCW { from{transform:rotate(0deg)}   to{transform:rotate(-360deg)} }
+  @keyframes uspGlow {
+    0%,100%{opacity:.4;transform:scale(1)}
+    50%    {opacity:.8;transform:scale(1.12)}
+  }
+  .usp-arm-cw  { position:absolute;inset:0;animation:uspCW  22s linear infinite; }
+  .usp-arm-ccw { position:absolute;inset:0;animation:uspCCW 14s linear infinite; }
+  .usp-ico-cw  { animation:uspCCW 22s linear infinite; }
+  .usp-ico-ccw { animation:uspCW  14s linear infinite; }
+  .usp-ring-o  { border:2px dashed rgba(234,179,8,.5);  animation:uspCW  40s linear infinite; }
+  .usp-ring-i  { border:1.5px dashed rgba(96,165,250,.4); animation:uspCCW 26s linear infinite; }
 `;
 
 /* ── hook: trigger class "vis" when element enters viewport ── */
@@ -352,68 +366,120 @@ const Aboutpage = () => {
             </div>
 
             {/* Bottom row — Core Services, Target Audience, Illustration */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
 
               {/* Core Services */}
               <div
                 ref={ref("cs")}
                 style={{ animationDelay:"0.25s", border:"2px solid #f3f4f6" }}
-                className={`ab-fade-up ${v("cs")} relative bg-white rounded-3xl p-7 flex flex-col gap-4 shadow-sm`}
+                className={`ab-fade-up ${v("cs")} relative bg-white rounded-3xl p-6 flex flex-col shadow-sm`}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 mb-3">
                   <div className="w-11 h-11 rounded-2xl bg-blue-50 flex items-center justify-center flex-shrink-0">
                     <svg className="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                   </div>
                   <h2 className="text-base font-extrabold text-gray-900 tracking-tight">Core Services</h2>
                 </div>
-                <div className="h-0.5 w-10 rounded-full bg-blue-200" />
+                <div className="h-0.5 w-10 rounded-full bg-blue-200 mb-4" />
                 <ul className="flex flex-col gap-2.5">
                   {[
-                    ["RC, Insurance, Challan & PUC", "Verification"],
-                    ["QR-Based Digital Identity", "for Vehicles"],
-                    ["Public Alert & Lost Vehicle", "Reporting"],
-                    ["Secure Document Upload &", "Instant Validation"],
-                  ].map(([l1, l2], i) => (
-                    <li key={i} className="flex items-center gap-2.5">
+                    "RC, Insurance, Challan & PUC Verification",
+                    "QR-Based Digital Identity for Vehicles",
+                    "Public Alert & Lost Vehicle Reporting",
+                    "Secure Document Upload & Instant Validation",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-center gap-2.5 bg-blue-50/50 rounded-xl px-3 py-2.5">
                       <span className="flex-shrink-0 w-5 h-5 rounded-full bg-yellow-400/20 flex items-center justify-center">
                         <svg className="w-3 h-3 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
                       </span>
-                      <span className="text-gray-600 text-xs leading-tight">{l1} {l2}</span>
+                      <span className="text-gray-600 text-xs leading-tight">{item}</span>
                     </li>
                   ))}
                 </ul>
+                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                  <span className="text-[10px] text-gray-400 font-medium">4 core features</span>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-500 bg-blue-50 rounded-full px-2.5 py-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 dot-pulse inline-block" /> Active
+                  </span>
+                </div>
               </div>
 
               {/* Target Audience */}
               <div
                 ref={ref("ta")}
                 style={{ animationDelay:"0.35s", border:"2px solid #f3f4f6" }}
-                className={`ab-fade-up ${v("ta")} relative bg-white rounded-3xl p-7 flex flex-col gap-4 shadow-sm`}
+                className={`ab-fade-up ${v("ta")} relative bg-white rounded-3xl p-6 flex flex-col shadow-sm`}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 mb-3">
                   <div className="w-11 h-11 rounded-2xl bg-green-50 flex items-center justify-center flex-shrink-0">
                     <svg className="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                   </div>
                   <h2 className="text-base font-extrabold text-gray-900 tracking-tight">Target Audience</h2>
                 </div>
-                <div className="h-0.5 w-10 rounded-full bg-green-200" />
+                <div className="h-0.5 w-10 rounded-full bg-green-200 mb-4" />
                 <ul className="flex flex-col gap-3">
                   {[
                     { icon: "🚗", label: "Private & Commercial", sub: "Vehicle Owners" },
                     { icon: "📢", label: "Citizens reporting", sub: "found or lost vehicles" },
                     { icon: "🏛️", label: "Transport professionals", sub: "& RTO partners" },
                   ].map(({ icon, label, sub }) => (
-                    <li key={label} className="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-2.5">
-                      <span className="text-lg leading-none">{icon}</span>
+                    <li key={label} className="flex items-center gap-3 bg-green-50/60 rounded-xl px-3 py-3">
+                      <span className="text-xl leading-none">{icon}</span>
                       <span className="text-xs text-gray-700 leading-tight"><strong>{label}</strong> {sub}</span>
                     </li>
                   ))}
                 </ul>
+                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                  <span className="text-[10px] text-gray-400 font-medium">3 key segments</span>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-green-600 bg-green-50 rounded-full px-2.5 py-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 dot-pulse inline-block" /> Growing
+                  </span>
+                </div>
               </div>
 
-              {/* Illustration */}
-              <div ref={ref("visionImg")} className={`ab-fade-right ${v("visionImg")} hidden lg:flex items-center justify-center`}>
-                <img src={VisionImg} alt="Vision Illustration" className="float-img2 h-72 w-auto object-contain" />
+              {/* Illustration card */}
+              <div
+                ref={ref("visionImg")}
+                style={{ animationDelay:"0.45s", background:"linear-gradient(145deg,#1e293b 0%,#0f172a 100%)", border:"2px solid #334155", height: 340 }}
+                className={`ab-fade-right ${v("visionImg")} flex flex-col rounded-3xl overflow-hidden shadow-xl relative`}
+              >
+                {/* Decorative blobs */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-full translate-x-10 -translate-y-10 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-400/10 rounded-full -translate-x-8 translate-y-8 pointer-events-none" />
+
+                {/* Image frame */}
+                <div className="relative flex-1 m-4 rounded-2xl overflow-hidden group">
+                  {/* Animated ring border */}
+                  <div className="absolute inset-0 rounded-2xl pointer-events-none z-10"
+                    style={{ boxShadow:"inset 0 0 0 2px rgba(234,179,8,0.35)", animation:"uspGlow 3s ease-in-out infinite" }} />
+                  <img
+                    src={VisionImg}
+                    alt="Vision Illustration"
+                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                  {/* Dark gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  {/* Floating label over image */}
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center gap-2">
+                    <div className="flex-1 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-3 py-2">
+                      <p className="text-white text-xs font-bold leading-tight">Driven by Vision</p>
+                      <p className="text-gray-300 text-[10px] leading-tight mt-0.5">Building a smarter India</p>
+                    </div>
+                    <div className="w-8 h-8 rounded-xl bg-yellow-400 flex items-center justify-center shadow-lg shadow-yellow-400/30 shrink-0">
+                      <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom stat strip */}
+                <div className="flex items-center justify-around px-4 pb-4 pt-1 gap-2">
+                  {[["2023","Founded"],["India","Serving"],["Digital","Future"]].map(([val, lbl]) => (
+                    <div key={lbl} className="text-center">
+                      <p className="text-yellow-400 text-sm font-extrabold">{val}</p>
+                      <p className="text-gray-400 text-[10px] font-medium">{lbl}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -451,8 +517,73 @@ const Aboutpage = () => {
               </ul>
             </div>
 
-            <div ref={ref("uspR")} className={`ab-fade-right ${v("uspR")} md:w-1/2 flex justify-center`}>
-              <img src={ringimg} alt="USP Illustration" className="float-img h-64 sm:h-80 w-auto object-contain" />
+            <div ref={ref("uspR")} className={`ab-fade-right ${v("uspR")} md:w-1/2 flex justify-center items-center`}>
+              <div className="relative mx-auto" style={{ width: 360, height: 360 }}>
+
+                {/* Ambient glow */}
+                <div className="absolute inset-4 rounded-full pointer-events-none"
+                  style={{ background:'radial-gradient(circle,rgba(234,179,8,.18) 0%,transparent 70%)', animation:'uspGlow 3.5s ease-in-out infinite' }} />
+
+                {/* Outer dashed ring */}
+                <div className="absolute rounded-full usp-ring-o"
+                  style={{ width:296, height:296, top:32, left:32 }} />
+
+                {/* Inner dashed ring */}
+                <div className="absolute rounded-full usp-ring-i"
+                  style={{ width:192, height:192, top:84, left:84 }} />
+
+                {/* ── Outer orbit (6 icons, CW, 22s) ── */}
+                {[
+                  { emoji:'🛡️', label:'Security' },
+                  { emoji:'📱', label:'Mobile'   },
+                  { emoji:'🚗', label:'Vehicle'  },
+                  { emoji:'📄', label:'Docs'     },
+                  { emoji:'⚡', label:'Fast'     },
+                  { emoji:'🔔', label:'Alerts'   },
+                ].map(({ emoji, label }, i) => (
+                  <div key={i} className="usp-arm-cw"
+                    style={{ animationDelay:`${-(22/6)*i}s` }}>
+                    <div style={{ position:'absolute', top:'calc(50% - 170px)', left:'calc(50% - 22px)' }}>
+                      <div className="usp-ico-cw" style={{ animationDelay:`${-(22/6)*i}s` }}>
+                        <div className="w-11 h-11 rounded-2xl bg-white shadow-lg border border-yellow-100 flex items-center justify-center text-xl select-none">
+                          {emoji}
+                        </div>
+                        <p className="text-[9px] text-gray-500 text-center mt-0.5 font-semibold leading-none">{label}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* ── Inner orbit (4 icons, CCW, 14s) ── */}
+                {[
+                  { emoji:'🔍' },
+                  { emoji:'🗺️' },
+                  { emoji:'🔒' },
+                  { emoji:'✅' },
+                ].map(({ emoji }, i) => (
+                  <div key={i} className="usp-arm-ccw"
+                    style={{ animationDelay:`${-(14/4)*i}s` }}>
+                    <div style={{ position:'absolute', top:'calc(50% - 115px)', left:'calc(50% - 19px)' }}>
+                      <div className="usp-ico-ccw" style={{ animationDelay:`${-(14/4)*i}s` }}>
+                        <div className="w-[38px] h-[38px] rounded-xl bg-white shadow-md border border-blue-100 flex items-center justify-center text-lg select-none">
+                          {emoji}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Center image */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative">
+                    <div className="absolute -inset-5 rounded-full pointer-events-none"
+                      style={{ background:'radial-gradient(circle,rgba(234,179,8,.25) 0%,transparent 70%)', animation:'uspGlow 2.6s ease-in-out infinite .4s' }} />
+                    <img src={ringimg} alt="USP Illustration"
+                      className="float-img relative w-48 h-48 object-contain drop-shadow-2xl" />
+                  </div>
+                </div>
+
+              </div>
             </div>
           </div>
         </section>
@@ -503,8 +634,18 @@ const Aboutpage = () => {
             </div>{/* end md:w-1/2 */}
 
             {/* Office image */}
-            <div ref={ref("legalR")} className={`ab-fade-right ${v("legalR")} md:w-1/2 rounded-3xl overflow-hidden shadow-lg self-stretch`}>
-              <img src={OfficeImg} alt="Digivahan Office" className="w-full h-full object-cover" style={{ display:"block" }} />
+            <div ref={ref("legalR")} className={`ab-fade-right ${v("legalR")} md:w-1/2 self-stretch`}>
+              <div className="relative group w-full h-full min-h-[380px] rounded-3xl overflow-hidden shadow-xl">
+                <img src={OfficeImg} alt="Digivahan Office" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" style={{ display:"block" }} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2.5 shadow-lg flex items-center gap-3">
+                  <span className="text-yellow-500 text-xl">🏢</span>
+                  <div>
+                    <p className="text-xs font-bold text-gray-800">Our Office</p>
+                    <p className="text-xs text-gray-500">Gurugram, Haryana</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
