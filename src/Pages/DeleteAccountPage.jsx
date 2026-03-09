@@ -188,18 +188,23 @@ const DeleteAccountPage = () => {
 
             {/* Right image */}
             <div className="fade-in-right delay-200">
-              <div className="relative">
-                <div className="absolute -inset-4 bg-linear-to-r from-red-400 to-red-600 rounded-2xl blur-2xl opacity-20"></div>
-                <img
-                  src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800"
-                  alt="Account Security"
-                  className="relative rounded-2xl shadow-2xl w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
-                  onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800"; }}
-                />
-                {/* Overlay badge */}
-                <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg scale-in delay-400">
-                  <p className="text-sm font-bold text-red-600">⚠️ Irreversible Action</p>
-                  <p className="text-xs text-gray-500">Please proceed with caution</p>
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-linear-to-r from-red-400 to-red-600 rounded-3xl blur-2xl opacity-25"></div>
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
+                  <img
+                    src="/Delete Account.webp"
+                    alt="Account Security"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+                  {/* Overlay badge */}
+                  <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2.5 shadow-lg flex items-center gap-3">
+                    <span className="text-xl">⚠️</span>
+                    <div>
+                      <p className="text-xs font-bold text-red-600">Irreversible Action</p>
+                      <p className="text-xs text-gray-500">Please proceed with caution</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

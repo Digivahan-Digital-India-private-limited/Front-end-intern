@@ -186,32 +186,17 @@ const VisitUs = () => {
             </div>
           </div>
 
-          {/* RIGHT — browser mockup */}
+          {/* RIGHT — hero image */}
           <div ref={mockRef} className="flex justify-center vu-fade-right">
-            <div className="vu-card rounded-2xl overflow-hidden shadow-2xl border border-gray-100 w-full max-w-lg"
-              style={{ boxShadow: "0 25px 60px rgba(0,0,0,.12)" }}>
-              {/* Mock browser bar */}
-              <div className="flex items-center gap-2 bg-gray-50 px-4 py-3 border-b border-gray-200">
-                <span className="w-3 h-3 rounded-full bg-red-400" />
-                <span className="w-3 h-3 rounded-full bg-yellow-400" />
-                <span className="w-3 h-3 rounded-full bg-green-400" />
-                <div className="flex-1 ml-3 bg-white rounded-md text-xs text-gray-400 px-3 py-1.5 text-center border border-gray-200">
-                  app.digivahan.com
-                </div>
-                <div className="flex gap-2 text-gray-400 text-sm ml-2">
-                  <span>‹</span><span>›</span>
-                </div>
-              </div>
-              {/* Screenshot with play overlay */}
-              <div className="relative group">
-                <img src={HeropageImage} alt="Partner meeting" className="w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="vu-play w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform">
-                    <span className="text-yellow-500 text-2xl ml-1">▶</span>
-                  </div>
-                </div>
-              </div>
+            <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl group"
+              style={{ boxShadow: "0 25px 60px rgba(0,0,0,.15)" }}>
+              <img
+                src="/Visit Us Top.webp"
+                alt="Partner meeting"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                style={{ minHeight: 380 }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
             </div>
           </div>
         </div>
@@ -249,19 +234,18 @@ const VisitUs = () => {
           </div>
 
           {/* RIGHT — person image */}
-          <div ref={whoImgRef} className="flex justify-center vu-zoom">
-            <div className="relative">
-              {/* Decorative ring */}
-              <div className="absolute -inset-4 rounded-2xl border-2 border-dashed border-yellow-300 opacity-60" />
+          <div ref={whoImgRef} className="vu-zoom w-full">
+            <div className="relative w-full rounded-3xl overflow-hidden" style={{ boxShadow: "0 30px 60px rgba(234,179,8,.18)" }}>
+              <div className="absolute -inset-3 rounded-3xl border-2 border-dashed border-yellow-300 opacity-60 pointer-events-none" />
               <img
-                src={Qrimage}
-                alt="Digivahan representative"
-                className="relative w-full max-w-lg rounded-2xl object-cover shadow-2xl"
-                style={{ boxShadow: "0 30px 60px rgba(234,179,8,.18)" }}
+                src="/Who Can Visit Us.webp"
+                alt="Who can visit Digivahan"
+                className="w-full object-cover rounded-3xl"
+                style={{ minHeight: 400 }}
               />
               {/* Floating badge */}
-              <div className="absolute -bottom-4 -left-4 bg-white shadow-xl rounded-xl px-4 py-3 flex items-center gap-3 border border-yellow-100">
-                <FaCalendarCheck className="text-yellow-500 text-2xl" />
+              <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm shadow-xl rounded-xl px-4 py-3 flex items-center gap-3 border border-yellow-100">
+                <FaCalendarCheck className="text-yellow-500 text-2xl shrink-0" />
                 <div>
                   <p className="text-xs font-bold text-gray-800">Book a Visit</p>
                   <p className="text-xs text-gray-500">Mon – Sat, 10am – 6pm</p>
@@ -326,8 +310,8 @@ const VisitUs = () => {
             <div className="absolute -inset-3 rounded-2xl opacity-20 pointer-events-none"
               style={{ background: "linear-gradient(135deg,#fbbf24,#f97316)" }} />
             <img
-              src="https://images.unsplash.com/photo-1513128034602-7814ccaddd4e?w=800&q=80"
-              alt="Target goal"
+              src="/Whom to Meet.webp"
+              alt="Whom to meet"
               className="absolute inset-0 w-full h-full object-cover rounded-2xl"
             />
             {/* Stats badge */}
