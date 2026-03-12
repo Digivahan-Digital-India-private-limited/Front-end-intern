@@ -4,7 +4,8 @@ import { jwtDecode } from "jwt-decode";
 import { io } from "socket.io-client";
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-const BASE_URL = "https://api.digicapital.co.in";
+const BASE_URL =
+  import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
 export const MyContext = createContext();
 
 const DataProvider = ({ children }) => {
@@ -407,6 +408,38 @@ const DataProvider = ({ children }) => {
     }
   };
 
+  const generateQrByAdmin = async (units) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/generate-qr",
+        {
+          unit: units,
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error generating QR:", error);
+      throw error;
+    }
+  };
+
+  const generateQrtemplateInBulk = async (templatetype) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/create/qr-template-in-bluk",
+        {
+          template_type: templatetype,
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error generating QR template in bulk:", error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     const token = Cookies.get("admin_token");
     if (!token) return;
@@ -466,6 +499,8 @@ const DataProvider = ({ children }) => {
         getOrderDetailsByAdmin,
         OrderCancelByAdmin,
         TrackOrderByAdmin,
+        generateQrByAdmin,
+        generateQrtemplateInBulk,
       }}
     >
       {children}
