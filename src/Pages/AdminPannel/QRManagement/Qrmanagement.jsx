@@ -132,7 +132,23 @@ const Qrmanagement = () => {
           </div>
         </div>
 
-        {/* Card 4 - QR Not Allotted to Sales Persons */}
+        {/* Card 4 - Generate QR */}
+        <div
+          onClick={() => navigate("/generate-qr")}
+          className="relative bg-green-100 h-28 w-125 rounded-lg border border-gray-300 mt-5 p-4 cursor-pointer hover:bg-green-200 transition"
+        >
+          <p className="text-gray-600 text-sm">Generate QR</p>
+
+          <div className="flex flex-row gap-2 mt-2">
+            <p className="text-lg font-semibold text-green-700">Create New QR Codes</p>
+          </div>
+
+          <div className="absolute top-4 right-4 bg-white h-12 w-12 rounded-full flex items-center justify-center shadow">
+            <QrCode className="text-green-600 text-xl" />
+          </div>
+        </div>
+
+        {/* Card 4 - QR Not Allotted to Sales Persons [COMMENTED OUT]
         <div
           onClick={() => navigate("/allotted-qr-code")}
           className="relative bg-orange-200 h-28 w-125 rounded-lg border border-gray-300 mt-5 p-4"
@@ -149,22 +165,22 @@ const Qrmanagement = () => {
             <Users className="text-gray-700 text-xl" />
           </div>
         </div>
+        */}
       </div>
+
+      {/* Sales Person QR Allocation Summary [COMMENTED OUT]
       <h1 className="text-xl  text-gray-900 mt-3">
         Sales Person QR Allocation Summary
       </h1>
       <p className="text-sm text-gray-600">
         View QR code distribution across sales team
       </p>
-
-      {/* many cards secction */}
-
       <div className="grid grid-cols-4 gap-4 mt-3">
-        {/* Card 1 - Rahul Sharma */}
         {SalesPersonInfo?.map((data) => (
           <SalesPersonProfile key={data.id} info={data} />
         ))}
       </div>
+      */}
     </main>
   );
 };

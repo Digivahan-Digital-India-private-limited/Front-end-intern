@@ -35,6 +35,7 @@ import GenerateManifest from "./Pages/AdminPannel/Orders/GenerateManifest/Genera
 import DeliveryPartners from "./Pages/AdminPannel/Orders/DeliveryPartners/DeliveryPartners";
 import ManageOrder from "./Pages/AdminPannel/Orders/ManageOrder";
 import Qrmanagement from "./Pages/AdminPannel/QRManagement/Qrmanagement";
+import GenerateQR from "./Pages/AdminPannel/QRManagement/GenerateQR";
 import AssignedQR from "./Pages/AdminPannel/QRManagement/QRStatusTabs/AssignedQR";
 import BlockedQR from "./Pages/AdminPannel/QRManagement/QRStatusTabs/BlockedQR";
 import AllottedQrCode from "./Pages/AdminPannel/QRManagement/QRStatusTabs/AllottedQrCode";
@@ -236,6 +237,7 @@ const App = () => {
           <Route path="/orders-panel/delivery-partners" element={<DeliveryPartners />} />
           <Route path="/orders-panel/manage" element={<ManageOrder />} />
           <Route path="/qr-panel" element={<Qrmanagement />} />
+          <Route path="/generate-qr" element={<GenerateQR />} />
           <Route path="/check-assigned-qr" element={<AssignedQR />} />
           <Route path="/check-blocked-qr" element={<BlockedQR />} />
           <Route path="/allotted-qr-code" element={<AllottedQrCode />} />
