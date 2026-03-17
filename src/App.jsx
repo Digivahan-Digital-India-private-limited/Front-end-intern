@@ -15,6 +15,7 @@ import ReturnRefundPolicy from "./Pages/ReturnRefundPolicy";
 import TermsAndConditionsPage from "./Pages/TermsAndConditionsPage";
 import Contactpage from "./Components/Contactpage/Contactpage";
 import RaiseConcern from "./Pages/RaiseConcern";
+import UserConcernChat from "./Pages/UserConcernChat";
 import VisitUs from "./Pages/VisitUs";
 import Reports from "./Pages/Reports";
 import Explorepage from "./Pages/Explorepage";
@@ -36,6 +37,7 @@ import DeliveryPartners from "./Pages/AdminPannel/Orders/DeliveryPartners/Delive
 import ManageOrder from "./Pages/AdminPannel/Orders/ManageOrder";
 import PendingOrders from "./Pages/AdminPannel/Orders/PendingOrders/PendingOrders";
 import Qrmanagement from "./Pages/AdminPannel/QRManagement/Qrmanagement";
+import FilterQR from "./Pages/AdminPannel/QRManagement/FilterQR";
 import GenerateQR from "./Pages/AdminPannel/QRManagement/GenerateQR";
 import AssignedQR from "./Pages/AdminPannel/QRManagement/QRStatusTabs/AssignedQR";
 import BlockedQR from "./Pages/AdminPannel/QRManagement/QRStatusTabs/BlockedQR";
@@ -88,6 +90,11 @@ import IssueResolution from "./Pages/AdminPannel/Issues/IssueResolution";
 import AdminReports from "./Pages/AdminPannel/Reports/Reports";
 import VehicleOwnerReports from "./Pages/AdminPannel/Reports/VehicleOwnerReports/VehicleOwnerReports";
 import InteractorReports from "./Pages/AdminPannel/Reports/InteractorReports/InteractorReports";
+import ManageAppointment from "./Pages/AdminPannel/Appointments/ManageAppointment";
+import ManageConcerns from "./Pages/AdminPannel/Concerns/ManageConcerns";
+import ConcernChat from "./Pages/AdminPannel/Concerns/ConcernChat";
+import DeleteAccountRequests from "./Pages/AdminPannel/DeleteAccountRequests/DeleteAccountRequests";
+import ReportIssueList from "./Pages/AdminPannel/ReportsIssue/ReportIssueList";
 
 
 // Protected Routes
@@ -132,6 +139,8 @@ const App = () => {
           <Route path="/login-otp" element={<OtpLoginPage />} />
           <Route path="/contact-page" element={<Contactpage />} />
           <Route path="/Raise-concern-page" element={<RaiseConcern />} />
+          <Route path="/concern-chat-user" element={<UserConcernChat />} />
+          <Route path="/concern-chat-user/:tokenId" element={<UserConcernChat />} />
           <Route path="/visit-us-page" element={<VisitUs />} />
           <Route path="/Report-page" element={<Reports />} />
           <Route path="/explore-page" element={<Explorepage />} />
@@ -239,6 +248,7 @@ const App = () => {
           <Route path="/orders-panel/manage" element={<ManageOrder />} />
           <Route path="/orders-panel/pending-orders" element={<PendingOrders />} />
           <Route path="/qr-panel" element={<Qrmanagement />} />
+          <Route path="/filter-qr" element={<FilterQR />} />
           <Route path="/generate-qr" element={<GenerateQR />} />
           <Route path="/check-assigned-qr" element={<AssignedQR />} />
           <Route path="/check-blocked-qr" element={<BlockedQR />} />
@@ -264,6 +274,13 @@ const App = () => {
           <Route path="/manage-qr-benefits" element={<ManageQRBenefits />} />
           <Route path="/manage-app-info" element={<ManageAppInfo />} />
           <Route path="/customer-queries" element={<CustomerQueries />} />
+          <Route path="/manage-concerns" element={<ManageConcerns />} />
+          <Route path="/manage-concerns/:concernId" element={<ManageConcerns />} />
+          <Route path="/concern-chat-admin" element={<ConcernChat />} />
+          <Route path="/concern-chat-admin/:concernId" element={<ConcernChat />} />
+          <Route path="/delete-account-requests" element={<DeleteAccountRequests />} />
+          <Route path="/report-issues" element={<ReportIssueList />} />
+          <Route path="/manage-appointment" element={<ManageAppointment />} />
           <Route path="/post-faq" element={<PostFAQ />} />
           <Route path="/delete-faq" element={<DeleteFAQ />} />
           <Route path="/update-faq" element={<UpdateFAQ />} />
