@@ -102,7 +102,7 @@ const normalizeHistory = (history) => {
 const normalizePriority = (priority) => {
   const key = String(priority || "").trim().toLowerCase();
   if (["high", "critical"].includes(key)) return "high";
-  if (["average", "medium", "normal"].includes(key)) return "average";
+  if (["average", "medium", "normal"].includes(key)) return "medium";
   return "low";
 };
 
@@ -161,7 +161,7 @@ const getPriorityFromIssueType = (issueType) => {
   const key = normalizeIssueTypeKey(issueType);
 
   if (key === "phishing" || key === "fake-calls") return "high";
-  if (key === "fake-email" || key === "spam") return "average";
+  if (key === "fake-email" || key === "spam") return "medium";
   return "low";
 };
 

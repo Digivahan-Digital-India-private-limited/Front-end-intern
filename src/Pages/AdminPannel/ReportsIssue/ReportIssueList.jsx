@@ -22,7 +22,7 @@ const STATUS_BADGES = {
 
 const PRIORITY_BADGES = {
   high: "bg-rose-100 text-rose-700 border-rose-200",
-  average: "bg-amber-100 text-amber-700 border-amber-200",
+  medium: "bg-amber-100 text-amber-700 border-amber-200",
   low: "bg-emerald-100 text-emerald-700 border-emerald-200",
 };
 
@@ -61,7 +61,7 @@ const formatDate = (value) => {
 const normalizePriority = (value) => {
   const key = String(value || "").trim().toLowerCase();
   if (["high", "critical"].includes(key)) return "high";
-  if (["average", "medium", "normal"].includes(key)) return "average";
+  if (["average", "medium", "normal"].includes(key)) return "medium";
   return "low";
 };
 
