@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from "react";
-import HeropageImage from "../assets/visitus.png";
-import Qrimage from "../assets/visitus-2.png";
-import { FaUserCircle, FaHandshake, FaBuilding, FaCogs, FaTruck, FaChartLine, FaCalendarCheck } from "react-icons/fa";
+import React, { useEffect, useRef, useState } from "react";
+import { FaHandshake, FaBuilding, FaCogs, FaTruck, FaChartLine, FaCalendarCheck } from "react-icons/fa";
 import { MdBusiness, MdEngineering, MdSupportAgent } from "react-icons/md";
+import axios from "axios";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
 
 /* ── Scroll-reveal hook ── */
 function useReveal() {
@@ -55,7 +56,85 @@ const VisitUs = () => {
   const whoRef    = useReveal();
   const whoImgRef = useReveal();
   const meetRef   = useReveal();
+  const appointmentRef = useReveal();
   const mapRef    = useReveal();
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minAppointmentDate = tomorrow.toISOString().split("T")[0];
+
+  const [formData, setFormData] = useState({
+    name: "",
+    companyName: "",
+    phoneNumber: "",
+    businessEmail: "",
+    whomToMeet: "",
+    role: "",
+    reason: "",
+    proposalDescription: "",
+    requestedDate: "",
+  });
+  const [submitMessage, setSubmitMessage] = useState({ type: "", text: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const today = new Date().toISOString().split("T")[0];
+
+    if (!formData.requestedDate || formData.requestedDate <= today) {
+      setSubmitMessage({
+        type: "error",
+        text: "Requested date must be from tomorrow onwards.",
+      });
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setSubmitMessage({ type: "", text: "" });
+
+      const response = await axios.post(`${BASE_URL}/api/appointment/create`, formData);
+
+      const success = response?.data?.success;
+      if (!success) {
+        throw new Error(response?.data?.message || "Failed to submit appointment request.");
+      }
+
+      setSubmitMessage({
+        type: "success",
+        text:
+          response?.data?.message ||
+          "Appointment request submitted successfully. Our team will contact you shortly.",
+      });
+
+      setFormData({
+        name: "",
+        companyName: "",
+        phoneNumber: "",
+        businessEmail: "",
+        whomToMeet: "",
+        role: "",
+        reason: "",
+        proposalDescription: "",
+        requestedDate: "",
+      });
+    } catch (error) {
+      setSubmitMessage({
+        type: "error",
+        text:
+          error?.response?.data?.message ||
+          error?.message ||
+          "Something went wrong while submitting your appointment request.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="w-full font-sans overflow-x-hidden">
@@ -117,6 +196,30 @@ const VisitUs = () => {
         .vu-map-wrap { clip-path: inset(100% 0 0 0); transition: clip-path .9s cubic-bezier(.4,0,.2,1); }
         .vu-visible .vu-map-wrap,
         .vu-visible.vu-map-wrap { clip-path: inset(0% 0 0 0); }
+
+        /* appointment form visuals */
+        .vu-form-card {
+          background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+          border: 1px solid #fde68a;
+          box-shadow: 0 24px 50px rgba(0,0,0,.08);
+        }
+        .vu-input {
+          border: 1px solid #e5e7eb;
+          transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+        }
+        .vu-input:focus {
+          outline: none;
+          border-color: #f59e0b;
+          box-shadow: 0 0 0 4px rgba(245,158,11,.15);
+          transform: translateY(-1px);
+        }
+        @keyframes vuGlow {
+          0%, 100% { opacity: .5; }
+          50% { opacity: 1; }
+        }
+        .vu-glow {
+          animation: vuGlow 3s ease-in-out infinite;
+        }
       `}</style>
 
       {/* ══════════════════════════════════════════
@@ -179,9 +282,9 @@ const VisitUs = () => {
                 className="inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-yellow-200">
                 📍 Find Us
               </a>
-              <a href="#who-section"
+              <a href="#appointment-section"
                 className="inline-flex items-center gap-2 border border-gray-300 hover:border-yellow-400 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 hover:text-yellow-600">
-                Learn More →
+                Book an Appointment →
               </a>
             </div>
           </div>
@@ -196,7 +299,7 @@ const VisitUs = () => {
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 style={{ minHeight: 380 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent" />
             </div>
           </div>
         </div>
@@ -301,10 +404,17 @@ const VisitUs = () => {
                 To ensure availability and proper scheduling, we recommend <strong className="text-gray-800">booking an appointment</strong> prior to your visit.
               </p>
             </div>
+
+            <a
+              href="#appointment-section"
+              className="inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-yellow-200"
+            >
+              Book an Appointment →
+            </a>
           </div>
 
           {/* RIGHT — target image full height */}
-          <div className="vu-fade-right relative rounded-2xl overflow-hidden min-h-[480px]"
+          <div className="vu-fade-right relative rounded-2xl overflow-hidden min-h-120"
             style={{ boxShadow: "0 30px 60px rgba(0,0,0,.14)" }}>
             {/* glow border */}
             <div className="absolute -inset-3 rounded-2xl opacity-20 pointer-events-none"
@@ -324,7 +434,98 @@ const VisitUs = () => {
       </section>
 
       {/* ══════════════════════════════════════════
-          Section 4 — Google Maps
+          Section 4 — Appointment Form
+      ══════════════════════════════════════════ */}
+      <section id="appointment-section" className="w-full py-20 px-6 bg-linear-to-b from-white to-yellow-50">
+        <div ref={appointmentRef} className="max-w-5xl mx-auto">
+          <div className="text-center space-y-3 mb-10 vu-fade-up">
+            <div className="inline-flex items-center gap-2 bg-yellow-100 text-yellow-700 text-xs font-semibold px-3 py-1 rounded-full vu-glow">
+              📅 Appointment Request
+            </div>
+            <h2 className="text-4xl font-extrabold text-gray-900">Book an Appointment</h2>
+            <p className="text-gray-600 text-sm md:text-base max-w-3xl mx-auto leading-7">
+              Share your details for a structured business discussion with the right Digivahan team. Please provide accurate information so we can schedule your meeting smoothly.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="vu-form-card rounded-3xl p-6 md:p-10 space-y-6 vu-fade-up">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="space-y-2">
+                <label htmlFor="name" className="text-sm font-semibold text-gray-700">Name</label>
+                <input id="name" name="name" type="text" value={formData.name} onChange={handleChange} required className="vu-input w-full rounded-xl px-4 py-3 text-sm bg-white" placeholder="Enter your full name" />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="companyName" className="text-sm font-semibold text-gray-700">Company Name</label>
+                <input id="companyName" name="companyName" type="text" value={formData.companyName} onChange={handleChange} required className="vu-input w-full rounded-xl px-4 py-3 text-sm bg-white" placeholder="Enter your company name" />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="phoneNumber" className="text-sm font-semibold text-gray-700">Phone Number</label>
+                <input id="phoneNumber" name="phoneNumber" type="tel" pattern="[0-9]{10}" inputMode="numeric" value={formData.phoneNumber} onChange={handleChange} required className="vu-input w-full rounded-xl px-4 py-3 text-sm bg-white" placeholder="10-digit phone number" />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="businessEmail" className="text-sm font-semibold text-gray-700">Business Email</label>
+                <input id="businessEmail" name="businessEmail" type="email" value={formData.businessEmail} onChange={handleChange} required className="vu-input w-full rounded-xl px-4 py-3 text-sm bg-white" placeholder="name@company.com" />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="whomToMeet" className="text-sm font-semibold text-gray-700">Whom to Meet</label>
+                <select id="whomToMeet" name="whomToMeet" value={formData.whomToMeet} onChange={handleChange} required className="vu-input w-full rounded-xl px-4 py-3 text-sm bg-white">
+                  <option value="">Select team</option>
+                  <option value="Business Development Team">Business Development Team</option>
+                  <option value="Technical Integration Team">Technical Integration Team</option>
+                  <option value="Operations Team">Operations Team</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="role" className="text-sm font-semibold text-gray-700">Role</label>
+                <select id="role" name="role" value={formData.role} onChange={handleChange} required className="vu-input w-full rounded-xl px-4 py-3 text-sm bg-white">
+                  <option value="">Select your role</option>
+                  <option value="Authorized Vehicle Dealers">Authorized Vehicle Dealers</option>
+                  <option value="Logistics & Courier Partners">Logistics & Courier Partners</option>
+                  <option value="Technology & API Integration Partners">Technology & API Integration Partners</option>
+                  <option value="Fleet Operators">Fleet Operators</option>
+                  <option value="Investors & Business Associates">Investors & Business Associates</option>
+                </select>
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label htmlFor="reason" className="text-sm font-semibold text-gray-700">Reason</label>
+                <input id="reason" name="reason" type="text" value={formData.reason} onChange={handleChange} required className="vu-input w-full rounded-xl px-4 py-3 text-sm bg-white" placeholder="Type the reason for your appointment" />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label htmlFor="proposalDescription" className="text-sm font-semibold text-gray-700">Proposal Description</label>
+                <textarea id="proposalDescription" name="proposalDescription" rows={4} value={formData.proposalDescription} onChange={handleChange} required className="vu-input w-full rounded-xl px-4 py-3 text-sm bg-white resize-none" placeholder="Describe your proposal in detail" />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label htmlFor="requestedDate" className="text-sm font-semibold text-gray-700">Requested Date</label>
+                <input id="requestedDate" name="requestedDate" type="date" min={minAppointmentDate} value={formData.requestedDate} onChange={handleChange} required className="vu-input w-full rounded-xl px-4 py-3 text-sm bg-white" />
+                <p className="text-xs text-gray-500">Appointment date can be selected from tomorrow onward only.</p>
+              </div>
+            </div>
+
+            {submitMessage.text && (
+              <p className={`text-sm font-medium ${submitMessage.type === "error" ? "text-red-600" : "text-green-600"}`}>
+                {submitMessage.text}
+              </p>
+            )}
+
+            <div className="pt-2">
+              <button type="submit" disabled={isSubmitting} className="inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 disabled:bg-yellow-400 disabled:cursor-not-allowed text-white text-sm font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-yellow-200">
+                {isSubmitting ? "Submitting..." : "Submit Appointment Request"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          Section 5 — Google Maps
       ══════════════════════════════════════════ */}
       <section id="map-section" className="w-full bg-gray-50 py-16 px-6">
         <div className="max-w-7xl mx-auto space-y-8">

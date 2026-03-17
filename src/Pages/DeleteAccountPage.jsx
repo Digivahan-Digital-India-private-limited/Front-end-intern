@@ -1,5 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaTimes, FaTrashAlt } from "react-icons/fa";
+import axios from "axios";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
+
+const REASON_LABELS = {
+  privacy: "Privacy concerns",
+  "privacy concerns": "Privacy concerns",
+  not_using: "No longer using the app",
+  "no longer using the app": "No longer using the app",
+  multiple_accounts: "Have multiple accounts",
+  "have multiple accounts": "Have multiple accounts",
+  data_concerns: "Data security concerns",
+  "data security concerns": "Data security concerns",
+  poor_experience: "Poor experience",
+  "poor experience": "Poor experience",
+  other: "Other",
+};
+
+const normalizeReasonForApi = (reason) => {
+  const key = String(reason || "").trim().toLowerCase();
+  return REASON_LABELS[key] || reason;
+};
 
 const DeleteAccountPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -8,6 +30,7 @@ const DeleteAccountPage = () => {
     mobile: "",
     email: "",
     reason: "",
+    description: "",
     confirm: false,
   });
   const [loading, setLoading] = useState(false);
@@ -45,22 +68,42 @@ const DeleteAccountPage = () => {
     setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.confirm) {
       alert("Please confirm that you understand this action is irreversible.");
       return;
     }
-    setLoading(true);
-    setTimeout(() => {
+
+    try {
+      setLoading(true);
+
+      const payload = {
+        name: formData.full_name.trim(),
+        phoneNumber: formData.mobile.trim(),
+        email: formData.email.trim(),
+        reason: normalizeReasonForApi(formData.reason),
+        otherReason: formData.description.trim(),
+      };
+
+      const response = await axios.post(`${BASE_URL}/api/delete-account/raise`, payload);
+
+      if (!response?.data?.success) {
+        throw new Error(response?.data?.message || "Failed to submit account deletion request.");
+      }
+
       setLoading(false);
-      setSuccess("Your account deletion request has been submitted. Our team will process it within 3–7 working days.");
-      setFormData({ full_name: "", mobile: "", email: "", reason: "", confirm: false });
+      setSuccess(response?.data?.message || "Your account deletion request has been submitted. Our team will process it within 3–7 working days.");
+      setFormData({ full_name: "", mobile: "", email: "", reason: "", description: "", confirm: false });
       setTimeout(() => {
         setIsModalOpen(false);
         setSuccess("");
       }, 3000);
-    }, 1500);
+    } catch (error) {
+      setLoading(false);
+      setSuccess("");
+      alert(error.response?.data?.message || error.message || "Failed to submit account deletion request.");
+    }
   };
 
   const steps = [
@@ -476,13 +519,26 @@ const DeleteAccountPage = () => {
                   className="w-full mt-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all duration-300 hover:border-red-300 bg-white"
                 >
                   <option value="">Select a reason</option>
-                  <option value="privacy">Privacy concerns</option>
-                  <option value="not_using">No longer using the app</option>
-                  <option value="multiple_accounts">Have multiple accounts</option>
-                  <option value="data_concerns">Data security concerns</option>
-                  <option value="poor_experience">Poor experience</option>
-                  <option value="other">Other</option>
+                  <option value="Privacy concerns">Privacy concerns</option>
+                  <option value="No longer using the app">No longer using the app</option>
+                  <option value="Have multiple accounts">Have multiple accounts</option>
+                  <option value="Data security concerns">Data security concerns</option>
+                  <option value="Poor experience">Poor experience</option>
+                  <option value="Other">Other</option>
                 </select>
+              </div>
+
+              <div className="transform transition-all duration-300 hover:scale-[1.02]">
+                <label className="text-sm font-semibold text-gray-700">Description *</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={4}
+                  placeholder="Please describe your reason for account deletion..."
+                  required
+                  className="w-full mt-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all duration-300 hover:border-red-300 resize-none"
+                />
               </div>
 
               {/* Confirmation checkbox */}

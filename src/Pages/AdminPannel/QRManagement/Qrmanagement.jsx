@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Users } from "lucide-react";
 import { QrCode } from "lucide-react";
+import { Funnel } from "lucide-react";
 import { MdBlockFlipped } from "react-icons/md";
 import SalesPersonProfile from "./SalesPersonProfile";
 
@@ -73,6 +74,16 @@ const Qrmanagement = () => {
 
   return (
     <main className="w-full h-screen overflow-y-auto bg-white md:p-5 p-2">
+      <style>{`
+        @keyframes softLift {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .filter-card-animate {
+          animation: softLift 0.45s ease-out forwards;
+        }
+      `}</style>
+
       <h1 className="text-2xl  text-gray-900">QR Management</h1>
       <p className="text-sm text-gray-600">
         Manage and monitor QR code allocation
@@ -145,6 +156,21 @@ const Qrmanagement = () => {
 
           <div className="absolute top-4 right-4 bg-white h-12 w-12 rounded-full flex items-center justify-center shadow">
             <QrCode className="text-green-600 text-xl" />
+          </div>
+        </div>
+
+        <div
+          onClick={() => navigate("/filter-qr")}
+          className="relative filter-card-animate bg-linear-to-r from-indigo-100 to-violet-100 h-28 w-125 rounded-lg border border-indigo-200 mt-5 p-4 cursor-pointer hover:from-indigo-200 hover:to-violet-200 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
+        >
+          <p className="text-gray-600 text-sm">Filter QR</p>
+
+          <div className="flex flex-row gap-2 mt-2">
+            <p className="text-lg font-semibold text-indigo-700">View QR List by Status</p>
+          </div>
+
+          <div className="absolute top-4 right-4 bg-white h-12 w-12 rounded-full flex items-center justify-center shadow-md">
+            <Funnel className="text-indigo-600 text-xl" />
           </div>
         </div>
 
