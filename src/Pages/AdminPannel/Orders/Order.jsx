@@ -6,7 +6,7 @@ import { MyContext } from "../../../ContextApi/DataProvider";
 function Order() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const { DeliveryOrders, ShiprocketOrders, ConfirmedOrders } =
+  const { DeliveryOrders, ShiprocketOrders, ConfirmedOrders, PendingOrders } =
     useContext(MyContext);
 
   const shiprocketOrders =
@@ -24,6 +24,10 @@ function Order() {
   const confirmedOrders =
     ConfirmedOrders?.filter((order) => order.order_status === "CONFIRMED") ||
     [];
+
+  const pendingOrders =
+    PendingOrders?.filter((order) => order.order_status === "NEW") || [];
+    
 
   // Fetch order counts from API
   const fetchOrderCounts = async () => {
@@ -88,6 +92,16 @@ function Order() {
       icon: Settings,
       link: "/orders-panel/manage",
       hideCount: true,
+    },
+
+    {
+      id: "pending",
+      title: "Pending Order",
+      description: "Fetch The Pending Orders",
+      count: pendingOrders.length,
+      gradient: "from-red-400 to-indigo-500",
+      icon: Settings,
+      link: "/orders-panel/pending-orders",
     },
   ];
 
