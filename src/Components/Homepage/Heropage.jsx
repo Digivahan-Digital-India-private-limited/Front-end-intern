@@ -1,42 +1,18 @@
 import React from "react";
-import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/logo.png"
 
 const Heropage = () => {
   return (
-    <>
-      {/* SEO Meta */}
-      <Helmet>
-        <title>Digivahan – Smart Vehicle Services in India</title>
-        <meta
-          name="description"
-          content="Digivahan is India’s smart digital platform for RC, insurance, PUC, challan check, and vehicle safety QR services. Manage your vehicle easily with Digivahan."
-        />
-        <meta
-          name="keywords"
-          content="Digivahan, vehicle services India, RC check, PUC status, challan check, vehicle QR, smart vehicle app"
-        />
-        <meta
-          property="og:title"
-          content="Digivahan – Smart Vehicle Services"
-        />
-        <meta
-          property="og:description"
-          content="Manage your vehicle with Digivahan – RC, PUC, insurance, challan, and safety QR in one app."
-        />
-        <meta property="og:type" content="website" />
-      </Helmet>
-
       <header className="w-full bg-white md:py-10 px-2 md:px-6">
-        <main className="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-5">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-5">
           {/* Left Content */}
           <section className="flex-1">
-            <img src={Logo} alt=""  className="md:w-40 w-24 pt-2 object-cover"/>
+            <img src={Logo} alt="DigiVahan logo"  className="md:w-40 w-24 pt-2 object-cover"/>
 
-            <h2 className="text-md sm:text-lg text-gray-700 mt-4">
+            <h1 className="text-md sm:text-lg text-gray-700 mt-4">
               Empowering India with Smart Vehicle Solutions
-            </h2>
+            </h1>
 
             <p className="text-sm sm:text-base text-gray-700 leading-relaxed mt-4">
               Digivahan is India’s trusted digital platform for all your
@@ -132,9 +108,8 @@ const Heropage = () => {
               </div>
             </div>
           </aside>
-        </main>
+        </div>
       </header>
-    </>
   );
 };
 

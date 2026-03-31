@@ -141,6 +141,13 @@ import {
 import MyVirtualQREmpty from "./Pages/IOSAppPage/IOSDashboard/VirtualQR/MyVirtualQREmpty";
 import MyVirtualQRList from "./Pages/IOSAppPage/IOSDashboard/VirtualQR/MyVirtualQRList";
 import MyVirtualQRDetail from "./Pages/IOSAppPage/IOSDashboard/VirtualQR/MyVirtualQRDetail";
+import SeoHead from "./Components/Seo/SeoHead";
+
+const SemanticPage = ({ children, label = "Page content" }) => (
+  <section aria-label={label} className="w-full h-full">
+    {children}
+  </section>
+);
 
 const App = () => {
   const { pathname } = useLocation();
@@ -150,7 +157,8 @@ const App = () => {
   }, [pathname]);
 
   return (
-    <main className="w-full h-full">
+    <div className="w-full h-full">
+      <SeoHead />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Homepage />} />
@@ -190,96 +198,96 @@ const App = () => {
           />
         </Route>
 
-        <Route path="/digivahan/about-us" element={<Aboutpage />} />
-        <Route path="/digivahan/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/digivahan/about-us" element={<SemanticPage label="About DigiVahan"><Aboutpage /></SemanticPage>} />
+        <Route path="/digivahan/privacy-policy" element={<SemanticPage label="Privacy policy"><PrivacyPolicy /></SemanticPage>} />
         <Route
           path="/digivahan/protection-policy"
-          element={<ProtectionPolicy />}
+          element={<SemanticPage label="Data protection policy"><ProtectionPolicy /></SemanticPage>}
         />
         <Route
           path="/digivahan/terms-and-conditions"
-          element={<TermsAndConditionsPage />}
+          element={<SemanticPage label="Terms and conditions"><TermsAndConditionsPage /></SemanticPage>}
         />
 
         <Route
           path="/send-notification/:qr_id"
-          element={<SendNotificationpage />}
+          element={<SemanticPage label="Send notification"><SendNotificationpage /></SemanticPage>}
         />
 
         <Route
           path="/connect-tabs/:qr_id/:issue_type"
-          element={<ConnectTabs />}
+          element={<SemanticPage label="Connect tabs"><ConnectTabs /></SemanticPage>}
         />
 
         <Route
           path="/accident-notification/:qr_id"
-          element={<AccidentNotification />}
+          element={<SemanticPage label="Accident notification"><AccidentNotification /></SemanticPage>}
         />
 
         <Route
           path="/emergency-notification/:qr_id"
-          element={<EmergencyContactUspage />}
+          element={<SemanticPage label="Emergency contact notification"><EmergencyContactUspage /></SemanticPage>}
         />
 
         <Route
           path="/access-vehicle-doc/:qr_id"
-          element={<AccessVehicleDoc />}
+          element={<SemanticPage label="Access vehicle documents"><AccessVehicleDoc /></SemanticPage>}
         />
 
         {/* iOS App Pages */}
-        <Route path="/ios/login" element={<IOSLoginPage />} />
-        <Route path="/ios/verify-number" element={<VerifyNumber />} />
-        <Route path="/ios/verify-email" element={<VerifyEmail />} />
-        <Route path="/ios/verify-otp" element={<VerifyOTP />} />
-        <Route path="/ios/account-created" element={<AccountCreated />} />
-        <Route path="/ios/login-success" element={<LoginSuccess />} />
-        <Route path="/ios/reset-password" element={<ResetPassword />} />
-        <Route path="/ios/password-changed" element={<PasswordChanged />} />
-        <Route path="/ios/dashboard" element={<Home />} />
-        <Route path="/ios/profile" element={<Profile />} />
-        <Route path="/ios/notifications" element={<Notification />} />
-        <Route path="/ios/chat" element={<Chat />} />
-        <Route path="/ios/document-vault" element={<DocumentVault />} />
-        <Route path="/ios/my-order" element={<MyOrder />} />
-        <Route path="/ios/track-order" element={<TrackOrder />} />
-        <Route path="/ios/my-garage" element={<MyGarage />} />
-        <Route path="/ios/vehicle-info" element={<VehicleInfo />} />
-        <Route path="/ios/my-virtual-qr-empty" element={<MyVirtualQREmpty />} />
-        <Route path="/ios/my-virtual-qr-list" element={<MyVirtualQRList />} />
+        <Route path="/ios/login" element={<SemanticPage label="iOS login"><IOSLoginPage /></SemanticPage>} />
+        <Route path="/ios/verify-number" element={<SemanticPage label="Verify number"><VerifyNumber /></SemanticPage>} />
+        <Route path="/ios/verify-email" element={<SemanticPage label="Verify email"><VerifyEmail /></SemanticPage>} />
+        <Route path="/ios/verify-otp" element={<SemanticPage label="Verify OTP"><VerifyOTP /></SemanticPage>} />
+        <Route path="/ios/account-created" element={<SemanticPage label="Account created"><AccountCreated /></SemanticPage>} />
+        <Route path="/ios/login-success" element={<SemanticPage label="Login success"><LoginSuccess /></SemanticPage>} />
+        <Route path="/ios/reset-password" element={<SemanticPage label="Reset password"><ResetPassword /></SemanticPage>} />
+        <Route path="/ios/password-changed" element={<SemanticPage label="Password changed"><PasswordChanged /></SemanticPage>} />
+        <Route path="/ios/dashboard" element={<SemanticPage label="iOS dashboard"><Home /></SemanticPage>} />
+        <Route path="/ios/profile" element={<SemanticPage label="Profile"><Profile /></SemanticPage>} />
+        <Route path="/ios/notifications" element={<SemanticPage label="Notifications"><Notification /></SemanticPage>} />
+        <Route path="/ios/chat" element={<SemanticPage label="Chat"><Chat /></SemanticPage>} />
+        <Route path="/ios/document-vault" element={<SemanticPage label="Document vault"><DocumentVault /></SemanticPage>} />
+        <Route path="/ios/my-order" element={<SemanticPage label="My order"><MyOrder /></SemanticPage>} />
+        <Route path="/ios/track-order" element={<SemanticPage label="Track order"><TrackOrder /></SemanticPage>} />
+        <Route path="/ios/my-garage" element={<SemanticPage label="My garage"><MyGarage /></SemanticPage>} />
+        <Route path="/ios/vehicle-info" element={<SemanticPage label="Vehicle information"><VehicleInfo /></SemanticPage>} />
+        <Route path="/ios/my-virtual-qr-empty" element={<SemanticPage label="Virtual QR empty state"><MyVirtualQREmpty /></SemanticPage>} />
+        <Route path="/ios/my-virtual-qr-list" element={<SemanticPage label="Virtual QR list"><MyVirtualQRList /></SemanticPage>} />
         <Route
           path="/ios/my-virtual-qr-detail"
-          element={<MyVirtualQRDetail />}
+          element={<SemanticPage label="Virtual QR details"><MyVirtualQRDetail /></SemanticPage>}
         />
-        <Route path="/ios/update-profile" element={<UpdateProfile />} />
-        <Route path="/ios/basic-details" element={<BasicDetails />} />
-        <Route path="/ios/public-details" element={<PublicDetails />} />
+        <Route path="/ios/update-profile" element={<SemanticPage label="Update profile"><UpdateProfile /></SemanticPage>} />
+        <Route path="/ios/basic-details" element={<SemanticPage label="Basic details"><BasicDetails /></SemanticPage>} />
+        <Route path="/ios/public-details" element={<SemanticPage label="Public details"><PublicDetails /></SemanticPage>} />
         <Route
           path="/ios/emergency-contacts-empty"
-          element={<EmergencyContactsEmpty />}
+          element={<SemanticPage label="Emergency contacts"><EmergencyContactsEmpty /></SemanticPage>}
         />
         <Route
           path="/ios/emergency-contacts-list"
-          element={<EmergencyContactsList />}
+          element={<SemanticPage label="Emergency contacts list"><EmergencyContactsList /></SemanticPage>}
         />
         <Route
           path="/ios/edit-emergency-contact"
-          element={<EditEmergencyContact />}
+          element={<SemanticPage label="Edit emergency contact"><EditEmergencyContact /></SemanticPage>}
         />
         <Route
           path="/ios/add-emergency-contact"
-          element={<AddEmergencyContact />}
+          element={<SemanticPage label="Add emergency contact"><AddEmergencyContact /></SemanticPage>}
         />
-        <Route path="/ios/change-password" element={<ChangePassword />} />
-        <Route path="/ios/about-us" element={<IOSAboutUs />} />
-        <Route path="/ios/terms-conditions" element={<IOSTermsConditions />} />
-        <Route path="/ios/privacy-policy" element={<IOSPrivacyPolicy />} />
-        <Route path="/ios/review-order" element={<ReviewOrder />} />
+        <Route path="/ios/change-password" element={<SemanticPage label="Change password"><ChangePassword /></SemanticPage>} />
+        <Route path="/ios/about-us" element={<SemanticPage label="About DigiVahan iOS"><IOSAboutUs /></SemanticPage>} />
+        <Route path="/ios/terms-conditions" element={<SemanticPage label="iOS terms and conditions"><IOSTermsConditions /></SemanticPage>} />
+        <Route path="/ios/privacy-policy" element={<SemanticPage label="iOS privacy policy"><IOSPrivacyPolicy /></SemanticPage>} />
+        <Route path="/ios/review-order" element={<SemanticPage label="Review order"><ReviewOrder /></SemanticPage>} />
         <Route
           path="/ios/edit-delivery-address"
-          element={<EditDeliveryAddress />}
+          element={<SemanticPage label="Edit delivery address"><EditDeliveryAddress /></SemanticPage>}
         />
-        <Route path="/ios/payment" element={<Payment />} />
-        <Route path="/ios/order-successful" element={<OrderSuccessful />} />
+        <Route path="/ios/payment" element={<SemanticPage label="Payment"><Payment /></SemanticPage>} />
+        <Route path="/ios/order-successful" element={<SemanticPage label="Order successful"><OrderSuccessful /></SemanticPage>} />
         <Route
           element={
             <ProtectedRoutes>
@@ -407,7 +415,7 @@ const App = () => {
           />
         </Route>
       </Routes>
-    </main>
+    </div>
   );
 };
 
