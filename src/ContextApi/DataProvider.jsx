@@ -2,16 +2,19 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { io } from "socket.io-client";
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { MyContext } from "./MyContext";
 const BASE_URL =
   import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
+export const MyContext = createContext();
 
 const DataProvider = ({ children }) => {
   const [DeliveryOrders, setDeliveryOrders] = useState([]);
   const [ShiprocketOrders, setShiprocketOrders] = useState([]);
   const [ConfirmedOrders, setConfirmedOrders] = useState([]);
+  const [PendingOrders, setPendingOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [filterQrlist, setfilterQrlist] = useState([]);
 
   const AdminSignInwithOtp = async (phone) => {
     try {
@@ -181,6 +184,30 @@ const DataProvider = ({ children }) => {
       console.error("Order confirm error:", error);
       toast.error(error.response?.data?.message || "Failed to confirm order");
       return null;
+    }
+  };
+
+  const fetchPendingOrders = async () => {
+    try {
+      setLoadingOrders(true);
+
+      const res = await axios.get(
+        "http://localhost:3000/api/admin/all-new-order",
+        {
+          params: {
+            page: 1,
+            limit: 10,
+          },
+        },
+      );
+
+      if (res?.data?.status) {
+        setPendingOrders(res.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching pending orders:", error);
+    } finally {
+      setLoadingOrders(false);
     }
   };
 
@@ -410,12 +437,9 @@ const DataProvider = ({ children }) => {
 
   const generateQrByAdmin = async (units) => {
     try {
-      const response = await axios.post(
-        "https://digivahan-backend.onrender.com/api/generate-qr",
-        {
-          unit: units,
-        },
-      );
+      const response = await axios.post(`${BASE_URL}/api/generate-qr`, {
+        unit: units,
+      });
 
       return response.data;
     } catch (error) {
@@ -427,7 +451,7 @@ const DataProvider = ({ children }) => {
   const generateQrtemplateInBulk = async (templatetype) => {
     try {
       const response = await axios.post(
-        "https://digivahan-backend.onrender.com/api/create/qr-template-in-bluk",
+        `${BASE_URL}/api/create/qr-template-in-bluk`,
         {
           template_type: templatetype,
         },
@@ -435,8 +459,39 @@ const DataProvider = ({ children }) => {
 
       return response.data;
     } catch (error) {
-      console.error("Error generating QR template in bulk:", error);
+      console.error(error);
       throw error;
+    }
+  };
+
+  const BlockedQrByAdmin = async (qrinfo) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/api/admin/qr-blocked`, {
+        qr_id: qrinfo.qr_id,
+        reason: qrinfo.reason,
+      });
+
+      return res.data;
+    } catch (error) {
+      console.error("Error blocking QR:", error);
+      toast.error("Failed to block QR");
+      throw error;
+    }
+  };
+
+  const filterQrData = async (qrstatus) => {
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/api/admin/filter-qr-list/${qrstatus}`,
+      );
+
+      if (res?.data?.success) {
+        setfilterQrlist(res.data.data); // 👈 state me save
+      }
+
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching QR data:", error);
     }
   };
 
@@ -477,6 +532,8 @@ const DataProvider = ({ children }) => {
       setConfirmedOrders((prev) => [updatedOrder, ...prev]);
     });
 
+    fetchPendingOrders();
+
     return () => {
       socket.disconnect();
     };
@@ -501,6 +558,11 @@ const DataProvider = ({ children }) => {
         TrackOrderByAdmin,
         generateQrByAdmin,
         generateQrtemplateInBulk,
+        PendingOrders,
+        loadingOrders,
+        BlockedQrByAdmin,
+        filterQrData,
+        filterQrlist,
       }}
     >
       {children}

@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { MyContext } from "../../../../ContextApi/DataProvider";
 
 const BlockedQR = () => {
+  const { BlockedQrByAdmin } = useContext(MyContext);
   const navigate = useNavigate();
   const [qrInput, setQrInput] = useState("");
   const [showDetails, setShowDetails] = useState(false);
-  const [blockedReason, setBlockedReason] = useState(
-    "Suspicious activity detected on multiple transactions",
-  );
+  const [blockedReason, setBlockedReason] = useState("");
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
 
@@ -26,13 +27,42 @@ const BlockedQR = () => {
     setShowConfirmPopup(true);
   };
 
-  const handleConfirmBlock = () => {
-    setIsBlocked(true);
-    setShowConfirmPopup(false);
+  const handleConfirmBlock = async () => {
+    try {
+      if (!qrInput.trim()) {
+        toast.error("QR ID is required");
+        return;
+      }
+
+      if (!blockedReason.trim()) {
+        toast.error("Please enter reason");
+        return;
+      }
+
+      const payload = {
+        qr_id: qrInput,
+        reason: blockedReason,
+      };
+
+      const res = await BlockedQrByAdmin(payload);
+
+      if (res?.success) {
+        toast.success("QR Blocked Successfully 🎉");
+
+        setIsBlocked(true);
+        setShowConfirmPopup(false);
+        setBlockedReason("");
+      } else {
+        toast.error("Failed to block QR");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Error blocking QR");
+    }
   };
 
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
-    qrInput
+    qrInput,
   )}`;
 
   return (
@@ -116,6 +146,7 @@ const BlockedQR = () => {
                 <textarea
                   rows="3"
                   className="w-full border rounded-lg p-4 bg-white"
+                  placeholder="Enter the valid Reason for blocked qr"
                   value={blockedReason}
                   onChange={(e) => setBlockedReason(e.target.value)}
                 />
@@ -124,7 +155,12 @@ const BlockedQR = () => {
               <div className="pt-2">
                 <button
                   onClick={handleBlockQr}
-                  className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition"
+                  disabled={isBlocked}
+                  className={`px-6 py-3 rounded-lg transition ${
+                    isBlocked
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-red-600 text-white hover:bg-red-700"
+                  }`}
                 >
                   Block QR
                 </button>
@@ -147,7 +183,8 @@ const BlockedQR = () => {
               Confirm QR Blocking
             </h3>
             <p className="text-sm text-gray-600 mb-6">
-              Are you sure you want to block this QR code? Users will not be able to use this QR until it is manually restored.
+              Are you sure you want to block this QR code? Users will not be
+              able to use this QR until it is manually restored.
             </p>
 
             <div className="flex justify-end gap-3">

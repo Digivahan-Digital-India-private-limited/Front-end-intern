@@ -36,6 +36,7 @@ import DelhiveryOrders from "./Pages/AdminPannel/Orders/DelhiveryOrders/Delhiver
 import GenerateManifest from "./Pages/AdminPannel/Orders/GenerateManifest/GenerateManifest";
 import DeliveryPartners from "./Pages/AdminPannel/Orders/DeliveryPartners/DeliveryPartners";
 import ManageOrder from "./Pages/AdminPannel/Orders/ManageOrder";
+import PendingOrders from "./Pages/AdminPannel/Orders/PendingOrders/PendingOrders";
 import Qrmanagement from "./Pages/AdminPannel/QRManagement/Qrmanagement";
 import FilterQR from "./Pages/AdminPannel/QRManagement/FilterQR";
 import GenerateQR from "./Pages/AdminPannel/QRManagement/GenerateQR";
@@ -97,7 +98,6 @@ import DeleteAccountRequests from "./Pages/AdminPannel/DeleteAccountRequests/Del
 import ReportIssueList from "./Pages/AdminPannel/ReportsIssue/ReportIssueList";
 import HRManager from "./Pages/AdminPannel/HRManager/HRManager";
 
-
 // Protected Routes
 import ProtectedRoutes from "./ProtectedRoutes/ProtectedRoutes";
 
@@ -110,9 +110,34 @@ import {
   AccountCreated,
   LoginSuccess,
   ResetPassword,
-  PasswordChanged
+  PasswordChanged,
 } from "./Pages/IOSAppPage/UserAuthentication";
-import { Home, Profile, Notification, Chat, DocumentVault, MyOrder, TrackOrder, MyGarage, ReviewOrder, EditDeliveryAddress, Payment, OrderSuccessful, UpdateProfile, BasicDetails, PublicDetails, EmergencyContactsEmpty, EmergencyContactsList, EditEmergencyContact, AddEmergencyContact, ChangePassword, IOSAboutUs, IOSTermsConditions, IOSPrivacyPolicy, VehicleInfo } from './Pages/IOSAppPage/IOSDashboard';
+import {
+  Home,
+  Profile,
+  Notification,
+  Chat,
+  DocumentVault,
+  MyOrder,
+  TrackOrder,
+  MyGarage,
+  ReviewOrder,
+  EditDeliveryAddress,
+  Payment,
+  OrderSuccessful,
+  UpdateProfile,
+  BasicDetails,
+  PublicDetails,
+  EmergencyContactsEmpty,
+  EmergencyContactsList,
+  EditEmergencyContact,
+  AddEmergencyContact,
+  ChangePassword,
+  IOSAboutUs,
+  IOSTermsConditions,
+  IOSPrivacyPolicy,
+  VehicleInfo,
+} from "./Pages/IOSAppPage/IOSDashboard";
 
 // Virtual QR Management Pages
 import MyVirtualQREmpty from "./Pages/IOSAppPage/IOSDashboard/VirtualQR/MyVirtualQREmpty";
@@ -149,7 +174,10 @@ const App = () => {
           <Route path="/contact-page" element={<Contactpage />} />
           <Route path="/Raise-concern-page" element={<RaiseConcern />} />
           <Route path="/concern-chat-user" element={<UserConcernChat />} />
-          <Route path="/concern-chat-user/:tokenId" element={<UserConcernChat />} />
+          <Route
+            path="/concern-chat-user/:tokenId"
+            element={<UserConcernChat />}
+          />
           <Route path="/visit-us-page" element={<VisitUs />} />
           <Route path="/Report-page" element={<Reports />} />
           <Route path="/explore-page" element={<Explorepage />} />
@@ -158,7 +186,10 @@ const App = () => {
 
           {/* Information page */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/digivahan-privacy-policy" element={<Navigate to="/privacy-policy" replace />} />
+          <Route
+            path="/digivahan-privacy-policy"
+            element={<Navigate to="/privacy-policy" replace />}
+          />
           <Route path="/protection-policy" element={<ProtectionPolicy />} />
           <Route
             path="/return-refund-policy"
@@ -226,20 +257,38 @@ const App = () => {
         <Route path="/ios/vehicle-info" element={<SemanticPage label="Vehicle information"><VehicleInfo /></SemanticPage>} />
         <Route path="/ios/my-virtual-qr-empty" element={<SemanticPage label="Virtual QR empty state"><MyVirtualQREmpty /></SemanticPage>} />
         <Route path="/ios/my-virtual-qr-list" element={<SemanticPage label="Virtual QR list"><MyVirtualQRList /></SemanticPage>} />
-        <Route path="/ios/my-virtual-qr-detail" element={<SemanticPage label="Virtual QR details"><MyVirtualQRDetail /></SemanticPage>} />
+        <Route
+          path="/ios/my-virtual-qr-detail"
+          element={<SemanticPage label="Virtual QR details"><MyVirtualQRDetail /></SemanticPage>}
+        />
         <Route path="/ios/update-profile" element={<SemanticPage label="Update profile"><UpdateProfile /></SemanticPage>} />
         <Route path="/ios/basic-details" element={<SemanticPage label="Basic details"><BasicDetails /></SemanticPage>} />
         <Route path="/ios/public-details" element={<SemanticPage label="Public details"><PublicDetails /></SemanticPage>} />
-        <Route path="/ios/emergency-contacts-empty" element={<SemanticPage label="Emergency contacts"><EmergencyContactsEmpty /></SemanticPage>} />
-        <Route path="/ios/emergency-contacts-list" element={<SemanticPage label="Emergency contacts list"><EmergencyContactsList /></SemanticPage>} />
-        <Route path="/ios/edit-emergency-contact" element={<SemanticPage label="Edit emergency contact"><EditEmergencyContact /></SemanticPage>} />
-        <Route path="/ios/add-emergency-contact" element={<SemanticPage label="Add emergency contact"><AddEmergencyContact /></SemanticPage>} />
+        <Route
+          path="/ios/emergency-contacts-empty"
+          element={<SemanticPage label="Emergency contacts"><EmergencyContactsEmpty /></SemanticPage>}
+        />
+        <Route
+          path="/ios/emergency-contacts-list"
+          element={<SemanticPage label="Emergency contacts list"><EmergencyContactsList /></SemanticPage>}
+        />
+        <Route
+          path="/ios/edit-emergency-contact"
+          element={<SemanticPage label="Edit emergency contact"><EditEmergencyContact /></SemanticPage>}
+        />
+        <Route
+          path="/ios/add-emergency-contact"
+          element={<SemanticPage label="Add emergency contact"><AddEmergencyContact /></SemanticPage>}
+        />
         <Route path="/ios/change-password" element={<SemanticPage label="Change password"><ChangePassword /></SemanticPage>} />
         <Route path="/ios/about-us" element={<SemanticPage label="About DigiVahan iOS"><IOSAboutUs /></SemanticPage>} />
         <Route path="/ios/terms-conditions" element={<SemanticPage label="iOS terms and conditions"><IOSTermsConditions /></SemanticPage>} />
         <Route path="/ios/privacy-policy" element={<SemanticPage label="iOS privacy policy"><IOSPrivacyPolicy /></SemanticPage>} />
         <Route path="/ios/review-order" element={<SemanticPage label="Review order"><ReviewOrder /></SemanticPage>} />
-        <Route path="/ios/edit-delivery-address" element={<SemanticPage label="Edit delivery address"><EditDeliveryAddress /></SemanticPage>} />
+        <Route
+          path="/ios/edit-delivery-address"
+          element={<SemanticPage label="Edit delivery address"><EditDeliveryAddress /></SemanticPage>}
+        />
         <Route path="/ios/payment" element={<SemanticPage label="Payment"><Payment /></SemanticPage>} />
         <Route path="/ios/order-successful" element={<SemanticPage label="Order successful"><OrderSuccessful /></SemanticPage>} />
         <Route
@@ -251,11 +300,24 @@ const App = () => {
         >
           <Route path="/admin-panel" element={<Dashboard />} />
           <Route path="/orders-panel" element={<Order />} />
-          <Route path="/orders-panel/shiprocket" element={<ShiprocketOrders />} />
+          <Route
+            path="/orders-panel/shiprocket"
+            element={<ShiprocketOrders />}
+          />
           <Route path="/orders-panel/delhivery" element={<DelhiveryOrders />} />
-          <Route path="/orders-panel/generate-manifest" element={<GenerateManifest />} />
-          <Route path="/orders-panel/delivery-partners" element={<DeliveryPartners />} />
+          <Route
+            path="/orders-panel/generate-manifest"
+            element={<GenerateManifest />}
+          />
+          <Route
+            path="/orders-panel/delivery-partners"
+            element={<DeliveryPartners />}
+          />
           <Route path="/orders-panel/manage" element={<ManageOrder />} />
+          <Route
+            path="/orders-panel/pending-orders"
+            element={<PendingOrders />}
+          />
           <Route path="/qr-panel" element={<Qrmanagement />} />
           <Route path="/filter-qr" element={<FilterQR />} />
           <Route path="/generate-qr" element={<GenerateQR />} />
@@ -284,10 +346,19 @@ const App = () => {
           <Route path="/manage-app-info" element={<ManageAppInfo />} />
           <Route path="/customer-queries" element={<CustomerQueries />} />
           <Route path="/manage-concerns" element={<ManageConcerns />} />
-          <Route path="/manage-concerns/:concernId" element={<ManageConcerns />} />
+          <Route
+            path="/manage-concerns/:concernId"
+            element={<ManageConcerns />}
+          />
           <Route path="/concern-chat-admin" element={<ConcernChat />} />
-          <Route path="/concern-chat-admin/:concernId" element={<ConcernChat />} />
-          <Route path="/delete-account-requests" element={<DeleteAccountRequests />} />
+          <Route
+            path="/concern-chat-admin/:concernId"
+            element={<ConcernChat />}
+          />
+          <Route
+            path="/delete-account-requests"
+            element={<DeleteAccountRequests />}
+          />
           <Route path="/report-issues" element={<ReportIssueList />} />
           <Route path="/manage-appointment" element={<ManageAppointment />} />
           <Route path="/hr-manager" element={<HRManager />} />

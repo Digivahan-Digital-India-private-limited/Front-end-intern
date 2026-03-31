@@ -716,7 +716,7 @@ const Reports = () => {
           {/* ══════════════════════════════════════════
               HERO — Report
           ══════════════════════════════════════════ */}
-          <section className="relative overflow-hidden rounded-2xl border border-yellow-100 shadow-xl bg-gradient-to-br from-yellow-50 via-white to-amber-50">
+          <section className="relative overflow-hidden rounded-2xl border border-yellow-100 shadow-xl bg-linear-to-br from-yellow-50 via-white to-amber-50">
             {/* Background blobs */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-300/20 rounded-full -translate-y-1/3 translate-x-1/4 blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-72 h-72 bg-orange-300/10 rounded-full translate-y-1/3 -translate-x-1/4 blur-3xl pointer-events-none" />
@@ -785,15 +785,15 @@ const Reports = () => {
               </div>
 
               {/* RIGHT — full-height image */}
-              <div className="rep-fade-right rep-delay-1 relative min-h-[400px] lg:min-h-[560px]">
+              <div className="rep-fade-right rep-delay-1 relative min-h-100 lg:min-h-140">
                 <img
                   src={reportHeroImage}
                   alt="Report Support Team"
                   className="absolute inset-0 w-full h-full object-cover lg:rounded-r-2xl"
                 />
                 {/* Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent lg:rounded-r-2xl" />
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-50/50 via-transparent to-transparent hidden lg:block" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent lg:rounded-r-2xl" />
+                <div className="absolute inset-0 bg-linear-to-r from-yellow-50/50 via-transparent to-transparent hidden lg:block" />
 
                 {/* Floating badge — top left */}
                 <div className="rep-float absolute top-6 left-6 bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl flex items-center gap-3 border border-yellow-100">
@@ -983,7 +983,7 @@ const Reports = () => {
                 {trackedReport.note ? (
                   <div className="mt-2 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-2">
                     <p className="text-xs font-semibold text-indigo-700">Admin Note</p>
-                    <p className="text-xs text-indigo-800 mt-0.5 break-words">{trackedReport.note}</p>
+                    <p className="text-xs text-indigo-800 mt-0.5 wrap-break-word">{trackedReport.note}</p>
                   </div>
                 ) : null}
 

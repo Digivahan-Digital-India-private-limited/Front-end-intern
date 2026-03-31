@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
+
 const SmsTabs = ({ setshowSmsPopup, userId, issueType }) => {
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +22,7 @@ const SmsTabs = ({ setshowSmsPopup, userId, issueType }) => {
       };
 
       await axios.post(
-        "https://digivahan-backend.onrender.com/api/send/sms-notification",
+        `${BASE_URL}/api/send/sms-notification`,
         payload
       );
 
