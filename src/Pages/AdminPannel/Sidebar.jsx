@@ -20,7 +20,7 @@ import {
   UserX,
   BriefcaseBusiness,
 } from "lucide-react";
-import { MyContext } from "../../ContextApi/MyContext";
+import { MyContext } from "../../ContextApi/DataProvider";
 
 const menuItems = [
   { name: "Dashboard", icon: LayoutDashboard, link: "/admin-panel" },

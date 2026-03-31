@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { MyContext } from "../../../../ContextApi/MyContext";
+import { MyContext } from "../../../../ContextApi/DataProvider";
 
 const deliveryPartners = [
   { id: "shiprocket", name: "Shiprocket" },
