@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const STORAGE_KEY = "digivahanConcerns";
-const BASE_URL = import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
 
 const API_TO_UI_STATUS = {
   PENDING: "Open",

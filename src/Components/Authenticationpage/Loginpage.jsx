@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import logo from "../../assets/Group 8.png";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { MyContext } from "../../ContextApi/DataProvider";
+import { MyContext } from "../../ContextApi/MyContext";
 import { FaShieldAlt, FaChartBar, FaUsers, FaCog, FaLock } from "react-icons/fa";
 
 const features = [

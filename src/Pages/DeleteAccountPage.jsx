@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaTimes, FaTrashAlt } from "react-icons/fa";
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
 
 const REASON_LABELS = {
   privacy: "Privacy concerns",

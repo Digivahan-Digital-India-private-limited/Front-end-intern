@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const STORAGE_KEY = "digivahanConcerns";
-const BASE_URL = import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
 
 const getStoredConcerns = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 

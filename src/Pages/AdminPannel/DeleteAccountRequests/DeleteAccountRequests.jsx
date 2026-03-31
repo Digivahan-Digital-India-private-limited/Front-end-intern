@@ -3,7 +3,7 @@ import axios from "axios";
 import { ArrowRight, CheckCircle2, Mail, Phone, RefreshCcw, Search, User2, UserX } from "lucide-react";
 import { toast } from "react-toastify";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
 
 const FILTER_OPTIONS = [
   { label: "All", value: "all" },

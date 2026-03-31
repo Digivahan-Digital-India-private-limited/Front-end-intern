@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 const reportHeroImage = "/Report.webp";
 const REPORT_STORAGE_KEY = "digivahanReportedIssues";
-const BASE_URL = import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
 const REPORT_LIST_ENDPOINTS = [
   "/api/report-issue/list",
   "/api/reports-issue/list",

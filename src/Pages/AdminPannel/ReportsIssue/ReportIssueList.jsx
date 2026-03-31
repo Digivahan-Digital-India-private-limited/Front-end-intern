@@ -3,7 +3,7 @@ import axios from "axios";
 import { AlertTriangle, CalendarClock, Mail, Phone, RefreshCcw, Search, ShieldAlert, Tag, Ticket, Trash2, UserCheck, X } from "lucide-react";
 import { toast } from "react-toastify";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
 
 const STATUS_TABS = [
   { label: "All", value: "all" },

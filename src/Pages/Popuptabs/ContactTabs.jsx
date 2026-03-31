@@ -36,7 +36,7 @@ const ContactTabs = ({ setShowContactPopup, receiverNumber }) => {
 
       localStorage.setItem("agentNumber", contactNumber);
 
-      await axios.post("http://localhost:3000/api/user/contact-via-call", {
+      await axios.post("https://digivahan-backend.onrender.com/api/user/contact-via-call", {
         receiver: receiverNumber,
         agent: contactNumber,
       });

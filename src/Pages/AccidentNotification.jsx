@@ -96,7 +96,7 @@ function AccidentNotification() {
         formData.append("image", compressedFile);
 
         const res = await axios.post(
-          "http://localhost:3000/api/v1/notification/image",
+          "https://digivahan-backend.onrender.com/api/v1/notification/image",
           formData,
         );
 
@@ -122,7 +122,7 @@ function AccidentNotification() {
     if (!window.confirm("Delete this image?")) return;
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/notification/delete-image",
+        "https://digivahan-backend.onrender.com/api/v1/notification/delete-image",
         { public_id },
       );
 
@@ -171,7 +171,7 @@ function AccidentNotification() {
       };
 
       const response = await axios.post(
-        "http://localhost:3000/api/notifications/send",
+        "https://digivahan-backend.onrender.com/api/notifications/send",
         payload,
       );
       // console.log("Notification sent:", response.data);

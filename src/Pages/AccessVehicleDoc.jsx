@@ -50,7 +50,7 @@ const AccessVehicleDoc = () => {
     const fetchUserDetails = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/user-details/${qr_id}`
+          `https://digivahan-backend.onrender.com/api/user-details/${qr_id}`
         );
 
         if (!res.data.success) {

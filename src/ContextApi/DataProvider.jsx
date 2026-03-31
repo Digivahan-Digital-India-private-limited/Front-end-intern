@@ -2,11 +2,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { io } from "socket.io-client";
-import React, { createContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { MyContext } from "./MyContext";
 const BASE_URL =
-  import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
-export const MyContext = createContext();
+  import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
 
 const DataProvider = ({ children }) => {
   const [DeliveryOrders, setDeliveryOrders] = useState([]);
@@ -411,7 +411,7 @@ const DataProvider = ({ children }) => {
   const generateQrByAdmin = async (units) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/generate-qr",
+        "https://digivahan-backend.onrender.com/api/generate-qr",
         {
           unit: units,
         },
@@ -427,7 +427,7 @@ const DataProvider = ({ children }) => {
   const generateQrtemplateInBulk = async (templatetype) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/create/qr-template-in-bluk",
+        "https://digivahan-backend.onrender.com/api/create/qr-template-in-bluk",
         {
           template_type: templatetype,
         },

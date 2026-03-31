@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logimg from "../../assets/Frame 1.png";
-import { MyContext } from "../../ContextApi/DataProvider";
+import { MyContext } from "../../ContextApi/MyContext";
 
 const OtpLoginPage = () => {
   const navigate = useNavigate();

@@ -19,6 +19,7 @@ import UserConcernChat from "./Pages/UserConcernChat";
 import VisitUs from "./Pages/VisitUs";
 import Reports from "./Pages/Reports";
 import Explorepage from "./Pages/Explorepage";
+import CareerPage from "./Pages/CareerPage";
 import DeleteAccountPage from "./Pages/DeleteAccountPage";
 import SendNotificationpage from "./Pages/SendNotificationpage";
 import ConnectTabs from "./Pages/ConnectTabs";
@@ -94,6 +95,7 @@ import ManageConcerns from "./Pages/AdminPannel/Concerns/ManageConcerns";
 import ConcernChat from "./Pages/AdminPannel/Concerns/ConcernChat";
 import DeleteAccountRequests from "./Pages/AdminPannel/DeleteAccountRequests/DeleteAccountRequests";
 import ReportIssueList from "./Pages/AdminPannel/ReportsIssue/ReportIssueList";
+import HRManager from "./Pages/AdminPannel/HRManager/HRManager";
 
 
 // Protected Routes
@@ -151,6 +153,7 @@ const App = () => {
           <Route path="/visit-us-page" element={<VisitUs />} />
           <Route path="/Report-page" element={<Reports />} />
           <Route path="/explore-page" element={<Explorepage />} />
+          <Route path="/career-page" element={<CareerPage />} />
           <Route path="/delete-account" element={<DeleteAccountPage />} />
 
           {/* Information page */}
@@ -287,6 +290,7 @@ const App = () => {
           <Route path="/delete-account-requests" element={<DeleteAccountRequests />} />
           <Route path="/report-issues" element={<ReportIssueList />} />
           <Route path="/manage-appointment" element={<ManageAppointment />} />
+          <Route path="/hr-manager" element={<HRManager />} />
           <Route path="/post-faq" element={<PostFAQ />} />
           <Route path="/delete-faq" element={<DeleteFAQ />} />
           <Route path="/update-faq" element={<UpdateFAQ />} />
