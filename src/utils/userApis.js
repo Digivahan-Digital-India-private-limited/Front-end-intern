@@ -1,10 +1,13 @@
 // api/userApi.js
 import axios from "axios";
 
+const BASE_URL =
+  import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
+
 const fetchUserDetails = async (qr_id) => {
   try {
     const res = await axios.get(
-      `http://localhost:3000/api/user-details/${qr_id}`,
+      `${BASE_URL}/api/user-details/${qr_id}`,
     );
 
     if (!res.data.success) {

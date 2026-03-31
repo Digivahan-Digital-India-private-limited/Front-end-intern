@@ -4,6 +4,8 @@ import Connecting from "../../assets/connecting.png";
 import SignalConnecting from "../../assets/signalconnecting.png"
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
+
 const ContactTabs = ({ setShowContactPopup, receiverNumber }) => {
   const [contactNumber, setContactNumber] = useState(
     localStorage.getItem("agentNumber") || "",
@@ -36,7 +38,7 @@ const ContactTabs = ({ setShowContactPopup, receiverNumber }) => {
 
       localStorage.setItem("agentNumber", contactNumber);
 
-      await axios.post("http://localhost:3000/api/user/contact-via-call", {
+      await axios.post(`${BASE_URL}/api/user/contact-via-call`, {
         receiver: receiverNumber,
         agent: contactNumber,
       });

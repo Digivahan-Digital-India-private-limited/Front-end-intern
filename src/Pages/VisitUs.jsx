@@ -3,7 +3,7 @@ import { FaHandshake, FaBuilding, FaCogs, FaTruck, FaChartLine, FaCalendarCheck 
 import { MdBusiness, MdEngineering, MdSupportAgent } from "react-icons/md";
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
 
 /* ── Scroll-reveal hook ── */
 function useReveal() {

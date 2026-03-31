@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 const BASE_URL =
-  import.meta.env.VITE_BASE_URL || "https://api.digicapital.co.in";
+  import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
 export const MyContext = createContext();
 
 const DataProvider = ({ children }) => {
@@ -14,6 +14,7 @@ const DataProvider = ({ children }) => {
   const [ConfirmedOrders, setConfirmedOrders] = useState([]);
   const [PendingOrders, setPendingOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
+  const [filterQrlist, setfilterQrlist] = useState([]);
 
   const AdminSignInwithOtp = async (phone) => {
     try {
@@ -436,12 +437,9 @@ const DataProvider = ({ children }) => {
 
   const generateQrByAdmin = async (units) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/generate-qr",
-        {
-          unit: units,
-        },
-      );
+      const response = await axios.post(`${BASE_URL}/api/generate-qr`, {
+        unit: units,
+      });
 
       return response.data;
     } catch (error) {
@@ -453,7 +451,7 @@ const DataProvider = ({ children }) => {
   const generateQrtemplateInBulk = async (templatetype) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/create/qr-template-in-bluk",
+        `${BASE_URL}/api/create/qr-template-in-bluk`,
         {
           template_type: templatetype,
         },
@@ -468,23 +466,32 @@ const DataProvider = ({ children }) => {
 
   const BlockedQrByAdmin = async (qrinfo) => {
     try {
-      const res = await axios.post(
-        "http://localhost:3000/api/admin/qr-blocked",
-        {
-          qr_id: qrinfo.qr_id,
-          reason: qrinfo.reason,
-        },
-      );
-
-      if (res?.data?.success) {
-        toast.success("QR Blocked Successfully");
-      }
+      const res = await axios.post(`${BASE_URL}/api/admin/qr-blocked`, {
+        qr_id: qrinfo.qr_id,
+        reason: qrinfo.reason,
+      });
 
       return res.data;
     } catch (error) {
       console.error("Error blocking QR:", error);
       toast.error("Failed to block QR");
       throw error;
+    }
+  };
+
+  const filterQrData = async (qrstatus) => {
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/api/admin/filter-qr-list/${qrstatus}`,
+      );
+
+      if (res?.data?.success) {
+        setfilterQrlist(res.data.data); // 👈 state me save
+      }
+
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching QR data:", error);
     }
   };
 
@@ -553,7 +560,9 @@ const DataProvider = ({ children }) => {
         generateQrtemplateInBulk,
         PendingOrders,
         loadingOrders,
-        BlockedQrByAdmin
+        BlockedQrByAdmin,
+        filterQrData,
+        filterQrlist,
       }}
     >
       {children}

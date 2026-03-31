@@ -96,7 +96,6 @@ import ConcernChat from "./Pages/AdminPannel/Concerns/ConcernChat";
 import DeleteAccountRequests from "./Pages/AdminPannel/DeleteAccountRequests/DeleteAccountRequests";
 import ReportIssueList from "./Pages/AdminPannel/ReportsIssue/ReportIssueList";
 
-
 // Protected Routes
 import ProtectedRoutes from "./ProtectedRoutes/ProtectedRoutes";
 
@@ -109,9 +108,34 @@ import {
   AccountCreated,
   LoginSuccess,
   ResetPassword,
-  PasswordChanged
+  PasswordChanged,
 } from "./Pages/IOSAppPage/UserAuthentication";
-import { Home, Profile, Notification, Chat, DocumentVault, MyOrder, TrackOrder, MyGarage, ReviewOrder, EditDeliveryAddress, Payment, OrderSuccessful, UpdateProfile, BasicDetails, PublicDetails, EmergencyContactsEmpty, EmergencyContactsList, EditEmergencyContact, AddEmergencyContact, ChangePassword, IOSAboutUs, IOSTermsConditions, IOSPrivacyPolicy, VehicleInfo } from './Pages/IOSAppPage/IOSDashboard';
+import {
+  Home,
+  Profile,
+  Notification,
+  Chat,
+  DocumentVault,
+  MyOrder,
+  TrackOrder,
+  MyGarage,
+  ReviewOrder,
+  EditDeliveryAddress,
+  Payment,
+  OrderSuccessful,
+  UpdateProfile,
+  BasicDetails,
+  PublicDetails,
+  EmergencyContactsEmpty,
+  EmergencyContactsList,
+  EditEmergencyContact,
+  AddEmergencyContact,
+  ChangePassword,
+  IOSAboutUs,
+  IOSTermsConditions,
+  IOSPrivacyPolicy,
+  VehicleInfo,
+} from "./Pages/IOSAppPage/IOSDashboard";
 
 // Virtual QR Management Pages
 import MyVirtualQREmpty from "./Pages/IOSAppPage/IOSDashboard/VirtualQR/MyVirtualQREmpty";
@@ -140,7 +164,10 @@ const App = () => {
           <Route path="/contact-page" element={<Contactpage />} />
           <Route path="/Raise-concern-page" element={<RaiseConcern />} />
           <Route path="/concern-chat-user" element={<UserConcernChat />} />
-          <Route path="/concern-chat-user/:tokenId" element={<UserConcernChat />} />
+          <Route
+            path="/concern-chat-user/:tokenId"
+            element={<UserConcernChat />}
+          />
           <Route path="/visit-us-page" element={<VisitUs />} />
           <Route path="/Report-page" element={<Reports />} />
           <Route path="/explore-page" element={<Explorepage />} />
@@ -148,7 +175,10 @@ const App = () => {
 
           {/* Information page */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/digivahan-privacy-policy" element={<Navigate to="/privacy-policy" replace />} />
+          <Route
+            path="/digivahan-privacy-policy"
+            element={<Navigate to="/privacy-policy" replace />}
+          />
           <Route path="/protection-policy" element={<ProtectionPolicy />} />
           <Route
             path="/return-refund-policy"
@@ -216,20 +246,38 @@ const App = () => {
         <Route path="/ios/vehicle-info" element={<VehicleInfo />} />
         <Route path="/ios/my-virtual-qr-empty" element={<MyVirtualQREmpty />} />
         <Route path="/ios/my-virtual-qr-list" element={<MyVirtualQRList />} />
-        <Route path="/ios/my-virtual-qr-detail" element={<MyVirtualQRDetail />} />
+        <Route
+          path="/ios/my-virtual-qr-detail"
+          element={<MyVirtualQRDetail />}
+        />
         <Route path="/ios/update-profile" element={<UpdateProfile />} />
         <Route path="/ios/basic-details" element={<BasicDetails />} />
         <Route path="/ios/public-details" element={<PublicDetails />} />
-        <Route path="/ios/emergency-contacts-empty" element={<EmergencyContactsEmpty />} />
-        <Route path="/ios/emergency-contacts-list" element={<EmergencyContactsList />} />
-        <Route path="/ios/edit-emergency-contact" element={<EditEmergencyContact />} />
-        <Route path="/ios/add-emergency-contact" element={<AddEmergencyContact />} />
+        <Route
+          path="/ios/emergency-contacts-empty"
+          element={<EmergencyContactsEmpty />}
+        />
+        <Route
+          path="/ios/emergency-contacts-list"
+          element={<EmergencyContactsList />}
+        />
+        <Route
+          path="/ios/edit-emergency-contact"
+          element={<EditEmergencyContact />}
+        />
+        <Route
+          path="/ios/add-emergency-contact"
+          element={<AddEmergencyContact />}
+        />
         <Route path="/ios/change-password" element={<ChangePassword />} />
         <Route path="/ios/about-us" element={<IOSAboutUs />} />
         <Route path="/ios/terms-conditions" element={<IOSTermsConditions />} />
         <Route path="/ios/privacy-policy" element={<IOSPrivacyPolicy />} />
         <Route path="/ios/review-order" element={<ReviewOrder />} />
-        <Route path="/ios/edit-delivery-address" element={<EditDeliveryAddress />} />
+        <Route
+          path="/ios/edit-delivery-address"
+          element={<EditDeliveryAddress />}
+        />
         <Route path="/ios/payment" element={<Payment />} />
         <Route path="/ios/order-successful" element={<OrderSuccessful />} />
         <Route
@@ -241,12 +289,24 @@ const App = () => {
         >
           <Route path="/admin-panel" element={<Dashboard />} />
           <Route path="/orders-panel" element={<Order />} />
-          <Route path="/orders-panel/shiprocket" element={<ShiprocketOrders />} />
+          <Route
+            path="/orders-panel/shiprocket"
+            element={<ShiprocketOrders />}
+          />
           <Route path="/orders-panel/delhivery" element={<DelhiveryOrders />} />
-          <Route path="/orders-panel/generate-manifest" element={<GenerateManifest />} />
-          <Route path="/orders-panel/delivery-partners" element={<DeliveryPartners />} />
+          <Route
+            path="/orders-panel/generate-manifest"
+            element={<GenerateManifest />}
+          />
+          <Route
+            path="/orders-panel/delivery-partners"
+            element={<DeliveryPartners />}
+          />
           <Route path="/orders-panel/manage" element={<ManageOrder />} />
-          <Route path="/orders-panel/pending-orders" element={<PendingOrders />} />
+          <Route
+            path="/orders-panel/pending-orders"
+            element={<PendingOrders />}
+          />
           <Route path="/qr-panel" element={<Qrmanagement />} />
           <Route path="/filter-qr" element={<FilterQR />} />
           <Route path="/generate-qr" element={<GenerateQR />} />
@@ -275,10 +335,19 @@ const App = () => {
           <Route path="/manage-app-info" element={<ManageAppInfo />} />
           <Route path="/customer-queries" element={<CustomerQueries />} />
           <Route path="/manage-concerns" element={<ManageConcerns />} />
-          <Route path="/manage-concerns/:concernId" element={<ManageConcerns />} />
+          <Route
+            path="/manage-concerns/:concernId"
+            element={<ManageConcerns />}
+          />
           <Route path="/concern-chat-admin" element={<ConcernChat />} />
-          <Route path="/concern-chat-admin/:concernId" element={<ConcernChat />} />
-          <Route path="/delete-account-requests" element={<DeleteAccountRequests />} />
+          <Route
+            path="/concern-chat-admin/:concernId"
+            element={<ConcernChat />}
+          />
+          <Route
+            path="/delete-account-requests"
+            element={<DeleteAccountRequests />}
+          />
           <Route path="/report-issues" element={<ReportIssueList />} />
           <Route path="/manage-appointment" element={<ManageAppointment />} />
           <Route path="/post-faq" element={<PostFAQ />} />
