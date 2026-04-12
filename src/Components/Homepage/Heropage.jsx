@@ -38,6 +38,14 @@ const Heropage = () => {
               >
                 Download Digivahan App
               </Link>
+
+              <Link
+                to="/order-qr"
+                className="border-2 border-yellow-500 text-yellow-700 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-50 transition"
+                aria-label="Open vehicle QR order page"
+              >
+                Order Vehicle QR
+              </Link>
             </div>
           </section>
 

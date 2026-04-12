@@ -19,6 +19,7 @@ import UserConcernChat from "./Pages/UserConcernChat";
 import VisitUs from "./Pages/VisitUs";
 import Reports from "./Pages/Reports";
 import Explorepage from "./Pages/Explorepage";
+import OrderQrPage from "./Pages/OrderQrPage";
 import CareerPage from "./Pages/CareerPage";
 import DeleteAccountPage from "./Pages/DeleteAccountPage";
 import SendNotificationpage from "./Pages/SendNotificationpage";
@@ -145,6 +146,55 @@ import MyVirtualQRList from "./Pages/IOSAppPage/IOSDashboard/VirtualQR/MyVirtual
 import MyVirtualQRDetail from "./Pages/IOSAppPage/IOSDashboard/VirtualQR/MyVirtualQRDetail";
 import SeoHead from "./Components/Seo/SeoHead";
 
+// New User System (Frontend Foundation)
+import UserProtectedRoute from "./features/auth/components/UserProtectedRoute";
+import LoginPage from "./features/auth/pages/LoginPage";
+import OtpVerificationPage from "./features/auth/pages/OtpVerificationPage";
+import AccountCreatedPage from "./features/auth/pages/AccountCreatedPage";
+import LoginSuccessPage from "./features/auth/pages/LoginSuccessPage";
+import ResetPasswordPage from "./features/auth/pages/ResetPasswordPage";
+import PasswordChangedPage from "./features/auth/pages/PasswordChangedPage";
+import AppLayout from "./features/shared/components/layout/AppLayout";
+import MarketplaceLayout from "./features/shared/components/layout/MarketplaceLayout";
+import DashboardPage from "./features/dashboard/pages/DashboardPage";
+import MyGaragePage from "./features/vehicles/pages/MyGaragePage";
+import AddVehiclePage from "./features/vehicles/pages/AddVehiclePage";
+import VehicleDetailsPage from "./features/vehicles/pages/VehicleDetailsPage";
+import MyVirtualQRPage from "./features/qr/pages/MyVirtualQRPage";
+import MyVirtualQRListPage from "./features/qr/pages/MyVirtualQRListPage";
+import MyVirtualQRDetailPage from "./features/qr/pages/MyVirtualQRDetailPage";
+import OrdersPage from "./features/orders/pages/OrdersPage";
+import TrackOrderPage from "./features/orders/pages/TrackOrderPage";
+import ReviewOrderPage from "./features/orders/pages/ReviewOrderPage";
+import EditDeliveryAddressPage from "./features/orders/pages/EditDeliveryAddressPage";
+import PaymentPage from "./features/orders/pages/PaymentPage";
+import OrderSuccessPage from "./features/orders/pages/OrderSuccessPage";
+import NotificationsPage from "./features/notifications/pages/NotificationsPage";
+import ProfilePage from "./features/profile/pages/ProfilePage";
+import EmergencyContactsPage from "./features/profile/pages/EmergencyContactsPage";
+import UpdateProfilePage from "./features/profile/pages/UpdateProfilePage";
+import BasicDetailsPage from "./features/profile/pages/BasicDetailsPage";
+import PublicDetailsPage from "./features/profile/pages/PublicDetailsPage";
+import ChangePasswordPage from "./features/profile/pages/ChangePasswordPage";
+import AddEmergencyContactPage from "./features/profile/pages/AddEmergencyContactPage";
+import EditEmergencyContactPage from "./features/profile/pages/EditEmergencyContactPage";
+import ChatPage from "./features/support/pages/ChatPage";
+import DocumentVaultPage from "./features/documents/pages/DocumentVaultPage";
+import MarketplaceHomePage from "./features/marketplace/pages/MarketplaceHomePage";
+import BuyCarsPage from "./features/marketplace/pages/BuyCarsPage";
+import SellCarsPage from "./features/marketplace/pages/SellCarsPage";
+import BuyCarDetailsPage from "./features/marketplace/pages/BuyCarDetailsPage";
+import BuyCarComparePage from "./features/marketplace/pages/BuyCarComparePage";
+import SellerInstantQuotePage from "./features/marketplace/pages/SellerInstantQuotePage";
+import SellerInspectionBookingPage from "./features/marketplace/pages/SellerInspectionBookingPage";
+import SellerFinalOfferPage from "./features/marketplace/pages/SellerFinalOfferPage";
+import SellerTransferTrackerPage from "./features/marketplace/pages/SellerTransferTrackerPage";
+import MarketplaceTrustPage from "./features/marketplace/pages/MarketplaceTrustPage";
+import MarketplaceReviewsPage from "./features/marketplace/pages/MarketplaceReviewsPage";
+import MarketplaceSupportPage from "./features/marketplace/pages/MarketplaceSupportPage";
+import MarketplaceEmiCalculatorPage from "./features/marketplace/pages/MarketplaceEmiCalculatorPage";
+import MarketplaceServiceCostCalculatorPage from "./features/marketplace/pages/MarketplaceServiceCostCalculatorPage";
+
 const SemanticPage = ({ children, label = "Page content" }) => (
   <section aria-label={label} className="w-full h-full">
     {children}
@@ -162,6 +212,100 @@ const App = () => {
     <div className="w-full h-full">
       <SeoHead />
       <Routes>
+        {/* New User System Routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login/otp" element={<OtpVerificationPage />} />
+        <Route path="/login/verify-number" element={<Navigate to="/login" replace />} />
+        <Route path="/login/verify-email" element={<Navigate to="/login" replace />} />
+        <Route path="/account-created" element={<AccountCreatedPage />} />
+        <Route path="/login-success" element={<LoginSuccessPage />} />
+        <Route path="/password-reset" element={<ResetPasswordPage />} />
+        <Route path="/password-reset/changed" element={<PasswordChangedPage />} />
+
+        <Route
+          element={
+            <UserProtectedRoute>
+              <AppLayout />
+            </UserProtectedRoute>
+          }
+        >
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/vehicles" element={<MyGaragePage />} />
+          <Route path="/my-garage" element={<Navigate to="/vehicles" replace />} />
+          <Route path="/vehicles/add" element={<AddVehiclePage />} />
+          <Route path="/vehicles/:id" element={<VehicleDetailsPage />} />
+          <Route path="/vehicles/:id/qr" element={<MyVirtualQRPage />} />
+          <Route path="/virtual-qr" element={<MyVirtualQRListPage />} />
+          <Route path="/virtual-qr/:id" element={<MyVirtualQRDetailPage />} />
+          <Route path="/my-virtual-qr-list" element={<Navigate to="/virtual-qr" replace />} />
+          <Route path="/my-virtual-qr-detail/:id" element={<MyVirtualQRDetailPage />} />
+          <Route path="/my-virtual-qr-empty" element={<Navigate to="/virtual-qr" replace />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/my-order" element={<Navigate to="/orders" replace />} />
+          <Route path="/orders/:id/track" element={<TrackOrderPage />} />
+          <Route path="/orders/:id/review" element={<ReviewOrderPage />} />
+          <Route path="/orders/:id/delivery" element={<EditDeliveryAddressPage />} />
+          <Route path="/orders/:id/payment" element={<PaymentPage />} />
+          <Route path="/orders/:id/success" element={<OrderSuccessPage />} />
+          <Route path="/track-order" element={<TrackOrderPage />} />
+          <Route path="/review-order" element={<ReviewOrderPage />} />
+          <Route path="/edit-delivery-address" element={<EditDeliveryAddressPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/order-successful" element={<OrderSuccessPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/document-vault" element={<DocumentVaultPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/update" element={<UpdateProfilePage />} />
+          <Route path="/profile/basic-details" element={<BasicDetailsPage />} />
+          <Route path="/profile/public-details" element={<PublicDetailsPage />} />
+          <Route path="/profile/change-password" element={<ChangePasswordPage />} />
+          <Route path="/update-profile" element={<Navigate to="/profile/update" replace />} />
+          <Route path="/basic-details" element={<Navigate to="/profile/basic-details" replace />} />
+          <Route path="/public-details" element={<Navigate to="/profile/public-details" replace />} />
+          <Route path="/change-password" element={<Navigate to="/profile/change-password" replace />} />
+          <Route
+            path="/profile/emergency-contacts"
+            element={<EmergencyContactsPage />}
+          />
+          <Route path="/emergency-contacts-list" element={<Navigate to="/profile/emergency-contacts" replace />} />
+          <Route path="/emergency-contacts-empty" element={<Navigate to="/profile/emergency-contacts" replace />} />
+          <Route
+            path="/profile/emergency-contacts/add"
+            element={<AddEmergencyContactPage />}
+          />
+          <Route path="/add-emergency-contact" element={<Navigate to="/profile/emergency-contacts/add" replace />} />
+          <Route
+            path="/profile/emergency-contacts/:id/edit"
+            element={<EditEmergencyContactPage />}
+          />
+        </Route>
+
+        <Route
+          element={
+            <UserProtectedRoute>
+              <MarketplaceLayout />
+            </UserProtectedRoute>
+          }
+        >
+          <Route path="/marketplace" element={<MarketplaceHomePage />} />
+          <Route path="/marketplace/trust" element={<MarketplaceTrustPage />} />
+          <Route path="/marketplace/reviews" element={<MarketplaceReviewsPage />} />
+          <Route path="/marketplace/support" element={<MarketplaceSupportPage />} />
+          <Route path="/marketplace/tools/emi" element={<MarketplaceEmiCalculatorPage />} />
+          <Route path="/marketplace/tools/service-cost" element={<MarketplaceServiceCostCalculatorPage />} />
+          <Route path="/marketplace/buy" element={<BuyCarsPage />} />
+          <Route path="/marketplace/buy/compare" element={<BuyCarComparePage />} />
+          <Route path="/marketplace/buy/:listingId" element={<BuyCarDetailsPage />} />
+          <Route path="/marketplace/sell" element={<SellCarsPage />} />
+          <Route path="/marketplace/sell/quote" element={<SellerInstantQuotePage />} />
+          <Route path="/marketplace/sell/inspection" element={<SellerInspectionBookingPage />} />
+          <Route path="/marketplace/sell/final-offer" element={<SellerFinalOfferPage />} />
+          <Route path="/marketplace/sell/transfer-tracker" element={<SellerTransferTrackerPage />} />
+          <Route path="/buy-cars" element={<Navigate to="/marketplace/buy" replace />} />
+          <Route path="/sell-cars" element={<Navigate to="/marketplace/sell" replace />} />
+        </Route>
+
         <Route element={<Layout />}>
           <Route path="/" element={<Homepage />} />
 
@@ -171,6 +315,8 @@ const App = () => {
           <Route path="/news-page" element={<Newspage />} />
           <Route path="/login-page" element={<Loginpage />} />
           <Route path="/login-otp" element={<OtpLoginPage />} />
+          <Route path="/user-login" element={<Navigate to="/login" replace />} />
+          <Route path="/user-login-otp" element={<Navigate to="/login/otp" replace />} />
           <Route path="/contact-page" element={<Contactpage />} />
           <Route path="/Raise-concern-page" element={<RaiseConcern />} />
           <Route path="/concern-chat-user" element={<UserConcernChat />} />
@@ -181,6 +327,7 @@ const App = () => {
           <Route path="/visit-us-page" element={<VisitUs />} />
           <Route path="/Report-page" element={<Reports />} />
           <Route path="/explore-page" element={<Explorepage />} />
+          <Route path="/order-qr" element={<OrderQrPage />} />
           <Route path="/career-page" element={<CareerPage />} />
           <Route path="/delete-account" element={<DeleteAccountPage />} />
 

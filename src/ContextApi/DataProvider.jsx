@@ -4,8 +4,12 @@ import { jwtDecode } from "jwt-decode";
 import { io } from "socket.io-client";
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+
 const BASE_URL =
   import.meta.env.VITE_BASE_URL || "https://digivahan-backend.onrender.com";
+const ENABLE_DUMMY_USER_AUTH =
+  import.meta.env.VITE_ENABLE_DUMMY_USER_AUTH !== "false";
+
 export const MyContext = createContext();
 
 const DataProvider = ({ children }) => {
@@ -15,6 +19,20 @@ const DataProvider = ({ children }) => {
   const [PendingOrders, setPendingOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [filterQrlist, setfilterQrlist] = useState([]);
+
+  const postWithFallback = async (endpointList, payload, config = {}) => {
+    let lastError = null;
+
+    for (const endpoint of endpointList) {
+      try {
+        return await axios.post(`${BASE_URL}${endpoint}`, payload, config);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError;
+  };
 
   const AdminSignInwithOtp = async (phone) => {
     try {
@@ -64,6 +82,109 @@ const DataProvider = ({ children }) => {
 
       toast.error(error.response?.data?.message || "Verification failed");
 
+      return null;
+    }
+  };
+
+  const UserSignInwithOtp = async (phone) => {
+    if (ENABLE_DUMMY_USER_AUTH) {
+      return {
+        success: true,
+        message: "Dummy OTP sent successfully",
+        phone,
+      };
+    }
+
+    try {
+      const response = await postWithFallback(
+        [
+          "/api/auth/user/send-otp",
+          "/api/auth/send-otp",
+          "/api/marketplace/auth/send-otp",
+        ],
+        {
+          phone,
+          role: "user",
+        },
+      );
+
+      if (response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "User OTP send failed");
+      return null;
+    }
+  };
+
+  const verifyUserOtp = async (userOtp) => {
+    if (ENABLE_DUMMY_USER_AUTH) {
+      const phone = localStorage.getItem("user_login_phone") || "dummy";
+      const token = `dummy_user_${phone}_${userOtp || "otp"}`;
+
+      Cookies.set("user_token", token, {
+        expires: 7,
+        secure: false,
+        sameSite: "Strict",
+      });
+
+      localStorage.setItem(
+        "marketplace_capabilities",
+        JSON.stringify({ canBuy: true, canSell: true }),
+      );
+      localStorage.removeItem("user_login_phone");
+
+      return {
+        success: true,
+        token,
+        mode: "buy_sell",
+        message: "Dummy login successful",
+      };
+    }
+
+    try {
+      const phone = localStorage.getItem("user_login_phone");
+
+      const response = await postWithFallback(
+        [
+          "/api/auth/user/verify-otp",
+          "/api/auth/user/verify-user",
+          "/api/marketplace/auth/verify-otp",
+        ],
+        {
+          phone,
+          otp: userOtp,
+          OtpCode: userOtp,
+          mode: "buy_sell",
+        },
+      );
+
+      if (response?.data) {
+        const token =
+          response.data.token ||
+          response.data.accessToken ||
+          response.data?.data?.token;
+
+        if (token) {
+          Cookies.set("user_token", token, {
+            expires: 7,
+            secure: false,
+            sameSite: "Strict",
+          });
+        }
+
+        localStorage.setItem(
+          "marketplace_capabilities",
+          JSON.stringify({ canBuy: true, canSell: true }),
+        );
+        localStorage.removeItem("user_login_phone");
+
+        return response.data;
+      }
+
+      return null;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "User OTP verification failed");
       return null;
     }
   };
@@ -544,6 +665,8 @@ const DataProvider = ({ children }) => {
       value={{
         AdminSignInwithOtp,
         verifyAdminOtp,
+        UserSignInwithOtp,
+        verifyUserOtp,
         LogoutAdmin,
         AddDeliveryPartners,
         DeliveryOrders,

@@ -61,6 +61,8 @@ const PRIVATE_PATH_PREFIXES = [
 const NO_INDEX_PREFIXES = [
   "/login-page",
   "/login-otp",
+  "/user-login",
+  "/user-login-otp",
   "/send-notification",
   "/connect-tabs",
   "/accident-notification",
@@ -138,6 +140,18 @@ const PAGE_META = [
     match: (pathname) => pathname === "/login-otp",
     title: "OTP Verification | DigiVahan",
     description: "Verify your OTP to securely sign in to DigiVahan.",
+  },
+  {
+    match: (pathname) => pathname === "/user-login",
+    title: "User Login | DigiVahan Marketplace",
+    description:
+      "Login to DigiVahan Marketplace and access both buy and sell car journeys from one account.",
+  },
+  {
+    match: (pathname) => pathname === "/user-login-otp",
+    title: "User OTP Verification | DigiVahan Marketplace",
+    description:
+      "Verify your OTP to unlock buying and selling car features in DigiVahan Marketplace.",
   },
   {
     match: (pathname) => pathname === "/raise-concern-page",
