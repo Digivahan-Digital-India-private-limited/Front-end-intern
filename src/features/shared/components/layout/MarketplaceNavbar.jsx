@@ -20,7 +20,7 @@ const desktopLinks = [
   { label: "Marketplace Home", to: "/marketplace" },
   { label: "Buy Cars", to: "/marketplace/buy" },
   { label: "Sell Cars", to: "/marketplace/sell" },
-  { label: "Trust", to: "/marketplace/trust" },
+  { label: "Trust Center", to: "/marketplace/trust" },
   { label: "Reviews", to: "/marketplace/reviews" },
   { label: "Support", to: "/marketplace/support" },
 ];

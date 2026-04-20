@@ -7,9 +7,19 @@ import {
 import { marketplaceListings } from "../data/marketplaceMockData";
 import { upsertLocalOrder } from "../../orders/services/ordersApi";
 
+const LISTING_DETAILS_TIMEOUT_MS = 3000;
+
+const parseYearFromTitle = (title) => {
+  const match = String(title || "").match(/\b(19|20)\d{2}\b/);
+  return match ? Number(match[0]) : new Date().getFullYear();
+};
+
 const normalizeListing = (item) => ({
   id: String(item?.id || item?._id || item?.vehicle_id || item?.listing_id || ""),
   title: item?.title || item?.vehicle_name || item?.name || "Used Car",
+  year: Number(item?.year || item?.manufacture_year || parseYearFromTitle(item?.title || item?.name)),
+  brand: item?.brand || item?.make || item?.manufacturer || "",
+  model: item?.model || item?.variant || "",
   city: item?.city || item?.location || "N/A",
   fuel: item?.fuel || item?.fuel_type || "Petrol",
   transmission: item?.transmission || item?.gearbox || "Manual",
@@ -29,6 +39,13 @@ const normalizeListing = (item) => ({
     item?.thumbnail ||
     "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1200",
   sellerType: item?.sellerType || item?.seller_type || "Verified Seller",
+  postedBy:
+    item?.postedBy ||
+    item?.posted_by ||
+    item?.seller_category ||
+    "dealer",
+  isInspected: Boolean(item?.isInspected ?? item?.inspected ?? item?.inspection_done ?? false),
+  distanceKm: Number(item?.distanceKm || item?.distance_km || item?.distance || 99999),
 });
 
 const normalizeOrderFromReserve = (item, listing) => ({
@@ -57,11 +74,16 @@ const getMockListingById = (listingId) =>
   marketplaceListings.find((item) => String(item.id) === String(listingId)) || null;
 
 export const getMarketplaceListingById = async (listingId) => {
+  const localListing = getMockListingById(listingId);
+  if (localListing) {
+    return normalizeListing(localListing);
+  }
+
   const response = await requestWithFallback(
     [
-      () => httpClient.get(`/api/marketplace/vehicles/${listingId}`),
-      () => httpClient.get(`/api/marketplace/listings/${listingId}`),
-      () => httpClient.get(`/api/vehicles/${listingId}`),
+      () => httpClient.get(`/api/marketplace/vehicles/${listingId}`, { timeout: LISTING_DETAILS_TIMEOUT_MS }),
+      () => httpClient.get(`/api/marketplace/listings/${listingId}`, { timeout: LISTING_DETAILS_TIMEOUT_MS }),
+      () => httpClient.get(`/api/vehicles/${listingId}`, { timeout: LISTING_DETAILS_TIMEOUT_MS }),
     ],
     () => ({ data: getMockListingById(listingId) }),
   );

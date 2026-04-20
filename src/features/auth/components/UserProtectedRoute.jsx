@@ -9,7 +9,6 @@ const UserProtectedRoute = ({ children }) => {
   const token = Cookies.get("user_token");
 
   const {
-    isLoading,
     isError,
     error,
   } = useQuery({
@@ -17,21 +16,15 @@ const UserProtectedRoute = ({ children }) => {
     queryFn: getSessionUser,
     enabled: Boolean(token),
     retry: false,
-    staleTime: 60 * 1000,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
   });
 
   if (!token) {
     return <Navigate to="/login" replace state={{ from: location }} />;
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-        <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm">
-          Validating session...
-        </div>
-      </div>
-    );
   }
 
   if (isError) {
